@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ultimateuhc</groupId>
+    <artifactId>commons</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <maven.compilier.source>1.8</maven.compilier.source>
+        <maven.compilier.target>1.8</maven.compilier.target>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+
+        <!-- Primary database connector -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <!-- Literally every database driver wants this -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+        
+        <!-- Working w/ JSON easily -->
+        <dependency>
+            <groupId>com.github.outdatedversion</groupId>
+            <artifactId>json-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <!-- Efficiently cache data -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.3.5</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
