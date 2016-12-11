@@ -1,4 +1,4 @@
-package com.ultimateuhc.network.database;
+package net.ultimateuhc.network.database;
 
 import com.google.gson.annotations.SerializedName;
 

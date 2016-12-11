@@ -1,6 +1,6 @@
-package com.ultimateuhc.network.database;
+package net.ultimateuhc.network.database;
 
-import com.ultimateuhc.util.Rank;
+import net.ultimateuhc.util.Rank;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +37,16 @@ public class Account
 
         /** the UNIX epoch timestamp we last saw this on */
         public long lastUsedOn;
+    }
+
+    public UUID uuid()
+    {
+        return uuid;
+    }
+
+    public String username()
+    {
+        return username;
     }
 
 }

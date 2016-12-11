@@ -1,4 +1,4 @@
-package com.ultimateuhc.util.config;
+package net.ultimateuhc.util.config;
 
 import com.google.gson.Gson;
 

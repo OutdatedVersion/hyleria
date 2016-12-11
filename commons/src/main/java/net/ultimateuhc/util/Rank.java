@@ -1,4 +1,4 @@
-package com.ultimateuhc.util;
+package net.ultimateuhc.util;
 
 /**
  * OutdatedVersion
@@ -11,9 +11,9 @@ public enum Rank
     OWNER('c'),
     DEV('c'),
     ADMIN('c'),
-    SENIOR('a'),
-    MOD('a'),
-    TRIAL('a'),
+    SENIOR('b'),
+    MOD('9'),
+    TRIAL('6'),
     PLAYER('7');
 
     /** the color of the rank's tag */
@@ -55,9 +55,7 @@ public enum Rank
      */
     private String formatName()
     {
-        final String _name = this.name().toLowerCase();
-
-        return String.format("[%s]", Character.toUpperCase(_name.charAt(0)) + _name.substring(1));
+        return String.format("[%s]", this.name());
     }
 
 }
