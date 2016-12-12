@@ -39,11 +39,13 @@ public class Account
         public long lastUsedOn;
     }
 
+    /** get -> {@link #uuid} */
     public UUID uuid()
     {
         return uuid;
     }
 
+    /** get -> {@link #username} */
     public String username()
     {
         return username;
