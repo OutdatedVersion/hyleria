@@ -1,6 +1,6 @@
 package net.ultimateuhc.network.database;
 
-import net.ultimateuhc.util.Rank;
+import net.ultimateuhc.util.Role;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +18,9 @@ public class Account
     private String username;
     private List<String> previousUsernames;
 
-    private Rank permissionRank;
-    private List<Rank> packageRanks;
+    private Role role;
+    private List<String> privileges;
+    private List<Package> packages;
 
     // TODO(Ben): currency & XP?
 

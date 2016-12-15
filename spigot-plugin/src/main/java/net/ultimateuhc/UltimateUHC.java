@@ -3,14 +3,13 @@ package net.ultimateuhc;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import net.ultimateuhc.module.Chat;
 import net.ultimateuhc.network.AccountHandler;
 import net.ultimateuhc.network.database.Database;
-import net.ultimateuhc.util.Module;
+import net.ultimateuhc.util.ShutdownHook;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,29 +22,39 @@ public class UltimateUHC extends JavaPlugin
 
     private static UltimateUHC Instance;
 
+    private Reflections reflections;
     private Injector injector;
     private List<Method> shutdownHooks;
-
-    private List<Class<? extends Module>> modules = Arrays.asList(AccountHandler.class, Chat.class);
 
     @Override
     public void onEnable()
     {
         Instance = this;
 
-        // queue modules to be bound
+        reflections = new Reflections("net.ultimateuhc");
 
-        // check if the module has a ShutdownHook - if present: add to list
+        // collect all of our hooks (silently fail on invalid ones)
         shutdownHooks = Lists.newArrayList();
 
-        final com.google.inject.Module _mainModule = binder ->
+        reflections.getMethodsAnnotatedWith(ShutdownHook.class)
+                   .stream()
+                   .filter(method -> method.getParameterCount() == 0)
+                   .forEach(shutdownHooks::add);
+
+        System.out.printf("Found %s shutdown hook%s\n", shutdownHooks.size(), shutdownHooks.size() >= 2 ? "s" : "");
+
+
+        // our primary injector - what we base a whole lot of this
+        // plugin around
+        injector = Guice.createInjector(binder ->
         {
-            binder.bind(UltimateUHC.class).toInstance(Instance);
+            // this plugin
+            binder.bind(UltimateUHC.class).toInstance(this);
 
-            binder.bind(Database.class).toInstance(new Database("database/production.json"));
-        };
-
-        injector = Guice.createInjector(_mainModule);
+            // a few things that we'll just start on our own..
+            binder.bind(Database.class).toInstance(new Database("production.json"));
+            binder.bind(AccountHandler.class).toInstance(new AccountHandler());
+        });
     }
 
     @Override

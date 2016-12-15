@@ -48,7 +48,7 @@ public class Database
      */
     public Database(String config)
     {
-        final DatabaseConfig _config = Configurations.read(config, DatabaseConfig.class);
+        final DatabaseConfig _config = Configurations.read("database/" + config, DatabaseConfig.class);
 
         client = new MongoClient(new ServerAddress(_config.connection.host, _config.connection.port),
                                  Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())));

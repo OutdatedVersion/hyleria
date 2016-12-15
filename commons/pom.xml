@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.github.outdatedversion</groupId>
             <artifactId>json-api</artifactId>
-            <version>1.1</version>
+            <version>e31c9365ee</version>
         </dependency>
 
         <!-- Efficiently cache data -->
@@ -48,6 +48,13 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>2.3.5</version>
+        </dependency>
+
+        <!-- Google: Injection framework -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.1.0</version>
         </dependency>
 
     </dependencies>

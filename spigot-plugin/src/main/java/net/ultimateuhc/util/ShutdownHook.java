@@ -15,4 +15,8 @@ import java.lang.annotation.Target;
 public @interface ShutdownHook
 {
 
+    // maybe some before/after parameter
+    // they'd make sure that this hook is
+    // executed before/after the specified one
+
 }

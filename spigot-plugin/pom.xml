@@ -19,18 +19,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Google: Dependency injection -->
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-
-        <!--  -->
+        <!-- Our 'core' -->
         <dependency>
             <groupId>net.ultimateuhc</groupId>
             <artifactId>commons</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <!-- Simple interface to reflection -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
         </dependency>
 
     </dependencies>
