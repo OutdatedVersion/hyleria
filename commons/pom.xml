@@ -38,7 +38,7 @@
         
         <!-- Working w/ JSON easily -->
         <dependency>
-            <groupId>com.github.outdatedversion</groupId>
+            <groupId>com.outdatedversion</groupId>
             <artifactId>json-api</artifactId>
             <version>e31c9365ee</version>
         </dependency>

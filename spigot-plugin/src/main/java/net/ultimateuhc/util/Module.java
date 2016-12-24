@@ -17,25 +17,15 @@ public abstract class Module extends AbstractModule implements Listener
 {
 
     /**
-     * In charge of starting this
-     * particular module
-     *
-     * @throws Exception in case something goes wrong
-     */
-    public abstract void initialize() throws Exception;
-
-    /**
-     * Guide delegate for our forcefully present
-     * {@link #initialize()} method.
+     * Guice delegate for this module
      */
     @Override
     protected void configure()
     {
         try
         {
-            initialize();
-
-            // let's automate a few things
+            // register this to Bukkit's event system there's
+            // actually a listener in this class
             if (Stream.of(this.getClass().getMethods()).filter(ann -> ann.isAnnotationPresent(EventHandler.class)).count() >= 1)
                 Bukkit.getServer().getPluginManager().registerEvents(this, require(UltimateUHC.class));
         }

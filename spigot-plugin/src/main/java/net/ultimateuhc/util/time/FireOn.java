@@ -19,7 +19,7 @@ public @interface FireOn
     /**
      * @return the value (amount) of our units
      */
-    int value() default 0;
+    int value() default 1;
 
     /**
      * @return the length of time we're using

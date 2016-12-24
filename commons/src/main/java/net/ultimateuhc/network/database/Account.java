@@ -13,6 +13,15 @@ import java.util.UUID;
 public class Account
 {
 
+    /** an account with all of the values of a fresh account */
+    public static final Account DEFAULTS = new Account();
+
+    // populate the default account w/ the proper values
+    static
+    {
+        DEFAULTS.role = Role.PLAYER;
+    }
+
     private UUID uuid;
 
     private String username;
@@ -27,6 +36,18 @@ public class Account
     private String currentIP;
     private List<PreviousAddress> previousAddresses;
 
+    /** get -> {@link #uuid} */
+    public UUID uuid()
+    {
+        return uuid;
+    }
+
+    /** get -> {@link #username} */
+    public String username()
+    {
+        return username;
+    }
+
     /**
      * Represents some other IP that
      * someone logged in from.
@@ -38,18 +59,6 @@ public class Account
 
         /** the UNIX epoch timestamp we last saw this on */
         public long lastUsedOn;
-    }
-
-    /** get -> {@link #uuid} */
-    public UUID uuid()
-    {
-        return uuid;
-    }
-
-    /** get -> {@link #username} */
-    public String username()
-    {
-        return username;
     }
 
 }

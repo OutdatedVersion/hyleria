@@ -1,35 +1,36 @@
 package net.ultimateuhc.util;
 
-import org.bson.Document;
-
 /**
  * OutdatedVersion
- * Dec/13/2016 (4:51 PM)
+ * Dec/23/2016 (8:07 PM)
  */
 
-public class Translator
+public abstract class Translator<C, D>
 {
 
-    private Document document;
+    /** the type of this when read from the source */
+    C codeSafe;
 
-    private Translator()
-    {
-        this.document = new Document();
-    }
+    /** the type of this when written to the database */
+    D databaseSafe;
 
-    public static Translator begin()
-    {
-        return new Translator();
-    }
+    /**
+     * In charge of translating the
+     * database version of this into
+     * the code version
+     *
+     * @param raw what we're translating
+     * @return the code version
+     */
+    public abstract C read(D raw);
 
-    public Translator next(String key, Object defaultValue)
-    {
-
-    }
-
-    public Document finish()
-    {
-
-    }
+    /**
+     * In charge of creating a database
+     * safe version of what we're working with
+     *
+     * @param raw what we're working with
+     * @return the database safe version of it
+     */
+    public abstract D write(C raw);
 
 }

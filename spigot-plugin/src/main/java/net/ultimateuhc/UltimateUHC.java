@@ -3,7 +3,6 @@ package net.ultimateuhc;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import net.ultimateuhc.network.AccountHandler;
 import net.ultimateuhc.network.database.Database;
 import net.ultimateuhc.util.ShutdownHook;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,7 +52,6 @@ public class UltimateUHC extends JavaPlugin
 
             // a few things that we'll just start on our own..
             binder.bind(Database.class).toInstance(new Database("production.json"));
-            binder.bind(AccountHandler.class).toInstance(new AccountHandler());
         });
     }
 

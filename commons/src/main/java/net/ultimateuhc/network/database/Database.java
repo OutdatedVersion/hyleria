@@ -7,6 +7,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import net.ultimateuhc.util.MongoUtil;
 import net.ultimateuhc.util.config.Configurations;
 import org.bson.Document;
 
@@ -163,7 +164,7 @@ public class Database
      */
     public Optional<Account> cacheFetch(UUID uuid)
     {
-        return Optional.ofNullable(accountCache.get(uuid, uuid0 -> null));
+        return Optional.ofNullable(accountCache.asMap().get(uuid));
     }
 
     /**
@@ -175,10 +176,31 @@ public class Database
      */
     public void fetchAccount(String username, Consumer<Optional<Account>> callback)
     {
-        fetchAccount(null, username, true, false, callback);
+        fetchAccount(null, username, true, true, callback);
     }
 
+    /**
+     * Grab an account from our database via
+     * the UUID provided.
+     *
+     * @param uuid the UUID
+     * @param callback our account
+     */
     public void fetchAccount(UUID uuid, Consumer<Optional<Account>> callback)
+    {
+        fetchAccount(uuid, null, true, true, callback);
+    }
+
+    /**
+     * Grab an account from our database
+     * synchronously. Probably only ever
+     * going to be used when someone is
+     * logging into a server.
+     *
+     * @param uuid the UUID of the player
+     * @param callback the player's account
+     */
+    public void fetchAccountSync(UUID uuid, Consumer<Optional<Account>> callback)
     {
         fetchAccount(uuid, null, true, false, callback);
     }
@@ -198,11 +220,9 @@ public class Database
      * @param uuid if we're looking someone up by UUID..
      * @param username if we're looking someone up by username..
      * @param useCache do we want to check our cache?
-     * @param commitToCache if we do find an account should
-     *                      we commit it to our local cache
      * @param callback our requested data
      */
-    private void fetchAccount(UUID uuid, String username, boolean useCache, boolean commitToCache, Consumer<Optional<Account>> callback)
+    private void fetchAccount(UUID uuid, String username, boolean useCache, boolean async, Consumer<Optional<Account>> callback)
     {
         boolean _useUsername = uuid == null && username != null;
 
@@ -223,19 +243,23 @@ public class Database
             }
         }
 
-        // hit up mongo
-        executor.submit(() ->
+        // code to make the database transaction
+        final Runnable _fetchTask = () ->
         {
-            Account _account = accounts.find(!_useUsername
-                                             ? eq("uuid", uuid.toString())
-                                             : eq("username_lower", username.toLowerCase()), Account.class).limit(1).first();
+            Document _document = accounts.find(!_useUsername
+                                               ? eq("uuid", uuid.toString())
+                                               : eq("username_lower", username.toLowerCase())).limit(1).first();
 
-            // respect store parameter
-            if (_account != null && commitToCache)
-                cacheCommit(_account);
+            callback.accept(_document == null ? Optional.empty()
+                                              : Optional.ofNullable(MongoUtil.translate(Account.DEFAULTS, _document)));
+        };
 
-            callback.accept(_account == null ? Optional.empty() : Optional.of(_account));
-        });
+        // in case we need to call this when
+        // logging in or a similar situation
+        if (async)
+            executor.submit(_fetchTask);
+        else
+            _fetchTask.run();
     }
 
 }
