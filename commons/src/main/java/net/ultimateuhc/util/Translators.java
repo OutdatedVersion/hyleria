@@ -14,7 +14,7 @@ public class Translators
 {
 
     /** default translators */
-    private static List<Translator<?, ?>> HOLD = Lists.newArrayList();
+    public static List<Translator<?, ?>> HOLD = Lists.newArrayList();
 
     // populate..
     static
@@ -47,10 +47,12 @@ public class Translators
     public static <A, B> Translator<A, B> translatorFor(Class<A> clazzOne, Class<B> clazzTwo)
     {
         // I have no clue man.. this just seems like a terrible solution.
+        // TODO(Ben): maybe change this? doesn't need to be explicitly equal on both in some cases.
+        // also don't want this throwing NPEs... this is wayyyy too messy.
 
         return (Translator<A, B>) HOLD
                                   .stream()
-                                  .filter(translator -> translator.codeSafe.getClass() == clazzOne && translator.databaseSafe.getClass() == clazzTwo)
+                                  .filter(translator -> translator.codeSafe.getClass().equals(clazzOne) && translator.databaseSafe.getClass().equals(clazzTwo))
                                   .findFirst().get();
     }
 
