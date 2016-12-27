@@ -1,4 +1,4 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import org.bson.Document;
 

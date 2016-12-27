@@ -1,4 +1,4 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;

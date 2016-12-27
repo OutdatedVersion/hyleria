@@ -1,7 +1,7 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import com.google.inject.AbstractModule;
-import net.ultimateuhc.UltimateUHC;
+import net.revellionmc.Revellion;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +27,7 @@ public abstract class Module extends AbstractModule implements Listener
             // register this to Bukkit's event system there's
             // actually a listener in this class
             if (Stream.of(this.getClass().getMethods()).filter(ann -> ann.isAnnotationPresent(EventHandler.class)).count() >= 1)
-                Bukkit.getServer().getPluginManager().registerEvents(this, require(UltimateUHC.class));
+                Bukkit.getServer().getPluginManager().registerEvents(this, require(Revellion.class));
         }
         catch (Exception ex)
         {
@@ -57,7 +57,7 @@ public abstract class Module extends AbstractModule implements Listener
      */
     public <T> T require(Class<T> clazz)
     {
-        return UltimateUHC.get().injector().getInstance(clazz);
+        return Revellion.get().injector().getInstance(clazz);
     }
 
 }

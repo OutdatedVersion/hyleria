@@ -1,10 +1,10 @@
-package net.ultimateuhc;
+package net.revellionmc;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import net.ultimateuhc.network.database.Database;
-import net.ultimateuhc.util.ShutdownHook;
+import net.revellionmc.network.database.Database;
+import net.revellionmc.util.ShutdownHook;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
@@ -16,10 +16,10 @@ import java.util.List;
  * Dec/11/2016 (5:48 PM)
  */
 
-public class UltimateUHC extends JavaPlugin
+public class Revellion extends JavaPlugin
 {
 
-    private static UltimateUHC Instance;
+    private static Revellion Instance;
 
     private Reflections reflections;
     private Injector injector;
@@ -30,7 +30,7 @@ public class UltimateUHC extends JavaPlugin
     {
         Instance = this;
 
-        reflections = new Reflections("net.ultimateuhc");
+        reflections = new Reflections("net.revellionmc");
 
         // collect all of our hooks (silently fail on invalid ones)
         shutdownHooks = Lists.newArrayList();
@@ -48,7 +48,7 @@ public class UltimateUHC extends JavaPlugin
         injector = Guice.createInjector(binder ->
         {
             // this plugin
-            binder.bind(UltimateUHC.class).toInstance(this);
+            binder.bind(Revellion.class).toInstance(this);
 
             // a few things that we'll just start on our own..
             binder.bind(Database.class).toInstance(new Database("production.json"));
@@ -77,7 +77,7 @@ public class UltimateUHC extends JavaPlugin
      * @return grabs the one & only instance
      *         of our plugin for this server
      */
-    public static UltimateUHC get()
+    public static Revellion get()
     {
         return Instance;
     }

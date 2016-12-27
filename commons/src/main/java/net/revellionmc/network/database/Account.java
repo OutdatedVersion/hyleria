@@ -1,6 +1,7 @@
-package net.ultimateuhc.network.database;
+package net.revellionmc.network.database;
 
-import net.ultimateuhc.util.Role;
+import com.google.gson.annotations.SerializedName;
+import net.revellionmc.util.Role;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +23,13 @@ public class Account
         DEFAULTS.role = Role.PLAYER;
     }
 
+
     private UUID uuid;
 
+    @SerializedName ( "name" )
     private String username;
+
+    @SerializedName ( "previous_names" )
     private List<String> previousUsernames;
 
     private Role role;
@@ -33,7 +38,10 @@ public class Account
 
     // TODO(Ben): currency & XP?
 
+    @SerializedName ( "current_address" )
     private String currentIP;
+
+    @SerializedName ( "previous_addresses" )
     private List<PreviousAddress> previousAddresses;
 
     /** get -> {@link #uuid} */
@@ -47,6 +55,7 @@ public class Account
     {
         return username;
     }
+
 
     /**
      * Represents some other IP that

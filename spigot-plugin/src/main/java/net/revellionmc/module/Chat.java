@@ -1,6 +1,6 @@
-package net.ultimateuhc.module;
+package net.revellionmc.module;
 
-import net.ultimateuhc.util.Module;
+import net.revellionmc.util.Module;
 
 /**
  * OutdatedVersion

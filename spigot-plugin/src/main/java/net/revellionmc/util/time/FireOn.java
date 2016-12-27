@@ -1,4 +1,4 @@
-package net.ultimateuhc.util.time;
+package net.revellionmc.util.time;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

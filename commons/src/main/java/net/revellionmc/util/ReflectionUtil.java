@@ -1,4 +1,4 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
-package net.ultimateuhc.util.time;
+package net.revellionmc.util.time;
 
-import net.ultimateuhc.util.Module;
+import net.revellionmc.util.Module;
 
 import java.lang.reflect.Method;
 import java.util.List;

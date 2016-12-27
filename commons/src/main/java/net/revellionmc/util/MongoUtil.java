@@ -1,4 +1,4 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.annotations.SerializedName;
@@ -38,25 +38,24 @@ public class MongoUtil
      * @param <T> the type of these values
      * @return a written document
      */
-    public static <T, R> R write(Class<R> returnType, T value, T defaultValue, Document document)
+    public static <T> Document write(T value, T defaultValue, Document document)
     {
-        return translateInternal(Action.WRITE_TO_DOCUMENT, returnType, value, defaultValue, document);
+        return translateInternal(Action.WRITE_TO_DOCUMENT, Document.class, value, defaultValue, document);
     }
 
     /**
      * Takes in data from a Mongo document
      *
      * @param returnType the type that we're working with
-     * @param value working value
      * @param defaultValue value w/ defaults
      * @param document mongo doc
      * @param <T> type
      * @param <R> return type
      * @return finished document
      */
-    public static <T, R> R read(Class<R> returnType, T value, T defaultValue, Document document)
+    public static <T, R> R read(Class<R> returnType, T defaultValue, Document document)
     {
-        return translateInternal(Action.READ_FROM_DOCUMENT, returnType, value, defaultValue, document);
+        return translateInternal(Action.READ_FROM_DOCUMENT, returnType, null, defaultValue, document);
     }
 
     /**
@@ -89,7 +88,7 @@ public class MongoUtil
             final Object _returnValue = action == Action.READ_FROM_DOCUMENT ? value.getClass().newInstance() : null;
 
             // iterate over what we need to set from our default
-            for (Field field : value.getClass().getDeclaredFields())
+            for (Field field : defaultValueHolder.getClass().getDeclaredFields())
             {
                 // in the case that something shouldn't be included
                 // this annotation will be present - let's honor it.

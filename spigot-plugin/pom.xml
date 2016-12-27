@@ -8,6 +8,18 @@
     <artifactId>spigot-plugin</artifactId>
     <version>1.0</version>
 
+    <properties>
+        <plugin.main>net.revellionmc.Revellion</plugin.main>
+        <plugin.name>Revellion</plugin.name>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <!-- y 1.7 | have to find that at some point -->

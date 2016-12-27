@@ -1,4 +1,4 @@
-package net.ultimateuhc.util.config;
+package net.revellionmc.util.config;
 
 import com.google.gson.Gson;
 

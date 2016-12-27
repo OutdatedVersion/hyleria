@@ -1,4 +1,4 @@
-package net.ultimateuhc.network.database;
+package net.revellionmc.network.database;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package net.ultimateuhc.util;
+package net.revellionmc.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

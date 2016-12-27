@@ -1,4 +1,4 @@
-package net.ultimateuhc.network.database;
+package net.revellionmc.network.database;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -7,8 +7,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.ultimateuhc.util.MongoUtil;
-import net.ultimateuhc.util.config.Configurations;
+import net.revellionmc.util.MongoUtil;
+import net.revellionmc.util.config.Configurations;
 import org.bson.Document;
 
 import java.util.Collections;
@@ -70,7 +70,7 @@ public class Database
      * Unbind the allocated resources for
      * this database instance.
      *
-     * Our {@link #executor} will finish executing
+     * Note: Our {@link #executor} will finish executing
      * the set of tasks it currently has queued.
      */
     public void releaseResources()
@@ -141,7 +141,7 @@ public class Database
 
     /**
      * Grabs an account from our cache wrapped
-     * in an {@link Optional}
+     * in an {@link Optional}.
      *
      * @param username the username
      * @return the account or an empty Optional
@@ -160,7 +160,7 @@ public class Database
      * on a player's UUID.
      *
      * @param uuid the UUID
-     * @return an account wrapped in an {@linkplain Optional}
+     * @return an account wrapped in an {@link Optional}
      */
     public Optional<Account> cacheFetch(UUID uuid)
     {
@@ -243,7 +243,7 @@ public class Database
             }
         }
 
-        // code to make the database transaction
+        // database transaction..
         final Runnable _fetchTask = () ->
         {
             Document _document = accounts.find(!_useUsername
@@ -251,8 +251,9 @@ public class Database
                                                : eq("username_lower", username.toLowerCase())).limit(1).first();
 
             callback.accept(_document == null ? Optional.empty()
-                                              : Optional.ofNullable(MongoUtil.translate(Account.DEFAULTS, _document)));
+                                              : Optional.ofNullable(MongoUtil.read(Account.class, Account.DEFAULTS, _document)));
         };
+
 
         // in case we need to call this when
         // logging in or a similar situation

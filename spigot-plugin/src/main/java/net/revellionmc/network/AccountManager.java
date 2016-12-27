@@ -1,10 +1,10 @@
-package net.ultimateuhc.network;
+package net.revellionmc.network;
 
 import com.google.inject.Inject;
-import net.ultimateuhc.network.database.Account;
-import net.ultimateuhc.network.database.Database;
-import net.ultimateuhc.util.Issues;
-import net.ultimateuhc.util.Module;
+import net.revellionmc.network.database.Account;
+import net.revellionmc.network.database.Database;
+import net.revellionmc.util.Issues;
+import net.revellionmc.util.Module;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
