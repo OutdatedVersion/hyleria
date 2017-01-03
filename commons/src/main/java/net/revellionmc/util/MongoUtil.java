@@ -6,8 +6,6 @@ import com.simplexitymc.util.json.Exclude;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
-import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * OutdatedVersion
@@ -16,9 +14,6 @@ import java.util.regex.Pattern;
 
 public class MongoUtil
 {
-
-    /** allows us to check that a {@link String} is in fact an {@link UUID} */
-    public static Pattern UUID_REGEX = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 
     /** what are we doing? */
     enum Action
@@ -35,7 +30,7 @@ public class MongoUtil
      * @param value the value that has content
      * @param defaultValue all of the defaults for that
      * @param document the mongo document we're writing to
-     * @param <T> the type of these values
+     * @param <T> the type of the value
      * @return a written document
      */
     public static <T> Document write(T value, T defaultValue, Document document)
@@ -44,7 +39,7 @@ public class MongoUtil
     }
 
     /**
-     * Takes in data from a Mongo document
+     * Takes in data from a Mongo document.
      *
      * @param returnType the type that we're working with
      * @param defaultValue value w/ defaults
@@ -62,6 +57,22 @@ public class MongoUtil
      * Uses a default value and a MongoDB
      * document to create a new instance
      * of the provided type ({@code T}).
+     *
+     * When the action matches {@link Action#READ_FROM_DOCUMENT}
+     * we'll attempt at iterating over every single field
+     * in the provided class. A new instance of the same type
+     * ({@code defaultValue}) will be generated - every single
+     * field mutually present will be transcribed to the replicate
+     * value then returned by the method.
+     *
+     * Whilst iterating over the fields of a class we'll
+     * check for a few annotations..
+     *
+     * > {@link Exclude}        - skip over that field if present
+     * > {@link SerializedName} - only observed when working
+     *  with a {@link Document} as fields are saved to our database
+     *  using the snake_case style.
+     *
      *
      * @param action what are we doing?
      *               READ: we're grabbing values from
@@ -108,12 +119,12 @@ public class MongoUtil
                     Object _current = document.get(_name);
 
                     // hacky way to handle UUIDs for now..
-                    if (_current instanceof String && UUID_REGEX.matcher((String) _current).matches())
-                        _current = Translators.translatorFor(UUID.class, String.class).read((String) _current);
+                    if (_current instanceof String && Constants.UUID_REGEX.matcher((String) _current).matches())
+                        _current = Translators.STRING_TO_UUID.apply((String) _current);
 
                     // set the value on the new object
                     // they're guaranteed to be the same type, so no issues there
-                    final Field _toUpdate = _returnValue.getClass().getField(_name);
+                    final Field _toUpdate = _returnValue.getClass().getField(field.getName());
 
                     // most of the fields are private so
                     // we need to forcefully change them
@@ -134,6 +145,8 @@ public class MongoUtil
                     // write different value
                     if (field.get(value) != _defaultValue)
                     {
+                        // TODO(Ben): consider recursively going through each of the non-primitive fields w/ this method
+
                         if (ReflectionUtil.isPrimitive(field))
                             document.put(_name, field.get(field));
                         else if (value.getClass().isAssignableFrom(DocumentCompatible.class))

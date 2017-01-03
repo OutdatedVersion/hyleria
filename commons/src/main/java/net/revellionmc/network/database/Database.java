@@ -1,7 +1,7 @@
 package net.revellionmc.network.database;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -61,9 +61,9 @@ public class Database
         executor = Executors.newCachedThreadPool();
 
         if (_config.cacheSpecification != null)
-            accountCache = Caffeine.from(_config.cacheSpecification).build();
+            accountCache = CacheBuilder.from(_config.cacheSpecification).build();
         else
-            accountCache = Caffeine.newBuilder().build();
+            accountCache = CacheBuilder.newBuilder().build();
     }
 
     /**

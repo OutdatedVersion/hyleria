@@ -43,11 +43,11 @@
             <version>e31c9365ee</version>
         </dependency>
 
-        <!-- Efficiently cache data -->
+        <!-- Google: All sorts of goodies -->
         <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>2.3.5</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
         </dependency>
 
         <!-- Google: Injection framework -->

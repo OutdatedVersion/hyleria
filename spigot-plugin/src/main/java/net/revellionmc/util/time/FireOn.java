@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.concurrent.TimeUnit;
 
 /**
  * OutdatedVersion
@@ -24,6 +23,6 @@ public @interface FireOn
     /**
      * @return the length of time we're using
      */
-    TimeUnit unit() default TimeUnit.SECONDS;
+     TimeLength length() default TimeLength.SECOND;
 
 }

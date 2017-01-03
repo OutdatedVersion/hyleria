@@ -22,18 +22,17 @@
 
     <dependencies>
 
-        <!-- y 1.7 | have to find that at some point -->
         <!-- Bukkit/Spigot API & CraftBukkit -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <!-- Our 'core' -->
         <dependency>
-            <groupId>net.ultimateuhc</groupId>
+            <groupId>net.revellionmc</groupId>
             <artifactId>commons</artifactId>
             <version>1.0</version>
         </dependency>

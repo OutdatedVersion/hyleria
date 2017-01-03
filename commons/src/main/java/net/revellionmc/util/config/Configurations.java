@@ -1,6 +1,7 @@
 package net.revellionmc.util.config;
 
 import com.google.gson.Gson;
+import net.revellionmc.util.Constants;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -14,10 +15,7 @@ import java.util.Collections;
 public class Configurations
 {
 
-    /** where we store configuration files */
-    private static final String DATA_FOLDER = "/home/mc/configuration/";
-
-    /** shared GSON instance */
+    /** GSON instance */
     private static final Gson GSON = new Gson();
 
     /**
@@ -33,7 +31,7 @@ public class Configurations
     {
         try
         {
-            final File _file = new File(DATA_FOLDER + dataFileName);
+            final File _file = new File(Constants.DATA_FOLDER + dataFileName);
 
             if (!_file.exists() || _file.isDirectory())
                 throw new IllegalArgumentException("Invalid data file found at " + _file.getAbsolutePath());
@@ -42,8 +40,9 @@ public class Configurations
         }
         catch (Exception ex)
         {
-            System.err.println("Issue occurred whilst reading configuration file.");
             ex.printStackTrace();
+            System.err.println();
+            System.err.println("Issue occurred whilst reading configuration file.");
         }
 
         return null;
@@ -63,12 +62,13 @@ public class Configurations
     {
         try
         {
-            Files.write(new File(DATA_FOLDER + dataFileName).toPath(), Collections.singletonList(GSON.toJson(object)));
+            Files.write(new File(Constants.DATA_FOLDER + dataFileName).toPath(), Collections.singletonList(GSON.toJson(object)));
         }
         catch (Exception ex)
         {
-            System.err.println("Issue occurred whilst saving configuration file.");
             ex.printStackTrace();
+            System.err.println();
+            System.err.println("Issue occurred whilst saving configuration file.");
         }
 
         return (T) object;

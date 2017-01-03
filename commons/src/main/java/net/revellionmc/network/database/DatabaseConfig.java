@@ -23,7 +23,7 @@ public class DatabaseConfig
     /** the main mongo collection we're using */
     public String collection;
 
-    /** details for our Guava cache | {@link null} if you wouldn't like to provide these details */
+    /** details for our Guava cache | {@code null} if you wouldn't like to provide these details */
     @SerializedName( "cache_spec" )
     public String cacheSpecification;
 
@@ -40,7 +40,7 @@ public class DatabaseConfig
 
     /**
      * Represents a set of credentials
-     * used to connect to our {@link #database}.
+     * used to connect to our {@link Database}.
      */
     public class AuthDetails
     {

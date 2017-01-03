@@ -23,6 +23,17 @@ public class Account
         DEFAULTS.role = Role.PLAYER;
     }
 
+    public static Account create(UUID uuid, String name)
+    {
+        final Account _account = new Account();
+
+        _account.uuid = uuid;
+        _account.username = name;
+        _account.role = Role.PLAYER;
+
+        return _account;
+    }
+
 
     private UUID uuid;
 

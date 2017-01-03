@@ -1,6 +1,9 @@
 package net.revellionmc.module;
 
 import net.revellionmc.util.Module;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * OutdatedVersion
@@ -10,10 +13,17 @@ import net.revellionmc.util.Module;
 public class Chat extends Module
 {
 
-    @Override
-    public void initialize() throws Exception
+    public Chat()
     {
 
+    }
+
+    @EventHandler
+    public void handleChat(AsyncPlayerChatEvent event)
+    {
+        final Player _player = event.getPlayer();
+
+        System.out.println("[Chat] " + _player.getName() + " > " + event.getMessage());
     }
 
 }
