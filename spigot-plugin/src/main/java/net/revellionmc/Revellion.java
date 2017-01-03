@@ -9,10 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.reflections.Reflections;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * OutdatedVersion
@@ -22,24 +22,13 @@ import java.util.List;
 public class Revellion extends JavaPlugin
 {
 
-    private Reflections reflections;
     private Injector injector;
     private List<Method> shutdownHooks;
 
     @Override
     public void onEnable()
     {
-        reflections = new Reflections("net.revellionmc");
-
-        // collect all of our hooks (silently fail on invalid ones)
         shutdownHooks = Lists.newArrayList();
-
-        reflections.getMethodsAnnotatedWith(ShutdownHook.class)
-                   .stream()
-                   .filter(method -> method.getParameterCount() == 0)
-                   .forEach(shutdownHooks::add);
-
-        System.out.printf("Found %s shutdown hook%s\n", shutdownHooks.size(), shutdownHooks.size() >= 2 ? "s" : "");
 
 
         // our primary injector - what we base a whole
@@ -92,6 +81,31 @@ public class Revellion extends JavaPlugin
     public Injector injector()
     {
         return injector;
+    }
+
+    /**
+     * Scans through the provided {@link Class}
+     * and collects all of the methods annotated
+     * with {@link ShutdownHook}. These methods
+     * are to be executed when the plugin (in
+     * most cases the server will be turning
+     * off when this occurs) disables. Invalid
+     * shutdown hooks, i.e. ones with any
+     * number of parameters will silently fail.
+     *
+     * @param clazz the class to look through
+     * @return this plugin
+     */
+    public Revellion registerHook(Class<?> clazz)
+    {
+        // consider satisfying parameters with our injector?
+
+        Stream.of(clazz.getMethods())
+              .filter(method -> method.isAnnotationPresent(ShutdownHook.class))
+              .filter(method -> method.getParameterCount() == 0)
+              .forEach(shutdownHooks::add);
+
+        return this;
     }
 
 }
