@@ -5,8 +5,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import net.revellionmc.network.database.Database;
 import net.revellionmc.util.ShutdownHook;
+import net.revellionmc.util.time.Timer;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -14,11 +17,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * OutdatedVersion
- * Dec/11/2016 (5:48 PM)
- */
 
+/**
+ * Handles the setup & initialization
+ * of this plugin
+ *
+ * @author Ben (OutdatedVersion)
+ * @since Dec/11/2016 (5:48 PM)
+ */
 public class Revellion extends JavaPlugin
 {
 
@@ -32,7 +38,7 @@ public class Revellion extends JavaPlugin
 
 
         // our primary injector - what we base a whole
-        //  lot of this plugin around
+        // lot of this plugin around
         injector = Guice.createInjector(binder ->
         {
             // this plugin
@@ -42,6 +48,7 @@ public class Revellion extends JavaPlugin
 
             // a few things that we'll just start on our own..
             binder.bind(Database.class).toInstance(new Database("production.json"));
+            binder.bind(Timer.class).toInstance(new Timer());
         });
     }
 
@@ -59,8 +66,7 @@ public class Revellion extends JavaPlugin
             catch (Exception ex)
             {
                 ex.printStackTrace();
-                System.err.println();
-                System.err.println("Issue handling the executing of a shutdown hook");
+                System.err.println("\nIssue handling the executing of a shutdown hook");
                 System.err.println("Origin: [" + method.getDeclaringClass().getSimpleName() + "]");
             }
         });
@@ -91,7 +97,8 @@ public class Revellion extends JavaPlugin
      * most cases the server will be turning
      * off when this occurs) disables. Invalid
      * shutdown hooks, i.e. ones with any
-     * number of parameters will silently fail.
+     * non-zero number of parameters
+     * will silently fail.
      *
      * @param clazz the class to look through
      * @return this plugin
@@ -104,6 +111,30 @@ public class Revellion extends JavaPlugin
               .filter(method -> method.isAnnotationPresent(ShutdownHook.class))
               .filter(method -> method.getParameterCount() == 0)
               .forEach(shutdownHooks::add);
+
+        return this;
+    }
+
+    /**
+     * Lets Bukkit's event system know about
+     * a listener bound to a certain class.
+     *
+     * <br>
+     * We do verify that the required {@link EventHandler}
+     * annotation is included in that class somewhere.
+     *
+     * <br>
+     * In the case that it is we'll hit up our injector
+     * to create a new instance of that item.
+     *
+     * @param classSet the things we'd like to register
+     * @return our plugin instance
+     */
+    public Revellion registerListener(Class<? extends Listener>... classSet)
+    {
+        Stream.of(classSet)
+                .filter(ann -> ann.isAnnotationPresent(EventHandler.class))
+                .forEach(clazz -> Bukkit.getServer().getPluginManager().registerEvents(injector.getInstance(clazz), this));
 
         return this;
     }

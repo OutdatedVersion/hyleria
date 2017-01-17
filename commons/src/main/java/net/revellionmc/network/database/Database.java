@@ -7,13 +7,14 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.revellionmc.util.MongoUtil;
+import net.revellionmc.util.mongo.MongoUtil;
 import net.revellionmc.util.config.Configurations;
 import org.bson.Document;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -251,7 +252,7 @@ public class Database
                                                : eq("username_lower", username.toLowerCase())).limit(1).first();
 
             callback.accept(_document == null ? Optional.empty()
-                                              : Optional.ofNullable(MongoUtil.read(Account.class, Account.DEFAULTS, _document)));
+                                              : Optional.ofNullable(MongoUtil.read(Account.class, , _document)));
         };
 
 

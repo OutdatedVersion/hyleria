@@ -1,8 +1,11 @@
-package net.revellionmc.util;
+package net.revellionmc.util.mongo;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.annotations.SerializedName;
 import com.simplexitymc.util.json.Exclude;
+import net.revellionmc.util.Constants;
+import net.revellionmc.util.ReflectionUtil;
+import net.revellionmc.util.Translators;
 import org.bson.Document;
 
 import java.lang.reflect.Field;

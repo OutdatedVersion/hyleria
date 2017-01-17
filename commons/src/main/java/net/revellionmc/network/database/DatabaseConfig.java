@@ -3,10 +3,13 @@ package net.revellionmc.network.database;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * OutdatedVersion
- * Dec/10/2016 (11:57 PM)
+ * Holds information regarding the
+ * connection details (auth & initial)
+ * for the MongoDB instance we use.
+ *
+ * @author Ben (OutdatedVersion)
+ * @since Dec/10/2016 (11:57 PM)
  */
-
 public class DatabaseConfig
 {
 
@@ -24,7 +27,7 @@ public class DatabaseConfig
     public String collection;
 
     /** details for our Guava cache | {@code null} if you wouldn't like to provide these details */
-    @SerializedName( "cache_spec" )
+    @SerializedName ( "cache_spec" )
     public String cacheSpecification;
 
     /**

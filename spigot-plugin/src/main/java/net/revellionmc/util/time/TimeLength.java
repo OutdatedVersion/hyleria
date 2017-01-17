@@ -19,6 +19,9 @@ public enum TimeLength
     /** milliseconds to reach this representative unit */
     private final long ms;
 
+    /** the last time this event was hit */
+    private long lastCycle;
+
     /**
      * @param msToHit if we started at {@code 0} what would
      *                we need to get to (in elapsed milliseconds)
@@ -27,6 +30,11 @@ public enum TimeLength
     TimeLength(long msToHit)
     {
         this.ms = msToHit;
+    }
+
+    public boolean allowTick()
+    {
+        return true;
     }
 
 }

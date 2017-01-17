@@ -6,39 +6,17 @@ import net.revellionmc.util.Role;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * OutdatedVersion
- * Dec/08/2016 (8:15 PM)
- */
 
+ /**
+  * @author Ben (OutdatedVersion)
+  * @since Dec/08/2016 (8:15 PM)
+  */
 public class Account
 {
 
-    /** an account with all of the values of a fresh account */
-    public static final Account DEFAULTS = new Account();
-
-    // populate the default account w/ the proper values
-    static
-    {
-        DEFAULTS.role = Role.PLAYER;
-    }
-
-    public static Account create(UUID uuid, String name)
-    {
-        final Account _account = new Account();
-
-        _account.uuid = uuid;
-        _account.username = name;
-        _account.role = Role.PLAYER;
-
-        return _account;
-    }
-
-
     private UUID uuid;
 
-    @SerializedName ( "name" )
-    private String username;
+    private String name;
 
     @SerializedName ( "previous_names" )
     private List<String> previousUsernames;
@@ -61,10 +39,10 @@ public class Account
         return uuid;
     }
 
-    /** get -> {@link #username} */
+    /** get -> {@link #name} */
     public String username()
     {
-        return username;
+        return name;
     }
 
 

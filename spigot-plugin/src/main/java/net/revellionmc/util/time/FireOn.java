@@ -16,7 +16,7 @@ public @interface FireOn
 {
 
     /**
-     * @return the value (amount) of our units
+     * @return the value (amount) of our unit
      */
     int value() default 1;
 

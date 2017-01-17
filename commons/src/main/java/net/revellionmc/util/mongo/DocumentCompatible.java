@@ -1,4 +1,4 @@
-package net.revellionmc.util;
+package net.revellionmc.util.mongo;
 
 import org.bson.Document;
 
