@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -71,22 +72,17 @@ public class AccountManager extends Module
     {
         try
         {
-            database.fetchAccountSync(event.getUniqueId(), callback ->
-            {
-                // they've been on before..
-                if (callback.isPresent())
-                {
-                    final Account _account = callback.get();
+            final Optional<Account> _transaction = database.fetchAccountSync(event.getUniqueId());
 
-                    database.cacheCommit(_account);
-                    // TODO(Ben): update account
-                }
-                // insert into database
-                else
-                {
-                    // idk
-                }
-            });
+            if (_transaction.isPresent())
+            {
+                database.cacheCommit(_transaction.get());
+                // TODO(Ben): update account
+            }
+            else
+            {
+                // TODO(Ben): create new account
+            }
         }
         catch (Exception ex)
         {

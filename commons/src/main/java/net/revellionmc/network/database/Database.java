@@ -7,7 +7,6 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.revellionmc.util.mongo.MongoUtil;
 import net.revellionmc.util.config.Configurations;
 import org.bson.Document;
 
@@ -17,6 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -173,11 +173,10 @@ public class Database
      * a username.
      *
      * @param username the username
-     * @param callback our account
      */
-    public void fetchAccount(String username, Consumer<Optional<Account>> callback)
+    public Future<Optional<Account>> fetchAccount(String username)
     {
-        fetchAccount(null, username, true, true, callback);
+        return fetchAccount(null, username, true, true);
     }
 
     /**
@@ -187,9 +186,9 @@ public class Database
      * @param uuid the UUID
      * @param callback our account
      */
-    public void fetchAccount(UUID uuid, Consumer<Optional<Account>> callback)
+    public Future<Optional<Account>> fetchAccount(UUID uuid, Consumer<Optional<Account>> callback)
     {
-        fetchAccount(uuid, null, true, true, callback);
+        return fetchAccount(uuid, null, true, true);
     }
 
     /**
@@ -199,21 +198,22 @@ public class Database
      * logging into a server.
      *
      * @param uuid the UUID of the player
-     * @param callback the player's account
      */
-    public void fetchAccountSync(UUID uuid, Consumer<Optional<Account>> callback)
+    public Optional<Account> fetchAccountSync(UUID uuid)
     {
-        fetchAccount(uuid, null, true, false, callback);
+        return fetchAccount(uuid, null, true, false);
     }
 
     /**
      * Internal Method
      *
+     * <p>
      * Loads an account from our main Mongo
      * database & wraps it in an {@linkplain Optional}
      * or returns an empty one if the player
      * doesn't exist within the account collection.
      *
+     * <p>
      * This method takes both a username & UUID.
      * Saves on some duplicated code.
      * Use the overloaded methods instead.
@@ -221,47 +221,56 @@ public class Database
      * @param uuid if we're looking someone up by UUID..
      * @param username if we're looking someone up by username..
      * @param useCache do we want to check our cache?
-     * @param callback our requested data
+     * @return what we were looking for. absolutely no
+     *         real verification goes into the return value for
+     *         this method. purely up to proper implementation.
      */
-    private void fetchAccount(UUID uuid, String username, boolean useCache, boolean async, Consumer<Optional<Account>> callback)
+    private <R> R fetchAccount(UUID uuid, String username, boolean useCache, boolean async)
     {
         boolean _useUsername = uuid == null && username != null;
 
-        // try locally first if we want to
-        if (useCache)
+        final Callable<Optional<Account>> _transaction = () ->
         {
-            Optional<Account> _cacheHit;
-
-            if (_useUsername)
-                _cacheHit = cacheFetch(username);
-            else
-                _cacheHit = cacheFetch(uuid);
-
-            if (_cacheHit.isPresent())
+            // if we request to we'll attempt to grab this
+            // account from our local cache before making
+            // a lengthy request to our database
+            if (useCache)
             {
-                callback.accept(_cacheHit);
-                return;
-            }
-        }
+                Optional<Account> _cacheHit;
 
-        // database transaction..
-        final Runnable _fetchTask = () ->
-        {
+                if (_useUsername)
+                    _cacheHit = cacheFetch(username);
+                else
+                    _cacheHit = cacheFetch(uuid);
+
+                if (_cacheHit.isPresent())
+                    return _cacheHit;
+            }
+
+            // hit up mongo
             Document _document = accounts.find(!_useUsername
                                                ? eq("uuid", uuid.toString())
                                                : eq("username_lower", username.toLowerCase())).limit(1).first();
 
-            callback.accept(_document == null ? Optional.empty()
-                                              : Optional.ofNullable(MongoUtil.read(Account.class, , _document)));
+            return _document == null ? Optional.empty()
+                                     : Optional.of(null);
+
+            // TODO(Ben): ^ turn the provided data into an account ^
         };
 
+        try
+        {
+            if (async)
+                return (R) executor.submit(_transaction);
+            else
+                return (R) executor.submit(_transaction).get();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
-        // in case we need to call this when
-        // logging in or a similar situation
-        if (async)
-            executor.submit(_fetchTask);
-        else
-            _fetchTask.run();
+        throw new RuntimeException("Something went seriously wrong whilst processing that request.");
     }
 
 }

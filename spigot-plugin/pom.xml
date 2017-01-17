@@ -40,7 +40,7 @@
     </dependencies>
 
     <build>
-        <finalName>Ultimate-UHC</finalName>
+        <finalName>Revellion</finalName>
         <defaultGoal>clean package</defaultGoal>
     
         <resources>
