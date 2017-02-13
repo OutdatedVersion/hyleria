@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.revellionmc</groupId>
+    <groupId>net.hyleriamc</groupId>
     <artifactId>spigot-plugin</artifactId>
     <version>1.0</version>
 
     <properties>
-        <plugin.main>net.revellionmc.Revellion</plugin.main>
-        <plugin.name>Revellion</plugin.name>
+        <plugin.main>net.hyleriamc.Hyleria</plugin.main>
+        <plugin.name>Hyleria</plugin.name>
     </properties>
 
     <repositories>
@@ -32,7 +32,7 @@
 
         <!-- Our 'core' -->
         <dependency>
-            <groupId>net.revellionmc</groupId>
+            <groupId>net.hyleriamc</groupId>
             <artifactId>commons</artifactId>
             <version>1.0</version>
         </dependency>
@@ -40,14 +40,14 @@
     </dependencies>
 
     <build>
-        <finalName>Revellion</finalName>
+        <finalName>${plugin.name}</finalName>
         <defaultGoal>clean package</defaultGoal>
-    
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-    
+
                 <includes>
                     <include>*</include>
                 </includes>
@@ -77,6 +77,21 @@
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Allows us to access Git info -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
                         </goals>
                     </execution>
                 </executions>

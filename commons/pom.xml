@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.revellionmc</groupId>
+    <groupId>net.hyleriamc</groupId>
     <artifactId>commons</artifactId>
     <version>1.0</version>
 
@@ -55,6 +55,20 @@
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.1.0</version>
+        </dependency>
+
+        <!-- Google (Guice): Injection w/ parameters -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+
+        <!-- Look through our loading/loaded elements easily -->
+        <dependency>
+            <groupId>io.github.lukehutch</groupId>
+            <artifactId>fast-classpath-scanner</artifactId>
+            <version>LATEST</version>
         </dependency>
 
         <!-- Apache: Random helpful language related things -->

@@ -1,0 +1,13 @@
+{
+  "connection_details": {
+    "host": "127.0.0.1",
+    "port": 27017
+  },
+  "auth": {
+    "username": "example",
+    "password": "password1234"
+  },
+  "database": "hyleria",
+  "collection": "accounts",
+  "cache_spec": null
+}
