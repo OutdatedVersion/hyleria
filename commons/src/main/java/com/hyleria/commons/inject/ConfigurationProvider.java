@@ -16,13 +16,14 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.function.Function;
 
+
 /**
  * Read & write the proper data from
  * configuration files.
  *
-  * @author Ben (OutdatedVersion)
-  * @since Dec/08/2016 (8:31 PM)
-  */
+ * @author Ben (OutdatedVersion)
+ * @since Dec/08/2016 (8:31 PM)
+ */
 public class ConfigurationProvider
 {
 
