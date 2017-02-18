@@ -3,7 +3,7 @@ package com.hyleria.commons.network.database;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
-import com.hyleria.commons.inject.Config;
+import com.hyleria.commons.inject.ConfigurationProvider;
 import com.hyleria.commons.inject.StartParallel;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
@@ -50,22 +50,22 @@ public class Database
     /** run all database requests async */
     private ExecutorService executor;
 
-    @Inject @Config ( "database/{env}" )
-    private DatabaseConfig config;
-
-    public Database()
+    @Inject
+    public Database(ConfigurationProvider provider)
     {
-        client = new MongoClient(new ServerAddress(config.connection.host, config.connection.port),
-                                 Collections.singletonList(MongoCredential.createCredential(config.auth.username, config.database, config.auth.password.toCharArray())));
+        final DatabaseConfig _config = provider.read("database/{env}", DatabaseConfig.class);
+
+        client = new MongoClient(new ServerAddress(_config.connection.host, _config.connection.port),
+                                 Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())));
 
 
-        database = client.getDatabase(config.database);
-        accounts = database.getCollection(config.collection);
+        database = client.getDatabase(_config.database);
+        accounts = database.getCollection(_config.collection);
 
         executor = Executors.newCachedThreadPool();
 
-        if (config.cacheSpecification != null)
-            accountCache = CacheBuilder.from(config.cacheSpecification).build();
+        if (_config.cacheSpecification != null)
+            accountCache = CacheBuilder.from(_config.cacheSpecification).build();
         else
             accountCache = CacheBuilder.newBuilder().build();
     }

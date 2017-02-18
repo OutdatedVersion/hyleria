@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
+import com.hyleria.commons.inject.Requires;
+import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.util.ShutdownHook;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import com.hyleria.commons.inject.ConfigurationProvider;
-import com.hyleria.commons.inject.StartParallel;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -48,15 +49,26 @@ public class Hyleria extends JavaPlugin
             binder.bind(Hyleria.class).toInstance(this);
             binder.bind(Server.class).toInstance(Bukkit.getServer());
             binder.bind(BukkitScheduler.class).toInstance(Bukkit.getServer().getScheduler());
-
-            binder.install(new ConfigurationProvider.ConfigurationModule());
         });
 
 
-        System.out.printf("Class path scanner filter: [%s.*]\n", getClass().getPackage().getName());
+        System.out.println("Class path scanner filter: [" + getClass().getPackage().getName() + ".*]");
+
+        final List<Class<?>> _toLoad = Lists.newArrayList();
 
         new FastClasspathScanner(getClass().getPackage().getName())
-                .matchClassesWithAnnotation(StartParallel.class, clazz -> injector.getInstance(clazz)).scan();
+                .matchClassesWithAnnotation(StartParallel.class, _toLoad::add).scan();
+
+        _toLoad.sort((one, two) ->
+        {
+            if (two.isAnnotationPresent(Requires.class))
+                if (Stream.of(two.getAnnotation(Requires.class).value()).anyMatch(each -> Objects.equals(one, each)))
+                    return -1;
+
+            return 0;
+        });
+
+        _toLoad.forEach(clazz -> injector.getInstance(clazz));
     }
 
     @Override

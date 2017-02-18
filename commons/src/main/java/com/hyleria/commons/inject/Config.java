@@ -1,6 +1,5 @@
 package com.hyleria.commons.inject;
 
-import com.google.inject.BindingAnnotation;
 import com.google.inject.Stage;
 
 import java.lang.annotation.ElementType;
@@ -17,7 +16,6 @@ import java.lang.annotation.Target;
  */
 @Target ( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD } )
 @Retention ( RetentionPolicy.RUNTIME )
-@BindingAnnotation
 public @interface Config
 {
 

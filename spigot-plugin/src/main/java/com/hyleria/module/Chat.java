@@ -1,6 +1,7 @@
 package com.hyleria.module;
 
 import com.google.inject.Inject;
+import com.hyleria.commons.inject.Requires;
 import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
@@ -9,11 +10,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 
- /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/11/2016 (6:53 PM)
-  */
- @StartParallel
+/**
+ * @author Ben (OutdatedVersion)
+ * @since Dec/11/2016 (6:53 PM)
+ */
+@StartParallel
+@Requires ( AccountManager.class )
 public class Chat extends Module
 {
 

@@ -1,13 +1,8 @@
 package com.hyleria.commons.inject;
 
 import com.google.gson.Gson;
-import com.google.inject.AbstractModule;
-import com.google.inject.MembersInjector;
+import com.google.inject.Inject;
 import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
 import com.hyleria.commons.util.Constants;
 
 import java.io.File;
@@ -94,80 +89,50 @@ public class ConfigurationProvider
     }
 
     /**
-     * Satisfy any fields annotated with a {@link Config} annotation
-     * with an instance of the proper configuration file, represented
-     * by a POJO.
-     */
-    public static class ConfigurationModule extends AbstractModule
-    {
-
-        /** read/write files */
-        private ConfigurationProvider provider = new ConfigurationProvider();
-
-        @Override
-        protected void configure()
-        {
-            bindListener(Matchers.any(), new TypeListener()
-            {
-                @Override
-                public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter)
-                {
-                    Class<? super I> _clazz = type.getRawType();
-
-                    while (_clazz != null)
-                    {
-                        for (Field field : _clazz.getDeclaredFields())
-                            if (!field.isAnnotationPresent(Config.class))
-                                encounter.register(new ConfigurationInjector<>(provider, field, field.getAnnotation(Config.class).value()));
-
-                        _clazz = _clazz.getSuperclass();
-                    }
-                }
-            });
-        }
-
-    }
-
-    /**
      * Allows us to have semi-dynamic code.
-     *
-     * @param <T> type parameter for what we're looking for
      */
-    public static class ConfigurationInjector<T> implements MembersInjector<T>
+    public static class ConfigurationInjector
     {
 
         /** an instance of our provider */
         private final ConfigurationProvider provider;
 
-        /** what this item is injecting */
-        private final Field field;
-
-        /** in this case, the path of the configuration file */
-        private final String value;
-
         /**
          * @param provider our provider
-         * @param field the field being injected
-         * @param value the value from our {@link Config} annotation
          */
-        public ConfigurationInjector(ConfigurationProvider provider, Field field, String value)
+        @Inject
+        public ConfigurationInjector(ConfigurationProvider provider)
         {
             this.provider = provider;
-            this.field = field;
-            this.value = value;
         }
 
-        @Override
-        public void injectMembers(T instance)
+        /**
+         * @param clazz the class containing the {@link Config} annotated field
+         * @param <T> a type parameter for that class
+         */
+        public <T> void inject(Class<T> clazz)
         {
             try
             {
-                field.set(instance, provider.read(value, field.getType()));
+                for (Field field : clazz.getDeclaredFields())
+                {
+                    if (field.isAnnotationPresent(Config.class))
+                    {
+                        // chances are the field is private, so
+                        // let's just do this now
+                        field.setAccessible(true);
+
+                        // provider.read(field.getAnnotation(Config.class).value(), field.getType())
+
+                        field.set(clazz, clazz);
+
+                        System.out.println("Field: " + field.get(this).getClass().getName());
+                    }
+                }
             }
-            catch (Exception ex)
+            catch (IllegalAccessException ex)
             {
-                ex.printStackTrace();
-                System.err.println("\nWe had an issue injecting a configuration for > " + instance.getClass().getName());
+                throw new RuntimeException(ex);
             }
         }
 
