@@ -3,7 +3,7 @@ package net.hyleriamc.network;
 import com.google.inject.Inject;
 import net.hyleriamc.commons.network.database.Account;
 import net.hyleriamc.commons.network.database.Database;
-import net.hyleriamc.commons.util.StartParallelToServer;
+import net.hyleriamc.commons.util.StartParallel;
 import net.hyleriamc.util.Issues;
 import net.hyleriamc.util.Module;
 import net.hyleriamc.util.ShutdownHook;
@@ -23,7 +23,7 @@ import java.util.UUID;
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (6:54 PM)
  */
-@StartParallelToServer
+@StartParallel
 public class AccountManager extends Module
 {
 

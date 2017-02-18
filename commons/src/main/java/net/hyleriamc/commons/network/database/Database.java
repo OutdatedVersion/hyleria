@@ -8,8 +8,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import net.hyleriamc.commons.util.StartParallelToServer;
-import net.hyleriamc.commons.util.config.Config;
+import net.hyleriamc.commons.inject.Config;
+import net.hyleriamc.commons.util.StartParallel;
 import org.bson.Document;
 
 import java.util.Collections;
@@ -24,11 +24,11 @@ import java.util.function.Consumer;
 import static com.mongodb.client.model.Filters.eq;
 
 
- /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/08/2016 (8:07 PM)
-  */
- @StartParallelToServer
+/**
+ * @author Ben (OutdatedVersion)
+ * @since Dec/08/2016 (8:07 PM)
+ */
+@StartParallel
 public class Database
 {
 
@@ -47,12 +47,13 @@ public class Database
     /** run all database requests async */
     private ExecutorService executor;
 
+    @Inject @Config
+    private DatabaseConfig config;
+
     /**
-     * @param config the minimal name of our config file
-     *               for this database instance.
+     *
      */
-    @Inject
-    public Database(@Config(DatabaseConfig.class) DatabaseConfig config)
+    public Database()
     {
         client = new MongoClient(new ServerAddress(config.connection.host, config.connection.port),
                                  Collections.singletonList(MongoCredential.createCredential(config.auth.username, config.database, config.auth.password.toCharArray())));

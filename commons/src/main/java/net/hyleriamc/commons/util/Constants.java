@@ -2,10 +2,10 @@ package net.hyleriamc.commons.util;
 
 import java.util.regex.Pattern;
 
- /**
-  * @author Ben (OutdatedVersion)
-  * @since Jan/02/2017 (9:57 PM)
-  */
+/**
+ * @author Ben (OutdatedVersion)
+ * @since Jan/02/2017 (9:57 PM)
+ */
 public class Constants
 {
 

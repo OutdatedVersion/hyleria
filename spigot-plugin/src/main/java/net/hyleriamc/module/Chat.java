@@ -1,7 +1,7 @@
 package net.hyleriamc.module;
 
 import com.google.inject.Inject;
-import net.hyleriamc.commons.util.StartParallelToServer;
+import net.hyleriamc.commons.util.StartParallel;
 import net.hyleriamc.network.AccountManager;
 import net.hyleriamc.util.Module;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
   * @author Ben (OutdatedVersion)
   * @since Dec/11/2016 (6:53 PM)
   */
- @StartParallelToServer
+ @StartParallel
 public class Chat extends Module
 {
 

@@ -57,13 +57,6 @@
             <version>4.1.0</version>
         </dependency>
 
-        <!-- Google (Guice): Injection w/ parameters -->
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-assistedinject</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-
         <!-- Look through our loading/loaded elements easily -->
         <dependency>
             <groupId>io.github.lukehutch</groupId>

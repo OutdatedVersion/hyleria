@@ -1,7 +1,7 @@
 package net.hyleriamc.commons.network.database;
 
 import com.google.gson.annotations.SerializedName;
-import net.hyleriamc.commons.util.config.Configuration;
+import net.hyleriamc.commons.inject.Configuration;
 
 /**
  * Holds information regarding the

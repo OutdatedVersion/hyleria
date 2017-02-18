@@ -5,7 +5,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import net.hyleriamc.commons.util.StartParallelToServer;
+import net.hyleriamc.commons.util.StartParallel;
+import net.hyleriamc.commons.inject.ConfigurationProvider;
 import net.hyleriamc.util.ShutdownHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -46,13 +47,15 @@ public class Hyleria extends JavaPlugin
             binder.bind(Hyleria.class).toInstance(this);
             binder.bind(Server.class).toInstance(Bukkit.getServer());
             binder.bind(BukkitScheduler.class).toInstance(Bukkit.getServer().getScheduler());
+
+            binder.install(new ConfigurationProvider.ConfigurationModule());
         });
 
 
         System.out.println("Scanning class path for auto-start modules; Filter match: " + getClass().getPackage().getName());
 
         new FastClasspathScanner(getClass().getPackage().getName())
-                .matchClassesWithAnnotation(StartParallelToServer.class, clazz -> injector.getInstance(clazz)).scan();
+                .matchClassesWithAnnotation(StartParallel.class, clazz -> injector.getInstance(clazz)).scan();
     }
 
     @Override
