@@ -21,8 +21,6 @@ public abstract class Module implements Listener
      */
     public void configure()
     {
-        System.out.println("[Debug] Hit #configure");
-
         plugin.registerListeners(this.getClass());
     }
 

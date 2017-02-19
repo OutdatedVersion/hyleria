@@ -70,7 +70,7 @@ public class Hyleria extends JavaPlugin
             return 0;
         });
 
-        _toLoad.forEach(this::typeParameterBoundInjection);
+        _toLoad.forEach(this::boundInjection);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class Hyleria extends JavaPlugin
      * @param <T> a type parameter for the type
      *            of the provided class
      */
-    private <T> void typeParameterBoundInjection(Class<T> clazz)
+    private <T> void boundInjection(Class<T> clazz)
     {
         T _instance = injector.getInstance(clazz);
 
