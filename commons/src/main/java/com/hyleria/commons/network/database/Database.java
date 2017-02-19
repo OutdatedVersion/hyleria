@@ -156,7 +156,7 @@ public class Database
                                    .stream()
                                    .filter(entry -> entry.getValue().username().equalsIgnoreCase(username))
                                    .findFirst()
-                                   .flatMap(entry -> Optional.ofNullable(entry.getValue()));
+                                   .flatMap(entry -> Optional.of(entry.getValue()));
     }
 
     /**
@@ -168,7 +168,7 @@ public class Database
      */
     public Optional<Account> cacheFetch(UUID uuid)
     {
-        return Optional.ofNullable(accountCache.asMap().get(uuid));
+        return Optional.ofNullable(accountCache.getIfPresent(uuid));
     }
 
     /**

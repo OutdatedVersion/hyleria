@@ -27,8 +27,12 @@ public class Chat extends Module
     public void handleChat(AsyncPlayerChatEvent event)
     {
         final Player _player = event.getPlayer();
+        final String _message = event.getMessage();
 
-        System.out.println("[Chat] " + _player.getName() + " > " + event.getMessage());
+
+        event.setCancelled(true);
+
+        System.out.println("[Chat] " + _player.getName() + " > " + _message);
     }
 
 }

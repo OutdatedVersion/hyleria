@@ -59,6 +59,7 @@ public class Hyleria extends JavaPlugin
         new FastClasspathScanner(getClass().getPackage().getName())
                 .matchClassesWithAnnotation(StartParallel.class, _toLoad::add).scan();
 
+        // verify that we're creating these in the right order
         _toLoad.sort((one, two) ->
         {
             if (two.isAnnotationPresent(Requires.class))
@@ -68,7 +69,7 @@ public class Hyleria extends JavaPlugin
             return 0;
         });
 
-        _toLoad.forEach(clazz -> injector.getInstance(clazz));
+        _toLoad.forEach(injector::getInstance);
     }
 
     @Override
