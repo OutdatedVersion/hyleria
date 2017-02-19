@@ -81,6 +81,7 @@ public class AccountManager extends Module
     {
         try
         {
+            final long _startedAt = System.currentTimeMillis();
             final Optional<Account> _transaction = database.fetchAccountSync(event.getUniqueId());
 
             if (_transaction.isPresent())
@@ -90,6 +91,7 @@ public class AccountManager extends Module
             }
             else
             {
+                System.out.println("[Login] not present");
                 // TODO(Ben): create new account
             }
         }

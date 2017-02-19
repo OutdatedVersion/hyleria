@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.hyleria.commons.inject.Requires;
 import com.hyleria.commons.inject.StartParallel;
+import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
@@ -69,7 +70,7 @@ public class Hyleria extends JavaPlugin
             return 0;
         });
 
-        _toLoad.forEach(injector::getInstance);
+        _toLoad.forEach(this::typeParameterBoundInjection);
     }
 
     @Override
@@ -157,6 +158,19 @@ public class Hyleria extends JavaPlugin
                 .forEach(clazz -> Bukkit.getServer().getPluginManager().registerEvents(injector.getInstance(clazz), this));
 
         return this;
+    }
+
+    /**
+     * @param clazz the class we're working with
+     * @param <T> a type parameter for the type
+     *            of the provided class
+     */
+    private <T> void typeParameterBoundInjection(Class<T> clazz)
+    {
+        T _instance = injector.getInstance(clazz);
+
+        if (_instance instanceof Module)
+            ((Module) _instance).configure();
     }
 
 }

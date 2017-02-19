@@ -1,6 +1,5 @@
 package com.hyleria.util;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.hyleria.Hyleria;
 import org.bukkit.event.Listener;
@@ -10,7 +9,7 @@ import org.bukkit.event.Listener;
   * @author Ben (OutdatedVersion)
   * @since Dec/11/2016 (7:04 PM)
   */
-public abstract class Module extends AbstractModule implements Listener
+public abstract class Module implements Listener
 {
 
     /** our plugin instance */
@@ -18,26 +17,13 @@ public abstract class Module extends AbstractModule implements Listener
     private Hyleria plugin;
 
     /**
-     * Guice delegate for this module
+     * Guice delegate for this module (kind of)
      */
-    @Override
-    protected void configure()
+    public void configure()
     {
         System.out.println("[Debug] Hit #configure");
 
         plugin.registerListeners(this.getClass());
-    }
-
-    /**
-     * Binds the particular object to our
-     * injector so we may use it later.
-     *
-     * @param object the object
-     */
-    com.google.inject.Module use(Module object)
-    {
-        super.binder().install(object);
-        return object;
     }
 
     /**
