@@ -1,4 +1,4 @@
-package com.hyleria.commons.database;
+package com.hyleria.commons.mongo;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -20,7 +20,7 @@ public class DatabaseConfig
     /** our connection details */
     public AuthDetails auth;
 
-    /** the database we're using */
+    /** the account we're using */
     public String database;
 
     /** the main mongo collection we're using */

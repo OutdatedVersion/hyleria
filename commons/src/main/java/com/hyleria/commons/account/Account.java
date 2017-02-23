@@ -1,10 +1,9 @@
-package com.hyleria.commons.database;
+package com.hyleria.commons.account;
 
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.commons.Role;
 import com.hyleria.commons.translation.SaveAs;
 
-import java.lang.*;
 import java.util.List;
 import java.util.UUID;
 

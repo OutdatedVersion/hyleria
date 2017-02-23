@@ -1,4 +1,4 @@
-package com.hyleria.commons.database;
+package com.hyleria.commons.account;
 
 import com.google.gson.annotations.SerializedName;
 import com.simplexitymc.util.json.Exclude;

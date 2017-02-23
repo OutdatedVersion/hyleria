@@ -1,8 +1,9 @@
-package com.hyleria.commons.database;
+package com.hyleria.commons.mongo;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
+import com.hyleria.commons.account.Account;
 import com.hyleria.commons.inject.ConfigurationProvider;
 import com.hyleria.commons.inject.StartParallel;
 import com.mongodb.MongoClient;
@@ -26,7 +27,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 /**
  * In charge of managing the connections,
- * and caching of our persistent database.
+ * and caching of our persistent account.
  *
  * @author Ben (OutdatedVersion)
  * @since Dec/08/2016 (8:07 PM)
@@ -38,7 +39,7 @@ public class Database
     /** our one and only Mongo client */
     private final MongoClient client;
 
-    /** the only Mongo database we're using */
+    /** the only Mongo account we're using */
     public final MongoDatabase database;
 
     /** the collection accounts are stored in (used for most things) */
@@ -47,13 +48,13 @@ public class Database
     /** local cache for accounts | it is crucial that you properly handle the invalidation of items here. */
     private Cache<UUID, Account> accountCache;
 
-    /** run all database requests async */
+    /** run all account requests async */
     private ExecutorService executor;
 
     @Inject
     public Database(ConfigurationProvider provider)
     {
-        final DatabaseConfig _config = provider.read("database/{env}", DatabaseConfig.class);
+        final DatabaseConfig _config = provider.read("account/{env}", DatabaseConfig.class);
 
         client = new MongoClient(new ServerAddress(_config.connection.host, _config.connection.port),
                                  Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())));
@@ -72,7 +73,7 @@ public class Database
 
     /**
      * Unbind the allocated resources for
-     * this database instance.
+     * this account instance.
      *
      * Note: Our {@link #executor} will finish executing
      * the set of tasks it currently has queued.
@@ -172,7 +173,7 @@ public class Database
     }
 
     /**
-     * Grab an account from our database via
+     * Grab an account from our account via
      * a username.
      *
      * @param username the username
@@ -183,7 +184,7 @@ public class Database
     }
 
     /**
-     * Grab an account from our database via
+     * Grab an account from our account via
      * the UUID provided.
      *
      * @param uuid the UUID
@@ -195,7 +196,7 @@ public class Database
     }
 
     /**
-     * Grab an account from our database
+     * Grab an account from our account
      * synchronously. Probably only ever
      * going to be used when someone is
      * logging into a server.
@@ -212,7 +213,7 @@ public class Database
      *
      * <p>
      * Loads an account from our main Mongo
-     * database & wraps it in an {@linkplain Optional}
+     * account & wraps it in an {@linkplain Optional}
      * or returns an empty one if the player
      * doesn't exist within the account collection.
      *
@@ -236,7 +237,7 @@ public class Database
         {
             // if we request to we'll attempt to grab this
             // account from our local cache before making
-            // a lengthy request to our database
+            // a lengthy request to our account
             if (useCache)
             {
                 Optional<Account> _cacheHit;

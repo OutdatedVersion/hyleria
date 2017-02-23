@@ -1,5 +1,7 @@
 package com.hyleria.commons.reflect;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -25,5 +27,20 @@ public class ReflectionUtil
     {
         return PRIMITIVE_TYPES.contains(field.getType());
     }
+
+    /**
+     * Grabs the "human friendly" name of
+     * the specified field.
+     *
+     * @param field the field
+     * @return the name
+     */
+    public static String nameFromField(Field field)
+    {
+        return field.isAnnotationPresent(SerializedName.class)
+                ? field.getAnnotation(SerializedName.class).value()
+                : field.getName();
+    }
+
 
 }

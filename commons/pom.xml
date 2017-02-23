@@ -22,14 +22,14 @@
     
     <dependencies>
 
-        <!-- Primary database connector -->
+        <!-- Primary account connector -->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>3.2.2</version>
         </dependency>
 
-        <!-- Literally every database driver wants this -->
+        <!-- Literally every account driver wants this -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
