@@ -2,8 +2,7 @@ package com.hyleria.commons.inject;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.google.inject.Stage;
-import com.hyleria.commons.util.Constants;
+import com.hyleria.commons.Constants;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -25,11 +24,8 @@ public class ConfigurationProvider
     /** GSON instance */
     private final Gson GSON = new Gson();
 
-    /** the current state of this plugin */
-    private final Stage STAGE = new File("dev_server.json").exists() ? Stage.DEVELOPMENT : Stage.PRODUCTION;
-
     /** Inject the proper variables & append the file extension to the provided {@link String} */
-    private Function<String, String> injectAndFormat = string -> string.replaceAll("\\{env}", STAGE.name().toLowerCase()) + ".json";
+    private Function<String, String> injectAndFormat = string -> string.replaceAll("\\{env}", Constants.ENV.name().toLowerCase()) + ".json";
 
     /**
      * Read the desired configuration.

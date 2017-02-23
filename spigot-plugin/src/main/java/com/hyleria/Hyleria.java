@@ -3,7 +3,7 @@ package com.hyleria;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Stage;
+import com.hyleria.commons.Constants;
 import com.hyleria.commons.inject.Requires;
 import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.util.Module;
@@ -44,7 +44,7 @@ public class Hyleria extends JavaPlugin
 
         // our primary injector - what we base a whole
         // lot of this plugin around
-        injector = Guice.createInjector(Stage.PRODUCTION, binder ->
+        injector = Guice.createInjector(Constants.ENV, binder ->
         {
             // this plugin
             binder.bind(Hyleria.class).toInstance(this);

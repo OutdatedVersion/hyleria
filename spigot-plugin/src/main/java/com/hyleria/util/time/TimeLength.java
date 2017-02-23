@@ -1,6 +1,6 @@
 package com.hyleria.util.time;
 
-import com.hyleria.commons.util.TimeConstants;
+import com.hyleria.commons.time.TimeConstants;
 
 /**
  * OutdatedVersion
