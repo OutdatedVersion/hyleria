@@ -1,4 +1,4 @@
-package com.hyleria.commons.util.mongo;
+package com.hyleria.commons.mongo;
 
 import org.bson.Document;
 

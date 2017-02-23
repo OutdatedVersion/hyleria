@@ -1,4 +1,4 @@
-package com.hyleria.commons.util;
+package com.hyleria.commons.translation;
 
 import java.util.UUID;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package com.hyleria.commons.network.database;
+package com.hyleria.commons.database;
 
 import com.google.gson.annotations.SerializedName;
 

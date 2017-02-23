@@ -1,8 +1,8 @@
 package com.hyleria.network;
 
 import com.google.inject.Inject;
-import com.hyleria.commons.network.database.Account;
-import com.hyleria.commons.network.database.Database;
+import com.hyleria.commons.database.Account;
+import com.hyleria.commons.database.Database;
 import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.util.Issues;
 import com.hyleria.util.Module;

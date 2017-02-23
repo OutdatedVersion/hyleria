@@ -1,4 +1,4 @@
-package com.hyleria.commons.network.database;
+package com.hyleria.commons.database;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

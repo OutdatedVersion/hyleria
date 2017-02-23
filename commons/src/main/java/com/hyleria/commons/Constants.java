@@ -1,9 +1,10 @@
-package com.hyleria.commons.util;
+package com.hyleria.commons;
 
 import com.google.inject.Stage;
 
 import java.io.File;
 import java.util.regex.Pattern;
+
 
 /**
  * @author Ben (OutdatedVersion)

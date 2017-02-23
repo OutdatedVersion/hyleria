@@ -1,4 +1,4 @@
-package com.hyleria.commons.util;
+package com.hyleria.commons.reflect;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

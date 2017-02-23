@@ -1,4 +1,5 @@
-package com.hyleria.commons.util;
+package com.hyleria.commons;
+
 
  /**
   * @author Ben (OutdatedVersion)

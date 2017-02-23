@@ -1,7 +1,8 @@
-package com.hyleria.commons.network.database;
+package com.hyleria.commons.database;
 
 import com.google.gson.annotations.SerializedName;
-import com.hyleria.commons.util.Role;
+import com.hyleria.commons.Role;
+import com.hyleria.commons.translation.SaveAs;
 
 import java.lang.*;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class Account
 {
 
+    @SaveAs ( String.class )
     private UUID uuid;
 
     private String name;
@@ -24,7 +26,7 @@ public class Account
 
     private Role role;
     private List<String> privileges;
-    private List<com.hyleria.commons.network.database.Package> packages;
+    private List<Package> packages;
 
     // TODO(Ben): currency & XP?
 

@@ -6,4 +6,4 @@
  * @author Ben (OutdatedVersion)
  * @since Jan/02/2017 (10:37 PM)
  */
-package com.hyleria.commons.util;
+package com.hyleria.commons;

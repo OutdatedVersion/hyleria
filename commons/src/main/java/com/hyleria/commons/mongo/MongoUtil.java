@@ -1,11 +1,9 @@
-package com.hyleria.commons.util.mongo;
+package com.hyleria.commons.mongo;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.annotations.SerializedName;
-import com.hyleria.commons.util.Constants;
-import com.hyleria.commons.util.ReflectionUtil;
+import com.hyleria.commons.reflect.ReflectionUtil;
 import com.simplexitymc.util.json.Exclude;
-import com.hyleria.commons.util.Translators;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
@@ -120,9 +118,7 @@ public class MongoUtil
                     // grab the value we got from the database
                     Object _current = document.get(_name);
 
-                    // hacky way to handle UUIDs for now..
-                    if (_current instanceof String && Constants.UUID_REGEX.matcher((String) _current).matches())
-                        _current = Translators.STRING_TO_UUID.apply((String) _current);
+                    // imply that our reading order is opposite to the saving
 
                     // set the value on the new object
                     // they're guaranteed to be the same type, so no issues there

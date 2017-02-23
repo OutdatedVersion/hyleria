@@ -1,4 +1,4 @@
-package com.hyleria.commons.util;
+package com.hyleria.commons.time;
 
  /**
   * @author Ben (OutdatedVersion)
