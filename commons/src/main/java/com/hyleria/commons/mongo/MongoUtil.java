@@ -124,7 +124,7 @@ public class MongoUtil
                     field.set(ACCESSOR, _current != _default ? _current : _default);
                 }
             }
-            else // write
+            else
             {
                 // writing to document
                 // iterate over the value, if it's not equal to default value, then set it
@@ -151,7 +151,6 @@ public class MongoUtil
 
             // an instance of 'T' that we may manipulate (final value)
             final Object _workingWith = action == Action.READ_FROM_DOCUMENT ? value.getClass().newInstance() : document;
-
 
 
             System.out.println("hitting class: " + _workingWith.getClass().getName());
