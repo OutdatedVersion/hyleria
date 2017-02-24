@@ -6,6 +6,7 @@ import com.hyleria.commons.account.Account;
 import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.commons.mongo.Database;
 import com.hyleria.util.Issues;
+import com.hyleria.util.LogUtil;
 import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
 import org.bukkit.entity.Player;
@@ -98,6 +99,8 @@ public class AccountManager extends Module
                 database.cacheCommit(_account);
                 database.accounts.insertOne(_account.asDocument());
             }
+
+            LogUtil.system("Login", "Elapsed for " + event.getName() + ": " + (System.currentTimeMillis() - _startedAt) + "ms");
         }
         catch (Exception ex)
         {
