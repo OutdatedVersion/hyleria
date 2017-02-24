@@ -23,10 +23,11 @@
     <dependencies>
 
         <!-- Bukkit/Spigot API & CraftBukkit -->
+        <!-- 1.7 cause people suck. no salt <3 -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.11-R0.1-SNAPSHOT</version>
+            <groupId>com.destroystokyo</groupId>
+            <artifactId>paper</artifactId>
+            <version>1.7-R1</version>
             <scope>provided</scope>
         </dependency>
 

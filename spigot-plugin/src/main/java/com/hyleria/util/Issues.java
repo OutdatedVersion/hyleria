@@ -2,7 +2,6 @@ package com.hyleria.util;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -49,7 +48,7 @@ public class Issues
 
         final BaseComponent[] _message = _builder.create();
 
-        Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(recipient -> recipient.spigot().sendMessage(_message));
+        PlayerUtil.everyone().filter(Player::isOp).forEach(recipient -> recipient.spigot().sendMessage(_message));
     }
 
 }

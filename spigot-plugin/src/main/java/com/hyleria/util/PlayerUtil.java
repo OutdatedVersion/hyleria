@@ -3,7 +3,8 @@ package com.hyleria.util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -15,9 +16,9 @@ public class PlayerUtil
     /**
      * @return a collection containing everyone that's online
      */
-    public static Collection<? extends Player> everyone()
+    public static Stream<Player> everyone()
     {
-        return Bukkit.getOnlinePlayers();
+        return Arrays.asList(Bukkit.getServer().getOnlinePlayers()).stream();
     }
 
 }
