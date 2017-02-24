@@ -17,8 +17,11 @@ public class Test
     {
         final Document _write = MongoUtil.write(new DataClass("Ben", 1, "Ben OutdatedVersion"), DataClass.DEFAULT_VAL, new Document());
 
+        System.out.println("=======================");
         System.out.println("Write:");
         System.out.println(_write.toJson());
+        System.out.println("=======================");
+        System.out.println();
         System.out.println();
         System.out.println();
 
@@ -26,9 +29,10 @@ public class Test
 
         final DataClass _data = MongoUtil.read(DataClass.class, DataClass.DEFAULT_VAL, _write);
 
+        System.out.println("=======================");
         System.out.println("Read:");
         System.out.println(_data.toString());
-        System.out.println();
+        System.out.println("=======================");
         System.out.println();
     }
 
@@ -47,6 +51,8 @@ public class Test
 
         @SerializedName ( "full_name" )
         public String fullName;
+
+        public DataClass() { }
 
         public DataClass(String name, int level, String fullName)
         {

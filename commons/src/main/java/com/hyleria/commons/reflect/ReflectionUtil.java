@@ -1,6 +1,8 @@
 package com.hyleria.commons.reflect;
 
 import com.google.gson.annotations.SerializedName;
+import com.hyleria.commons.mongo.DefaultValue;
+import com.simplexitymc.util.json.Exclude;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -42,5 +44,17 @@ public class ReflectionUtil
                 : field.getName();
     }
 
+    /**
+     * Whether or not we should continue going
+     * whilst iterating the fields in a class
+     * during reflection.
+     *
+     * @param field the field
+     * @return yes or no
+     */
+    public static boolean skipOver(Field field)
+    {
+        return field.isAnnotationPresent(Exclude.class) || field.isAnnotationPresent(DefaultValue.class);
+    }
 
 }

@@ -7,9 +7,10 @@ import com.simplexitymc.util.json.Exclude;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.hyleria.commons.reflect.ReflectionUtil.isPrimitive;
 import static com.hyleria.commons.translation.Translators.translatorFor;
 
 /**
@@ -18,8 +19,6 @@ import static com.hyleria.commons.translation.Translators.translatorFor;
   */
 public class MongoUtil
 {
-
-    private static final Object ACCESSOR = new Object();
 
     /** what are we doing? */
     enum Action
@@ -95,131 +94,79 @@ public class MongoUtil
     {
         try
         {
-            System.out.println("action -> " + action);
-            System.out.println("returnType -> " + returnType.getName());
+            final long _startedAt = System.currentTimeMillis();
 
-//            if (action == Action.READ_FROM_DOCUMENT)
-//                checkState(value != null, "'value' must not be null");
-//            else
-//                checkState(defaultValue != null, "'defaultValue' must not be null");
+            System.out.println("Performing Action: " + action.name());
+            System.out.println("Return Type: " + returnType.getName());
 
+            if (value != null)
+                System.out.println("Value Type: " + value.getClass().getName());
+
+            checkState(defaultValue != null, "a default value is required for both actions");
+            System.out.println("Default Value Type: " + defaultValue.getClass().getName());
+
+
+            R _willReturn;
 
             // requires non-null: defaultValue
             if (action == Action.READ_FROM_DOCUMENT)
             {
-                checkState(returnType.getClass() == defaultValue.getClass(), "mismatched class types");
+                checkState(Stream.of(returnType.getConstructors()).anyMatch(con -> con.getParameterCount() == 0), "we require a zero args constructor for initialization");
+                checkState(returnType == defaultValue.getClass(), "mismatched class types");
 
                 final R _workingWith = returnType.newInstance();
 
                 for (Field field : _workingWith.getClass().getDeclaredFields())
                 {
-                    if (field.isAnnotationPresent(Exclude.class))
+                    if (ReflectionUtil.skipOver(field))
                         continue;
+
+                    // we can't set final fields, so let's check that over
+                    checkState(!Modifier.isFinal(field.getModifiers()), "can't reset a final field; be sure to exclude this field or change the modifiers.");
 
                     final String _name = ReflectionUtil.nameFromField(field);
 
                     Object _current = document.get(_name);
-                    Object _default = defaultValue.getClass().getDeclaredField(field.getName()).get(ACCESSOR);
+                    Object _default = defaultValue.getClass().getDeclaredField(field.getName()).get(defaultValue);
 
-                    field.set(ACCESSOR, _current != _default ? _current : _default);
+                    field.set(defaultValue, _current != _default ? _current : _default);
                 }
+
+                _willReturn = _workingWith;
             }
             else
             {
                 // writing to document
                 // iterate over the value, if it's not equal to default value, then set it
+                checkState(value != null, "we require a value to work with whilst writing");
 
                 for (Field field : value.getClass().getDeclaredFields())
                 {
-                    if (field.isAnnotationPresent(Exclude.class))
+                    if (field.isAnnotationPresent(Exclude.class) || field.isAnnotationPresent(DefaultValue.class))
                         continue;
 
                     final String _name = ReflectionUtil.nameFromField(field);
 
-                    Object _current = field.get(ACCESSOR);
-                    Object _default = defaultValue.getClass().getDeclaredField(field.getName()).get(ACCESSOR);
+                    Object _current = field.get(value);
+                    Object _default = defaultValue.getClass().getDeclaredField(field.getName()).get(value);
 
                     if (_current != _default)
                     {
-                        // TODO(Ben): ok
+                        // first operation needs to be modified
                         document.put(_name, field.isAnnotationPresent(SaveAs.class)
                                             ? translatorFor(field.getType(), field.getAnnotation(SaveAs.class).value())
                                             : _current);
                     }
                 }
+
+                // dirty cast - verified same type by nature of
+                // how this method works
+                _willReturn = (R) document;
             }
 
-            // an instance of 'T' that we may manipulate (final value)
-            final Object _workingWith = action == Action.READ_FROM_DOCUMENT ? value.getClass().newInstance() : document;
-
-
-            System.out.println("hitting class: " + _workingWith.getClass().getName());
-
-            // iterate over what we need to set from our default
-            for (Field field : _workingWith.getClass().getDeclaredFields())
-            {
-                System.out.println("hitting field: " + field.getName());
-
-                // in the case that something shouldn't be included
-                // this annotation will be present - let's honor it.
-                if (field.isAnnotationPresent(Exclude.class))
-                    continue;
-
-                // the identifier for this field that we're going with
-                // we respect custom names via an annotation from Google's GSON project
-                final String _name = field.isAnnotationPresent(SerializedName.class)
-                                     ? field.getAnnotation(SerializedName.class).value()
-                                     : field.getName();
-
-
-                if (action == Action.READ_FROM_DOCUMENT)
-                {
-                    // grab the value we got from the account
-                    Object _current = document.get(_name);
-
-                    // imply that our reading order is opposite to the saving
-
-                    // set the value on the new object
-                    // they're guaranteed to be the same type, so no issues there
-                    final Field _toUpdate = _workingWith.getClass().getField(field.getName());
-
-                    // most of the fields are private so
-                    // we need to forcefully change them
-                    // butttt check just in-case..
-                    if (!_toUpdate.isAccessible())
-                        _toUpdate.setAccessible(true);
-
-                    _toUpdate.set(_workingWith, _current == null
-                                                ? field.get(value)
-                                                : _current);
-                }
-                else
-                {
-                    // if the default value is not equal to our set value
-                    // we'll commit the value into our document.
-
-                    // default values are implied to be 'null' unless the
-                    // specified field is a primitive; in which case it should
-                    // be assigned to its default at initialization.
-                    final Object _defaultValue = defaultValue.getClass().getField(field.getName());
-
-                    // write different value
-                    if (field.get(value) != _defaultValue)
-                    {
-                        // TODO(Ben): consider recursively going through each of the non-primitive fields w/ this method
-
-                        if (isPrimitive(field))
-                            document.put(_name, field.get(field));
-                        else if (value.getClass().isAssignableFrom(DocumentCompatible.class))
-                            document.put(_name, ((DocumentCompatible) value).asDocument());
-                        else
-                            throw new IllegalArgumentException("We couldn't convert [" + value.getClass().getName() + "] to a Document");
-                    }
-                }
-            }
-
+            System.out.println("Elapsed Time for Operation: " + (System.currentTimeMillis() - _startedAt) + "ms");
             // idk. all of this is just so dirty.
-            return _workingWith == null ? (R) document : (R) _workingWith;
+            return _willReturn;
         }
         catch (Exception ex)
         {
