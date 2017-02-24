@@ -1,21 +1,25 @@
 package com.hyleria.commons.account;
 
 import com.google.gson.annotations.SerializedName;
-import com.hyleria.commons.Role;
-import com.hyleria.commons.translation.SaveAs;
+import com.hyleria.commons.mongo.document.DocumentBuilder;
+import com.hyleria.commons.mongo.document.DocumentCompatible;
+import com.hyleria.commons.reference.Role;
+import com.hyleria.commons.translation.Translators;
+import com.hyleria.commons.translation.UseTranslator;
+import org.bson.Document;
 
 import java.util.List;
 import java.util.UUID;
 
 
- /**
+/**
   * @author Ben (OutdatedVersion)
   * @since Dec/08/2016 (8:15 PM)
   */
-public class Account
+public class Account implements DocumentCompatible
 {
 
-    @SaveAs ( String.class )
+    @UseTranslator ( Translators.UUID )
     private UUID uuid;
 
     private String name;
@@ -33,6 +37,7 @@ public class Account
     private String currentIP;
 
     @SerializedName ( "previous_addresses" )
+    @UseTranslator ( Translators.PREVIOUS_ADDRESS )
     private List<PreviousAddress> previousAddresses;
 
     /** get -> {@link #uuid} */
@@ -47,6 +52,12 @@ public class Account
         return name;
     }
 
+    /** get -> {@link #role} */
+    public Role role()
+    {
+        return role;
+    }
+
 
     /**
      * Represents some other IP that
@@ -59,6 +70,52 @@ public class Account
 
         /** the UNIX epoch timestamp we last saw this on */
         public long lastUsedOn;
+
+        public PreviousAddress(String value, long lastUsedOn)
+        {
+            this.value = value;
+            this.lastUsedOn = lastUsedOn;
+        }
+    }
+
+    @Override
+    public Document asDocument()
+    {
+        return DocumentBuilder.create()
+                .withFreshDoc()
+                .appendAllFields(this)
+                .finished();
+    }
+
+    @Override
+    public Account populateFromDocument(Document document)
+    {
+        this.uuid = UUID.fromString(document.getString("uuid"));
+        this.name = document.getString("name");
+        this.role = Role.ADMIN;
+
+        return this;
+    }
+
+    /**
+     * Turns the provided data, retrieved
+     * from a client when they login, into
+     * an account.
+     *
+     * @param uuid the player's UUID
+     * @param name the player's username
+     * @param ip the player's IP address
+     * @return the new account
+     */
+    public static Account fromLoginData(UUID uuid, String name, String ip)
+    {
+        final Account _fresh = new Account();
+
+        _fresh.uuid = uuid;
+        _fresh.name = name;
+        _fresh.currentIP = ip;
+
+        return _fresh;
     }
 
 }

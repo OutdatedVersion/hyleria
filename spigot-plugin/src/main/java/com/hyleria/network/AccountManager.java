@@ -1,9 +1,10 @@
 package com.hyleria.network;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.hyleria.commons.account.Account;
-import com.hyleria.commons.mongo.Database;
 import com.hyleria.commons.inject.StartParallel;
+import com.hyleria.commons.mongo.Database;
 import com.hyleria.util.Issues;
 import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
@@ -24,6 +25,7 @@ import java.util.UUID;
  * @since Dec/11/2016 (6:54 PM)
  */
 @StartParallel
+@Singleton
 public class AccountManager extends Module
 {
 
@@ -87,12 +89,14 @@ public class AccountManager extends Module
             if (_transaction.isPresent())
             {
                 database.cacheCommit(_transaction.get());
-                // TODO(Ben): update account
+                // TODO(Ben): update account | name, IP
             }
             else
             {
-                System.out.println("[Login] not present");
-                // TODO(Ben): create new account
+                final Account _account = Account.fromLoginData(event.getUniqueId(), event.getName(), event.getAddress().getHostAddress());
+
+                database.cacheCommit(_account);
+                database.accounts.insertOne(_account.asDocument());
             }
         }
         catch (Exception ex)

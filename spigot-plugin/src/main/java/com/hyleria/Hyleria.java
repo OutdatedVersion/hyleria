@@ -3,7 +3,7 @@ package com.hyleria;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hyleria.commons.Constants;
+import com.hyleria.commons.reference.Constants;
 import com.hyleria.commons.inject.Requires;
 import com.hyleria.commons.inject.StartParallel;
 import com.hyleria.util.Module;

@@ -2,7 +2,7 @@ package com.hyleria.commons.inject;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import com.hyleria.commons.Constants;
+import com.hyleria.commons.reference.Constants;
 
 import java.io.File;
 import java.lang.reflect.Field;

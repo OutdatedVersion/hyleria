@@ -3,6 +3,7 @@ package com.hyleria.commons.mongo;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.hyleria.commons.account.Account;
 import com.hyleria.commons.inject.ConfigurationProvider;
 import com.hyleria.commons.inject.StartParallel;
@@ -33,6 +34,7 @@ import static com.mongodb.client.model.Filters.eq;
  * @since Dec/08/2016 (8:07 PM)
  */
 @StartParallel
+@Singleton
 public class Database
 {
 
@@ -54,7 +56,7 @@ public class Database
     @Inject
     public Database(ConfigurationProvider provider)
     {
-        final DatabaseConfig _config = provider.read("account/{env}", DatabaseConfig.class);
+        final DatabaseConfig _config = provider.read("database/{env}", DatabaseConfig.class);
 
         client = new MongoClient(new ServerAddress(_config.connection.host, _config.connection.port),
                                  Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())));
@@ -257,9 +259,7 @@ public class Database
                                                : eq("name_lower", username.toLowerCase())).limit(1).first();
 
             return _document == null ? Optional.empty()
-                                     : Optional.of(null);
-
-            // TODO(Ben): ^ turn the provided data into an account ^
+                                     : Optional.of(new Account().populateFromDocument(_document));
         };
 
 

@@ -2,7 +2,6 @@ package com.hyleria.commons.mongo;
 
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.commons.reflect.ReflectionUtil;
-import com.hyleria.commons.translation.SaveAs;
 import com.simplexitymc.util.json.Exclude;
 import org.bson.Document;
 
@@ -11,7 +10,6 @@ import java.lang.reflect.Modifier;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.hyleria.commons.translation.Translators.translatorFor;
 
 /**
   * @author Ben (OutdatedVersion)
@@ -153,9 +151,11 @@ public class MongoUtil
                     if (_current != _default)
                     {
                         // first operation needs to be modified
-                        document.put(_name, field.isAnnotationPresent(SaveAs.class)
+
+                        /* document.put(_name, field.isAnnotationPresent(SaveAs.class)
                                             ? translatorFor(field.getType(), field.getAnnotation(SaveAs.class).value())
                                             : _current);
+                                            */
                     }
                 }
 

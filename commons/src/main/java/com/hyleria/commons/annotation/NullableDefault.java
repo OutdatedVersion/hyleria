@@ -1,4 +1,4 @@
-package com.hyleria.commons;
+package com.hyleria.commons.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

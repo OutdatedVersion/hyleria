@@ -1,4 +1,4 @@
-package com.hyleria.commons;
+package com.hyleria.commons.reference;
 
 import com.google.inject.Stage;
 
@@ -17,7 +17,7 @@ public class Constants
     public static final String DEV_SERVER_FILE_NAME = "dev_server.json";
 
     /** the current environment of this place. represented by a {@link Stage} from Guice. */
-    public static final Stage ENV = new File(DEV_SERVER_FILE_NAME).exists() ? Stage.PRODUCTION : Stage.DEVELOPMENT;
+    public static final Stage ENV = new File(DEV_SERVER_FILE_NAME).exists() ? Stage.DEVELOPMENT : Stage.PRODUCTION;
 
     /** where the Minecraft related items are stored */
     public static final String BASE_PATH = "/home/mc/";

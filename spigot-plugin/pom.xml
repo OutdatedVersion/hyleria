@@ -72,6 +72,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
 
                 <executions>
                     <execution>
@@ -79,6 +80,16 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+
+                        <configuration>
+                            <relocations>
+                                <!-- 1.7 jar has an outdated Guava version, so we'll use our own -->
+                                <relocation>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>com.hyleria.lib.google</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

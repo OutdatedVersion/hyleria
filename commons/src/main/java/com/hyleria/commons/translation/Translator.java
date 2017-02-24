@@ -22,7 +22,7 @@ public abstract class Translator<A, B>
      * @param b an instance of B
      * @return an instance of A from B
      */
-    abstract A fromFirst(B b);
+    public abstract A read(B b);
 
     /**
      * Turn {@code A} into {@code B}
@@ -30,6 +30,6 @@ public abstract class Translator<A, B>
      * @param a an instance of A
      * @return an instance of B from A
      */
-    abstract B fromSecond(A a);
+    public abstract B write(A a);
 
 }

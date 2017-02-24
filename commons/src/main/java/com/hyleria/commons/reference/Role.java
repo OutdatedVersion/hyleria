@@ -1,4 +1,4 @@
-package com.hyleria.commons;
+package com.hyleria.commons.reference;
 
 
  /**
@@ -20,15 +20,6 @@ public enum Role
     Role(char colorCode)
     {
         this.colorCode = colorCode;
-    }
-
-    /**
-     * @return the result of {@link #toNameColorless()} with
-     *         the fancy color we use
-     */
-    public String toName()
-    {
-        return '§' + this.colorCode + toNameColorless();
     }
 
     /**

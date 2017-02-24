@@ -1,9 +1,6 @@
 package com.hyleria;
 
-import com.google.common.base.Objects;
-import com.google.gson.annotations.SerializedName;
-import com.hyleria.commons.mongo.DefaultValue;
-import com.hyleria.commons.mongo.MongoUtil;
+import com.hyleria.commons.account.Account;
 import org.bson.Document;
 
 /**
@@ -15,57 +12,23 @@ public class Test
 
     public Test()
     {
-        final Document _write = MongoUtil.write(new DataClass("Ben", 1, "Ben OutdatedVersion"), DataClass.DEFAULT_VAL, new Document());
+        final Document _document = new Document("uuid", "03c337cd-7be0-4694-b9b0-e2fd03f57258")
+                                        .append("name", "OutdatedVersion");
 
-        System.out.println("=======================");
-        System.out.println("Write:");
-        System.out.println(_write.toJson());
-        System.out.println("=======================");
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        final Account _account = new Account();
 
-        // -----------------------
+        System.out.println("========================");
+        System.out.println("Document:");
+        _account.populateFromDocument(_document);
 
-        final DataClass _data = MongoUtil.read(DataClass.class, DataClass.DEFAULT_VAL, _write);
-
-        System.out.println("=======================");
-        System.out.println("Read:");
-        System.out.println(_data.toString());
-        System.out.println("=======================");
-        System.out.println();
+        System.out.println("========================");
+        System.out.println("JSON:");
+        System.out.println(_account.asDocument().toJson());
     }
 
     public static void main(String[] args)
     {
         new Test();
-    }
-
-    public static class DataClass
-    {
-        @DefaultValue
-        public static final DataClass DEFAULT_VAL = new DataClass("Default", 5, "Default");
-
-        public String name;
-        public int level = 1;
-
-        @SerializedName ( "full_name" )
-        public String fullName;
-
-        public DataClass() { }
-
-        public DataClass(String name, int level, String fullName)
-        {
-            this.name = name;
-            this.level = level;
-            this.fullName = fullName;
-        }
-
-        @Override
-        public String toString()
-        {
-            return Objects.toStringHelper(this).add("name", name).add("level", level).add("fullName", fullName).toString();
-        }
     }
 
 }

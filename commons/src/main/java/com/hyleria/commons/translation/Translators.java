@@ -1,62 +1,73 @@
 package com.hyleria.commons.translation;
 
-import com.google.common.collect.Sets;
-import org.apache.commons.lang3.builder.EqualsBuilder;
+import com.hyleria.commons.account.Account;
+import org.bson.Document;
 
-import java.util.Set;
 import java.util.UUID;
 
 /**
+ * Holds a bunch of random {@link Translator}s
+ * that we may need to use.
+ *
  * @author Ben (OutdatedVersion)
  * @since Jan/02/2017 (9:53 PM)
  */
-public class Translators
+public enum Translators
 {
 
-    /** a set of our default translators */
-    private static Set<Translator> translatorHold = Sets.newHashSet();
+    // I have no idea what I was thinking with this class
+    // like tf
 
-    // insert our default translators
-    static
+    UUID(new Translator<UUID, String>()
     {
-        translatorHold.add(new Translator<UUID, String>()
+        @Override
+        public UUID read(String string)
         {
-            @Override
-            UUID fromFirst(String string)
-            {
-                return string.contains("-")
-                       ? UUID.fromString(string)
-                       : new UUID(Long.parseUnsignedLong(string.substring(0, 16), 16),
-                                  Long.parseUnsignedLong(string.substring(16), 16));
-            }
+            return string.contains("-")
+                   ? java.util.UUID.fromString(string)
+                   : new UUID(Long.parseUnsignedLong(string.substring(0, 16), 16),
+                              Long.parseUnsignedLong(string.substring(16), 16));
+        }
 
-            @Override
-            String fromSecond(UUID uuid)
-            {
-                return uuid.toString();
-            }
-        });
+        @Override
+        public String write(UUID uuid)
+        {
+            return uuid.toString();
+        }
+    }),
+
+    PREVIOUS_ADDRESS(new Translator<Account.PreviousAddress, Document>()
+    {
+        @Override
+        public Account.PreviousAddress read(Document document)
+        {
+            return new Account.PreviousAddress(document.getString("val"), document.getLong("last_used"));
+        }
+
+        @Override
+        public Document write(Account.PreviousAddress previousAddress)
+        {
+            return new Document("last_used", previousAddress.lastUsedOn).append("val", previousAddress.value);
+        }
+    });
+
+    /** the translator behind this */
+    private final Translator translator;
+
+    /**
+     * @param translator the translator behind this
+     */
+    Translators(Translator translator)
+    {
+        this.translator = translator;
     }
 
     /**
-     * Attempts to grab a {@link Translator}
-     * that works for the provided types.
-     *
-     * @param from one of the classes
-     * @param to the other class
-     * @param <A> the type of the first class
-     * @param <B> the type of the second class
-     * @return either the translator, or {@code null}.
-     *         there's a pretty strong chance you know
-     *         one already exists for what you're working
-     *         with when using this method though.
+     * @return the backing translator
      */
-    public static <A, B> Translator<A, B> translatorFor(Class<A> from, Class<B> to)
+    public Translator get()
     {
-        return translatorHold
-                .stream()
-                .filter(translator -> new EqualsBuilder().append(translator.a.getClass() == from,
-                                        translator.b.getClass() == to).build()).findFirst().get();
+        return translator;
     }
 
 }
