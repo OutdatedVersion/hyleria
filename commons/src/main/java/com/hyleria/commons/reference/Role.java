@@ -17,9 +17,18 @@ public enum Role
     /** the color of the tag */
     public char colorCode;
 
+    /** the public-facing name for this role */
+    public String name;
+
     Role(char colorCode)
     {
+        this(colorCode, null);
+    }
+
+    Role(char colorCode, String displayName)
+    {
         this.colorCode = colorCode;
+        this.name = displayName == null ? this.name() : displayName;
     }
 
     /**
