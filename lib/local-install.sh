@@ -1,4 +1,3 @@
-
 function install {
 	echo "Installing $3 ($2:$4)"
 	echo ""
@@ -16,6 +15,6 @@ function install {
 }
 
 
-install "./paper-1_7.jar" "com.destroystokyo" "paper" "1.7-R1"
+install "./paper.jar" "com.destroystokyo" "paper" "1.7-R1"
 install "./waterfall.jar" "com.destroystokyo" "waterfall" "1.11-R1"
 

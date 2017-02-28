@@ -2,11 +2,10 @@ package com.hyleria.util.time;
 
 import com.hyleria.commons.time.TimeConstants;
 
-/**
- * OutdatedVersion
- * Jan/02/2017 (10:23 PM)
- */
-
+ /**
+  * @author Ben (OutdatedVersion)
+  * @since Jan/02/2017 (10:23 PM)
+  */
 public enum TimeLength
 {
 

@@ -5,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * OutdatedVersion
- * Dec/14/2016 (6:43 PM)
- */
-
+ /**
+  * @author Ben (OutdatedVersion)
+  * @since Dec/14/2016 (6:43 PM)
+  */
 @Retention ( RetentionPolicy.RUNTIME )
 @Target ( ElementType.METHOD )
 public @interface FireOn

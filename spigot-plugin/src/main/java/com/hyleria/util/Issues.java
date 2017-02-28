@@ -4,11 +4,10 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.entity.Player;
 
-/**
- * OutdatedVersion
- * Dec/23/2016 (3:44 PM)
- */
-
+ /**
+  * @author Ben (OutdatedVersion)
+  * @since Dec/23/2016 (3:44 PM)
+  */
 public class Issues
 {
 
