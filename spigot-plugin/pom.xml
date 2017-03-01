@@ -82,6 +82,9 @@
                         </goals>
 
                         <configuration>
+                            <!-- please stop -->
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+
                             <relocations>
                                 <!-- 1.7 jar has an outdated Guava version, so we'll use our own -->
                                 <relocation>
