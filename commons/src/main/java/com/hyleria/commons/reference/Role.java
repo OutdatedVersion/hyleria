@@ -1,7 +1,9 @@
 package com.hyleria.commons.reference;
 
 
- /**
+import org.apache.commons.lang3.text.WordUtils;
+
+/**
   * @author Ben (OutdatedVersion)
   * @since Dec/10/2016 (12:19 PM)
   */
@@ -11,7 +13,7 @@ public enum Role
     ADMIN('c'),
     SENIOR('b'),
     MOD('9'),
-    TRIAL('6'),
+    TRIAL('6'),     // takes in "staff_focus"
     PLAYER('7');
 
     /** the color of the tag */
@@ -28,7 +30,8 @@ public enum Role
     Role(char colorCode, String displayName)
     {
         this.colorCode = colorCode;
-        this.name = displayName == null ? this.name() : displayName;
+        this.name = displayName == null ? WordUtils.capitalizeFully(this.name().replaceAll("_", " "))
+                                        : displayName;
     }
 
     /**

@@ -1,11 +1,11 @@
 package com.hyleria.command.api;
 
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
+import com.hyleria.commons.reference.Role;
 
-import java.util.Map;
+import java.lang.reflect.Method;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -18,11 +18,31 @@ public class CommandHandler
     @Inject
     private Hyleria hyleria;
 
-    private Map<String, CommandData> commands = Maps.newHashMap();
-
-    public static class CommandData
+    public CommandHandler registerCommands(Object object)
     {
+        for (Method method : object.getClass().getMethods())
+        {
+            if (method.isAnnotationPresent(Command.class))
+            {
+                final CommandInfo _info = new CommandInfo();
 
+
+            }
+        }
+
+        return this;
+    }
+
+    static class CommandInfo
+    {
+        String[] executors;
+        boolean commandArgsAsParameters;
+        Role role;
+
+        String node()
+        {
+            return "";
+        }
     }
 
 }

@@ -7,6 +7,6 @@ package com.hyleria.command.api;
 public @interface Command
 {
 
-    String name();
+    String[] executor();
 
 }

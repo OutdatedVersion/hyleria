@@ -1,6 +1,8 @@
 package com.hyleria.command;
 
 import com.hyleria.command.api.Command;
+import com.hyleria.command.api.RequiresRole;
+import com.hyleria.commons.reference.Role;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -9,9 +11,8 @@ import com.hyleria.command.api.Command;
 public class ExampleCommand
 {
 
-    // Usage: /rank <player>
-
-    @Command ( name = "permissions" )
+    @Command ( executor = "role" )
+    @RequiresRole ( Role.ADMIN )
     public void baseCommand()
     {
 
