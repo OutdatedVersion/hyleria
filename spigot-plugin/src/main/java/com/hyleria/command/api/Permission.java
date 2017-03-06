@@ -1,5 +1,7 @@
 package com.hyleria.command.api;
 
+import com.hyleria.commons.reference.Role;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -7,11 +9,13 @@ import java.lang.annotation.Target;
 
 /**
  * @author Ben (OutdatedVersion)
- * @since Feb/28/2017 (6:02 PM)
+ * @since Mar/01/2017 (4:08 PM)
  */
 @Retention ( RetentionPolicy.RUNTIME )
-@Target ( ElementType.FIELD )
-public @interface ChildCommand
+@Target ( ElementType.METHOD )
+public @interface Permission
 {
+
+    Role value();
 
 }

@@ -1,7 +1,7 @@
 package com.hyleria.command;
 
 import com.hyleria.command.api.Command;
-import com.hyleria.command.api.RequiresRole;
+import com.hyleria.command.api.Permission;
 import com.hyleria.commons.reference.Role;
 
 /**
@@ -12,7 +12,7 @@ public class ExampleCommand
 {
 
     @Command ( executor = "role" )
-    @RequiresRole ( Role.ADMIN )
+    @Permission ( Role.ADMIN )
     public void baseCommand()
     {
 

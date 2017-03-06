@@ -25,8 +25,8 @@ import java.util.UUID;
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (6:54 PM)
  */
-@StartParallel
 @Singleton
+@StartParallel
 public class AccountManager extends Module
 {
 
