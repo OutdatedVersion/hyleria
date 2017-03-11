@@ -30,8 +30,7 @@ public class Chat extends Module
     public static final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) -> chatFormat(account.role()) + " " + player.getName() + " " + ChatColor.WHITE;
 
     /** let's us interact with player accounts */
-    @Inject
-    private AccountManager accountManager;
+    @Inject private AccountManager accountManager;
 
     @EventHandler
     public void handleChat(AsyncPlayerChatEvent event)

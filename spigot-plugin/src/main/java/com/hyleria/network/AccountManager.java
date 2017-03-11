@@ -31,8 +31,7 @@ public class AccountManager extends Module
 {
 
     /** allows us to grab info from our mongo instance */
-    @Inject
-    private Database database;
+    @Inject private Database database;
 
     /**
      * Attempts to grab an account by

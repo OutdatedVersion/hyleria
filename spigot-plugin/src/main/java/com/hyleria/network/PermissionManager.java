@@ -19,9 +19,18 @@ public class PermissionManager
                                                                     "Uh oh. You're missing the privileges to do that!";
 
     /** access player data */
-    @Inject
-    private AccountManager accountManager;
+    @Inject private AccountManager accountManager;
 
+    /**
+     * Checks whether the specified player has
+     * the role (or something leveled hierarchy
+     * higher). If they do not a missing permission
+     * message is automatically sent to that person.
+     *
+     * @param player the player
+     * @param role the required role
+     * @return either yes or no
+     */
     public boolean has(Player player, Role role)
     {
         if (accountManager.grab(player).role().ordinal() <= role.ordinal())

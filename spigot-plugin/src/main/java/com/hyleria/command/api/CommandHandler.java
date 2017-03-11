@@ -2,10 +2,12 @@ package com.hyleria.command.api;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.commons.reference.Role;
 import com.hyleria.network.PermissionManager;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,19 +28,27 @@ import static com.google.common.base.Preconditions.checkState;
 public class CommandHandler
 {
 
-    @Inject
-    private Hyleria hyleria;
+    @Inject private Hyleria hyleria;
 
-    @Inject
-    private PermissionManager permissionManager;
+    @Inject private PermissionManager permissionManager;
 
-    private Map<String, CommandInfo> commands;
+    private Map<String, CommandInfo> commands = Maps.newHashMap();
+
+    private Map<Class, Provider> providers = Maps.newHashMap();
+
+    public void registerInPackage(String pkg)
+    {
+        new FastClasspathScanner()
+                .matchClassesWithMethodAnnotation(Command.class, (clazz, method) ->
+                {
+                    Object _instance = hyleria.injector().getInstance(clazz);
+
+
+                }).scan();
+    }
 
     public CommandHandler registerCommands(Object object)
     {
-        if (commands == null)
-            commands = Maps.newHashMap();
-
         // Iterate over a class looking for a method suitable
         // for being a used as a command. Keep in mind, only
         // public methods are eligible.
@@ -47,10 +57,18 @@ public class CommandHandler
             if (method.isAnnotationPresent(Command.class))
             {
                 final Command _ann = method.getAnnotation(Command.class);
-                final Parameter[] _parameters = method.getParameters();
+
+                checkState(method.getParameterTypes()[0].equals(Player.class),
+                           "The first argument in any command must be a Player (the one who executed the command)");
+
                 final CommandInfo _info = new CommandInfo();
 
-                checkState(_parameters[0].getType().equals(Player.class), "The first argument in any command must be a Player");
+                _info.method = method;
+                _info.executors = _ann.executor();
+                _info.role = method.isAnnotationPresent(Permission.class)
+                             ? method.getAnnotation(Permission.class).value()
+                             : Role.PLAYER;
+
             }
         }
 
@@ -70,36 +88,33 @@ public class CommandHandler
                 .stream()
                 .filter(data -> Arrays.stream(data.executors).anyMatch(_command::equals))
                 .findFirst()
-                .ifPresent(info ->
-                {
-
-                });
+                .ifPresent(info -> attemptCommandExecution(info.instanceOfPossessor, info.method, event.getPlayer(), info));
     }
 
     public void attemptCommandExecution(Object object, Method method, Player player, CommandInfo info)
     {
-        // permissions
-        if (method.isAnnotationPresent(Permission.class))
-        {
-            final Role _role = method.getAnnotation(Permission.class).value();
+        // verify the player can actually execute this command
+        if (info.role != Role.PLAYER)
+            if (!permissionManager.has(player, info.role))
+                return;
 
-
-        }
 
         // invoke
+        final Parameter[] _required = method.getParameters();
+        Object[] _invokingWith = new Object[_required.length];
+
+        _invokingWith[0] = player;
+
+
     }
 
     static class CommandInfo
     {
+        Object instanceOfPossessor;
         Method method;
 
         String[] executors;
         Role role;
-
-        String node()
-        {
-            return "command." + executors[0].toLowerCase();
-        }
     }
 
 }

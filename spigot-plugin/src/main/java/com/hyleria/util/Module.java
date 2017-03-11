@@ -13,8 +13,7 @@ public abstract class Module implements Listener
 {
 
     /** our plugin instance */
-    @Inject
-    private Hyleria plugin;
+    @Inject private Hyleria plugin;
 
     /**
      * Guice delegate for this module (kind of)

@@ -18,8 +18,7 @@ public class Ping implements Listener
 {
 
     /** local plugin instance */
-    @Inject
-    private Hyleria hyleria;
+    @Inject private Hyleria hyleria;
 
     /** the text of our ping response */
     private TextComponent pingResponse = new TextComponent("");
