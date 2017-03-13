@@ -3,7 +3,6 @@ package com.hyleria.coeus.available.uhc;
 import com.google.common.collect.Sets;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.available.uhc.scenario.UHCScenario;
-import com.hyleria.coeus.available.uhc.scenario.VanillaPlus;
 
 import java.time.Duration;
 import java.util.Set;
@@ -14,8 +13,6 @@ import java.util.Set;
  */
 public class UHC implements Game
 {
-
-    private Class<? extends UHCScenario> defaultUHCScenario = VanillaPlus.class;
 
     private Set<UHCScenario> avaiableScenarios = Sets.newHashSet();
 
@@ -45,7 +42,7 @@ public class UHC implements Game
     @Override
     public void init()
     {
-
+        // load scenarios
     }
 
     @Override

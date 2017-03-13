@@ -10,6 +10,10 @@ import static com.hyleria.coeus.available.uhc.scenario.Cutclean.APPLE;
 import static com.hyleria.coeus.available.uhc.scenario.Cutclean.FLINT;
 
 /**
+ * Apples now have a 1.5% chance of
+ * dropping and flint drop rates are
+ * bumped to 20%
+ *
  * @author Ben (OutdatedVersion)
  * @since Mar/12/2017 (10:38 AM)
  */
@@ -23,7 +27,7 @@ public class VanillaPlus extends UHCScenario
     }
 
     @EventHandler
-    public void modifyDrops(BlockBreakEvent event)
+    public void flintDrop(BlockBreakEvent event)
     {
         if (event.getBlock().getType() == Material.GRAVEL)
         {
@@ -35,7 +39,7 @@ public class VanillaPlus extends UHCScenario
     }
 
     @EventHandler
-    public void leaves(LeavesDecayEvent event)
+    public void appleDrop(LeavesDecayEvent event)
     {
         event.getBlock().getDrops().clear();
 

@@ -18,7 +18,7 @@ public class Barebones extends UHCScenario
     private static final ItemStack IRON = new ItemStack(Material.IRON_INGOT);
 
     /** one gapple */
-    private static final ItemStack GAPPLE = new ItemStack(Material.GOLDEN_APPLE, 0, (byte) 1);
+    private static final ItemStack GAPPLE = new ItemStack(Material.GOLDEN_APPLE, 1, (byte) 1);
 
     @Override
     public String name()
