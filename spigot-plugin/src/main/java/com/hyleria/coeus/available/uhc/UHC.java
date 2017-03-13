@@ -1,8 +1,12 @@
 package com.hyleria.coeus.available.uhc;
 
+import com.google.common.collect.Sets;
 import com.hyleria.coeus.Game;
+import com.hyleria.coeus.available.uhc.scenario.UHCScenario;
+import com.hyleria.coeus.available.uhc.scenario.VanillaPlus;
 
 import java.time.Duration;
+import java.util.Set;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -10,6 +14,10 @@ import java.time.Duration;
  */
 public class UHC implements Game
 {
+
+    private Class<? extends UHCScenario> defaultUHCScenario = VanillaPlus.class;
+
+    private Set<UHCScenario> avaiableScenarios = Sets.newHashSet();
 
     /** the amount of time until you start healing */
     private Duration healTime = Duration.ofMinutes(10);

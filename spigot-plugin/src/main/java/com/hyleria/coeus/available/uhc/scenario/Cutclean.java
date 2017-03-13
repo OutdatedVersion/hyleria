@@ -1,15 +1,19 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
+import com.hyleria.commons.math.Math;
 import com.hyleria.util.BlockUtil;
+import com.hyleria.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Anything that drops a smeltable/cookable
@@ -27,7 +31,10 @@ public class Cutclean extends UHCScenario
 {
 
     /** one flint */
-    private static final ItemStack FLINT = new ItemStack(Material.FLINT);
+    static final ItemStack FLINT = new ItemStack(Material.FLINT);
+
+    /** one apple */
+    static final ItemStack APPLE = new ItemStack(Material.APPLE);
 
     @Override
     public String name()
@@ -66,7 +73,26 @@ public class Cutclean extends UHCScenario
     @EventHandler
     public void autoCook(EntityDeathEvent event)
     {
+        // try this way, if it doesn't maintain the changes made
+        // then do it the for-sure way
 
+        // final Collection<ItemStack> _drops = event.getDrops();
+
+        event.getDrops()
+                .stream()
+                .map(ItemStack::getType)
+                .map(ItemUtil::cookedItemFor)
+                .filter(Objects::nonNull).map(ItemStack::new)
+                .collect(Collectors.toList());
+    }
+
+    @EventHandler
+    public void leaves(LeavesDecayEvent event)
+    {
+        event.getBlock().getDrops().clear();
+
+        if (Math.chance(1.25))
+            event.getBlock().getDrops().add(APPLE);
     }
 
 }
