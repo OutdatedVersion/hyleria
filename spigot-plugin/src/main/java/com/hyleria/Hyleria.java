@@ -3,6 +3,7 @@ package com.hyleria;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.hyleria.coeus.Coeus;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.reference.Constants;
@@ -71,6 +72,9 @@ public class Hyleria extends JavaPlugin
         });
 
         _toLoad.forEach(this::boundInjection);
+
+        // I want to guarantee this will load last
+        boundInjection(Coeus.class);
     }
 
     @Override
