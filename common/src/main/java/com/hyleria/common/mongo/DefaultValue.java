@@ -1,6 +1,4 @@
-package com.hyleria.command.api;
-
-import com.hyleria.common.reference.Role;
+package com.hyleria.common.mongo;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,13 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * @author Ben (OutdatedVersion)
- * @since Mar/01/2017 (4:08 PM)
+ * @since Feb/22/2017 (11:20 PM)
  */
+@Target ( ElementType.FIELD )
 @Retention ( RetentionPolicy.RUNTIME )
-@Target ( ElementType.METHOD )
-public @interface Permission
+public @interface DefaultValue
 {
-
-    Role value();
 
 }

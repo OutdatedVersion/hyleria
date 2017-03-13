@@ -1,7 +1,7 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
 import com.google.common.collect.Lists;
-import com.hyleria.commons.math.Math;
+import com.hyleria.common.math.Math;
 import com.hyleria.util.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

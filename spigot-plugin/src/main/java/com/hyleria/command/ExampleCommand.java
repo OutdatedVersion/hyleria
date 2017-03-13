@@ -2,7 +2,7 @@ package com.hyleria.command;
 
 import com.hyleria.command.api.Command;
 import com.hyleria.command.api.Permission;
-import com.hyleria.commons.reference.Role;
+import com.hyleria.common.reference.Role;
 
 /**
  * @author Ben (OutdatedVersion)

@@ -1,9 +1,9 @@
 package com.hyleria.module;
 
 import com.google.inject.Inject;
-import com.hyleria.commons.account.Account;
-import com.hyleria.commons.inject.Requires;
-import com.hyleria.commons.inject.StartParallel;
+import com.hyleria.common.account.Account;
+import com.hyleria.common.inject.Requires;
+import com.hyleria.common.inject.StartParallel;
 import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
 import com.hyleria.util.PlayerUtil;

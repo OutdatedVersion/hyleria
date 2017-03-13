@@ -2,7 +2,7 @@ package com.hyleria.network;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.hyleria.commons.reference.Role;
+import com.hyleria.common.reference.Role;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

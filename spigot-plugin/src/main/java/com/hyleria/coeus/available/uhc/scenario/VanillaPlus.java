@@ -1,6 +1,6 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
-import com.hyleria.commons.math.Math;
+import com.hyleria.common.math.Math;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;

@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
-import com.hyleria.commons.reference.Role;
+import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.entity.Player;

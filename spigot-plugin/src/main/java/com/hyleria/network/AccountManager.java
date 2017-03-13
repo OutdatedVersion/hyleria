@@ -2,9 +2,9 @@ package com.hyleria.network;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.hyleria.commons.account.Account;
-import com.hyleria.commons.inject.StartParallel;
-import com.hyleria.commons.mongo.Database;
+import com.hyleria.common.account.Account;
+import com.hyleria.common.inject.StartParallel;
+import com.hyleria.common.mongo.Database;
 import com.hyleria.util.Issues;
 import com.hyleria.util.LogUtil;
 import com.hyleria.util.Module;

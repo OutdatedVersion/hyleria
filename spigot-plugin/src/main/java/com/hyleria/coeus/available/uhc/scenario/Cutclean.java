@@ -1,6 +1,6 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
-import com.hyleria.commons.math.Math;
+import com.hyleria.common.math.Math;
 import com.hyleria.util.BlockUtil;
 import com.hyleria.util.ItemUtil;
 import org.bukkit.Material;

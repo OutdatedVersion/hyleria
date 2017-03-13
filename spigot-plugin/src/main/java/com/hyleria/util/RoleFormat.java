@@ -1,7 +1,7 @@
 package com.hyleria.util;
 
 import com.google.common.collect.Maps;
-import com.hyleria.commons.reference.Role;
+import com.hyleria.common.reference.Role;
 import org.bukkit.ChatColor;
 
 import java.util.Arrays;
