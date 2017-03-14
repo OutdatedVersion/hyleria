@@ -7,6 +7,9 @@ package com.hyleria.common.backend;
 public class ServerConfig
 {
 
+    /** the name of the file that this is usually saved as */
+    public static final String FILE_NAME = "server_config.json";
+
     /** the public facing name for this server (also serves as the unique ID) */
     public String name;
 

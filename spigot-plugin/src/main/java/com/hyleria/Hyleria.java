@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hyleria.coeus.Coeus;
+import com.hyleria.common.backend.ServerConfig;
+import com.hyleria.common.inject.ConfigurationProvider;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.reference.Constants;
@@ -42,7 +44,6 @@ public class Hyleria extends JavaPlugin
         shutdownHooks = Lists.newArrayList();
         // TODO(Ben): handle shutdown hooks
 
-
         // our primary injector - what we base a whole
         // lot of this plugin around
         injector = Guice.createInjector(Constants.ENV, binder ->
@@ -51,6 +52,7 @@ public class Hyleria extends JavaPlugin
             binder.bind(Hyleria.class).toInstance(this);
             binder.bind(Server.class).toInstance(Bukkit.getServer());
             binder.bind(BukkitScheduler.class).toInstance(Bukkit.getServer().getScheduler());
+            binder.bind(ServerConfig.class).toInstance(new ConfigurationProvider().read(ServerConfig.FILE_NAME, ServerConfig.class));
         });
 
 
@@ -72,6 +74,7 @@ public class Hyleria extends JavaPlugin
         });
 
         _toLoad.forEach(this::boundInjection);
+
 
         // I want to guarantee this will load last
         boundInjection(Coeus.class);

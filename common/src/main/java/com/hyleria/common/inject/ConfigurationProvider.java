@@ -2,6 +2,7 @@ package com.hyleria.common.inject;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.hyleria.common.reference.Constants;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.function.Function;
  * @author Ben (OutdatedVersion)
  * @since Dec/08/2016 (8:31 PM)
  */
+@Singleton
 public class ConfigurationProvider
 {
 

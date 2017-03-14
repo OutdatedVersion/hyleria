@@ -1,4 +1,4 @@
-package com.hyleria.coeus.data;
+package com.hyleria.coeus.match;
 
 import java.util.UUID;
 

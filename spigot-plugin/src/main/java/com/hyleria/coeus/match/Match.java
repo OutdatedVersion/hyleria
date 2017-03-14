@@ -1,6 +1,6 @@
-package com.hyleria.coeus;
+package com.hyleria.coeus.match;
 
-import com.hyleria.coeus.data.MatchPlayer;
+import com.hyleria.coeus.GameChoice;
 import org.bukkit.entity.Player;
 
 import java.util.List;
