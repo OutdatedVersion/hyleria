@@ -1,18 +1,19 @@
-package com.simplexitymc.kraken.damage.kinds;
+package com.hyleria.coeus.damage.kinds;
 
-import com.simplexitymc.kraken.damage.CombatEvent;
-import com.simplexitymc.kraken.damage.DamageCause;
+import com.hyleria.coeus.damage.CombatEvent;
+import com.hyleria.coeus.damage.DamageCause;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 
 /**
- * OutdatedVersion
- * At: 11:12 PM (May/07/2016)
- * cave-realms
+ * Damage dealt between multiple
+ * people w/o a weapon.
+ *
+ * @author Ben (OutdatedVersion)
+ * @since 11:12 PM (May/07/2016)
  */
-
 public class DisarmedCombatEvent extends CombatEvent
 {
 
@@ -22,9 +23,9 @@ public class DisarmedCombatEvent extends CombatEvent
     }
 
     @Override
-    public BaseComponent[] getInformation()
+    public BaseComponent[] information()
     {
-        return new ComponentBuilder("Hand Combat - ").color(ChatColor.GRAY).append(String.valueOf(getDamageDealt()))
+        return new ComponentBuilder("Hand Combat - ").color(ChatColor.GRAY).append(String.valueOf(damageDealt()))
                    .color(ChatColor.RED).append(" damage").color(ChatColor.GRAY).create();
     }
 

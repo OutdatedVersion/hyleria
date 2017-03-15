@@ -172,7 +172,7 @@ public class Hyleria extends JavaPlugin
      * @param <T> a type parameter for the type
      *            of the provided class
      */
-    private <T> void boundInjection(Class<T> clazz)
+    public <T> void boundInjection(Class<T> clazz)
     {
         T _instance = injector.getInstance(clazz);
 

@@ -1,8 +1,8 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
-import org.bukkit.entity.EntityType;
+import com.hyleria.coeus.damage.kinds.FireDamageEvent;
+import com.hyleria.coeus.damage.kinds.LavaDamageEvent;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * You may not take damage from anything
@@ -29,17 +29,15 @@ public class Fireless extends UHCScenario
     }
 
     @EventHandler
-    public void disableFireDamage(EntityDamageEvent event)
+    public void disableFire(FireDamageEvent event)
     {
-        // is fire aspect combustion handled separately?
+        event.setCancelled(true);
+    }
 
-        if (event.getEntityType() != EntityType.PLAYER)
-            return;
-
-        if (   event.getCause() == EntityDamageEvent.DamageCause.FIRE
-            || event.getCause() == EntityDamageEvent.DamageCause.LAVA
-            || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK)
-            event.setCancelled(true);
+    @EventHandler
+    public void disableLava(LavaDamageEvent event)
+    {
+        event.setCancelled(true);
     }
 
 }

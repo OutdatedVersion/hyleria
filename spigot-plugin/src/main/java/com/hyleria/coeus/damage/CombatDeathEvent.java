@@ -1,48 +1,68 @@
-package com.simplexitymc.kraken.damage;
+package com.hyleria.coeus.damage;
 
+import com.hyleria.util.HyleriaEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
 /**
- * OutdatedVersion
- * At: 11:05 PM (May/07/2016)
- * cave-realms
+ * @author Ben (OutdatedVersion)
+ * @since 11:05 PM (May/07/2016)
  */
-
-public class CombatDeathEvent extends PlayerEvent
+public class CombatDeathEvent extends HyleriaEvent
 {
-    private static final HandlerList handlers = new HandlerList();
 
+    private static final HandlerList HANDLER_LIST = new HandlerList();
+
+    /** the log backing this system */
     private final DamageLog log;
+
+    /** the final person attacked */
     private final Player finalAttacker;
+
+    /** the player who died */
+    private final Player victim;
 
     public CombatDeathEvent(Player who, Player lastDamageDealtBy, DamageLog log)
     {
-        super(who);
-
+        this.victim = who;
         this.log = log;
         this.finalAttacker = lastDamageDealtBy;
     }
 
-    public Player getBy()
+    /**
+     * @return the player who died
+     */
+    public Player victim()
+    {
+        return victim;
+    }
+
+    /**
+     * @return the player this was dealt by
+     */
+    public Player by()
     {
         return finalAttacker;
     }
 
-    public DamageLog getLog()
+    /**
+     * @return the log
+     */
+    public DamageLog log()
     {
         return log;
     }
 
+    /** Bukkit */
     @Override
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLER_LIST;
     }
 
+    /** Bukkit */
     public static HandlerList getHandlerList()
     {
-        return handlers;
+        return HANDLER_LIST;
     }
 }

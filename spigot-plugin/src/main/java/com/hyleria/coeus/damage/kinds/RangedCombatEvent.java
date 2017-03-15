@@ -1,7 +1,7 @@
-package com.simplexitymc.kraken.damage.kinds;
+package com.hyleria.coeus.damage.kinds;
 
-import com.simplexitymc.kraken.damage.CombatEvent;
-import com.simplexitymc.kraken.damage.DamageCause;
+import com.hyleria.coeus.damage.CombatEvent;
+import com.hyleria.coeus.damage.DamageCause;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -11,15 +11,21 @@ import org.bukkit.entity.Player;
 import java.util.Map;
 
 /**
- * OutdatedVersion
- * At: 10:15 PM (May/07/2016)
- * cave-realms
+ * Whenever players engage in
+ * combat using bows/other
+ * ranged weapons we'll hit
+ * this event.
+ *
+ * @author Ben (OutdatedVersion)
+ * @since 10:15 PM (May/07/2016)
  */
-
 public class RangedCombatEvent extends CombatEvent
 {
 
+    /** how far we were when this happened */
     private final int blocksAway;
+
+    /** the enchantments on the bow */
     private final Map<Enchantment, Integer> bowEnchantments;
 
     public RangedCombatEvent(Player victim, Player attacker, double dealtDamage, int blocksAway, Map<Enchantment, Integer> bowEnchants)
@@ -30,18 +36,24 @@ public class RangedCombatEvent extends CombatEvent
         this.bowEnchantments = bowEnchants;
     }
 
-    public int getBlocksAway()
+    /**
+     * @return the distance this was hit from (in blocks)
+     */
+    public int distance()
     {
         return blocksAway;
     }
 
-    public Map<Enchantment, Integer> getBowEnchantments()
+    /**
+     * @return the enchantments on the bow used
+     */
+    public Map<Enchantment, Integer> bowEnchants()
     {
         return bowEnchantments;
     }
 
     @Override
-    public BaseComponent[] getInformation()
+    public BaseComponent[] information()
     {
         return new ComponentBuilder("Ranged Combat - ").color(ChatColor.GRAY).append(String.valueOf(blocksAway))
                                                        .color(ChatColor.RED).append(" block away").color(ChatColor.GRAY).create();

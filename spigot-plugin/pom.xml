@@ -31,11 +31,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Our 'core' -->
+        <!-- hyleria stuff -->
         <dependency>
             <groupId>com.hyleria</groupId>
             <artifactId>commons</artifactId>
             <version>1.0</version>
+        </dependency>
+        
+        <!-- need to get this done, so going to use -->
+        <!-- an API for world generation :: will probably -->
+        <!-- rewrite at some point to use an in-house solution -->
+        <dependency>
+            <groupId>com.wimbli</groupId>
+            <artifactId>world-border</artifactId>
+            <version>LATEST</version>
         </dependency>
 
     </dependencies>

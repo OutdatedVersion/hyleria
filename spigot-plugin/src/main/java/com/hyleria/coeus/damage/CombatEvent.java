@@ -1,15 +1,18 @@
-package com.simplexitymc.kraken.damage;
+package com.hyleria.coeus.damage;
 
 import org.bukkit.entity.Player;
 
 /**
- * OutdatedVersion
- * At: 10:50 PM (May/07/2016)
- * cave-realms
+ * Something combat related
+ * occurred (PvP)
+ *
+ * @author Ben (OutdatedVersion)
+ * @since 10:50 PM (May/07/2016)
  */
-
 public abstract class CombatEvent extends DamageEvent
 {
+
+    /** who started this attack */
     private final Player attacker;
 
     public CombatEvent(Player victim, Player attacker, double dealtDamage, DamageCause damageCause)
@@ -19,8 +22,12 @@ public abstract class CombatEvent extends DamageEvent
         this.attacker = attacker;
     }
 
-    public Player getAttacker()
+    /**
+     * @return the person who started this
+     */
+    public Player attacker()
     {
         return attacker;
     }
+
 }

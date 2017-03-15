@@ -1,5 +1,7 @@
 package com.hyleria.common.backend;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author Ben (OutdatedVersion)
  * @since Mar/13/2017 (4:49 PM)
@@ -14,9 +16,15 @@ public class ServerConfig
     public String name;
 
     /** the game that will be loaded on this server */
+    @SerializedName ( "forced_game" )
     public String forcedGame;
 
+    /** the type of game config we're using | see {@link GameConfiguration} for details */
+    @SerializedName ( "game_config_mode" )
+    public ConfigurationMode configMode;
+
     /** data relating to the game currently going */
+    @SerializedName ( "game_config" )
     public GameConfiguration gameConfig;
 
 }

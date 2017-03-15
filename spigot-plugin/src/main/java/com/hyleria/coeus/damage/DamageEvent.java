@@ -1,26 +1,34 @@
-package com.simplexitymc.kraken.damage;
+package com.hyleria.coeus.damage;
 
+import com.hyleria.util.HyleriaEvent;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * OutdatedVersion
- * At: 10:10 PM (May/07/2016)
- * cave-realms
+ * Some sort of damage was inflicted
+ * onto a player. Let's handle that.
+ *
+ * @author Ben (OutdatedVersion)
+ * @since 10:10 PM (May/07/2016)
  */
-
-public abstract class DamageEvent extends Event implements Cancellable
+public abstract class DamageEvent extends HyleriaEvent implements Cancellable
 {
 
-    private static final HandlerList handlers = new HandlerList();
+    /** Bukkit */
+    private static final HandlerList HANDLER_LIST = new HandlerList();
 
+    /** whether or not this event will be fully propagated */
     private boolean isCancelled;
 
+    /** who this is happening to */
     private final Player victim;
+
+    /** the amount of damage that was inflicted because of this */
     private final double dealtDamage;
+
+    /** the semi-friendly cause of this incident */
     private final DamageCause damageCause;
 
     public DamageEvent(Player victim, double dealtDamage, DamageCause damageCause)
@@ -30,22 +38,34 @@ public abstract class DamageEvent extends Event implements Cancellable
         this.damageCause = damageCause;
     }
 
-    public Player getVictim()
+    /**
+     * @return who this happened to
+     */
+    public Player victim()
     {
         return victim;
     }
 
-    public double getDamageDealt()
+    /**
+     * @return the total damage dealt
+     */
+    public double damageDealt()
     {
         return dealtDamage;
     }
 
-    public DamageCause getDamageCause()
+    /**
+     * @return the cause
+     */
+    public DamageCause damageCause()
     {
         return damageCause;
     }
 
-    public abstract BaseComponent[] getInformation();
+    /**
+     * @return what happened as text
+     */
+    public abstract BaseComponent[] information();
 
     @Override
     public void setCancelled(boolean val)
@@ -59,15 +79,17 @@ public abstract class DamageEvent extends Event implements Cancellable
         return isCancelled;
     }
 
+    /** Bukkit */
     @Override
     public HandlerList getHandlers()
     {
-        return handlers;
+        return HANDLER_LIST;
     }
 
+    /** Bukkit */
     public static HandlerList getHandlerList()
     {
-        return handlers;
+        return HANDLER_LIST;
     }
 
 }

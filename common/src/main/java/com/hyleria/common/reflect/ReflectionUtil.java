@@ -57,4 +57,25 @@ public class ReflectionUtil
         return field.isAnnotationPresent(Exclude.class) || field.isAnnotationPresent(DefaultValue.class);
     }
 
+    /**
+     * Load a class via the name of it
+     *
+     * @param name the fully qualified name for this class
+     * @return the class
+     */
+    public static Class<?> classForName(String name)
+    {
+        try
+        {
+            return Class.forName(name);
+        }
+        catch (ClassNotFoundException ex)
+        {
+            ex.printStackTrace();
+            System.err.println("Unable to find class at location: [" + name + "]");
+
+            return null;
+        }
+    }
+
 }

@@ -1,17 +1,20 @@
-package com.simplexitymc.kraken.damage.kinds;
+package com.hyleria.coeus.damage.kinds;
 
-import com.simplexitymc.kraken.damage.DamageCause;
-import com.simplexitymc.kraken.damage.DamageEvent;
+import com.hyleria.coeus.damage.DamageCause;
+import com.hyleria.coeus.damage.DamageEvent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 
 /**
- * OutdatedVersion
- * Aug/08/2016 (12:21 AM)
+ * When a player is stuck somewhere
+ * and runs out of oxygen you'll
+ * receive this.
+ *
+ * @author Ben (OutdatedVersion)
+ * @since Aug/08/2016 (12:21 AM)
  */
-
 public class PlayerSuffocateEvent extends DamageEvent
 {
 
@@ -21,10 +24,10 @@ public class PlayerSuffocateEvent extends DamageEvent
     }
 
     @Override
-    public BaseComponent[] getInformation()
+    public BaseComponent[] information()
     {
         return new ComponentBuilder("").append("Suffocation - ").color(ChatColor.GRAY)
-                .append(String.valueOf(getDamageDealt())).color(ChatColor.RED).create();
+                .append(String.valueOf(damageDealt())).color(ChatColor.RED).create();
     }
 
 }

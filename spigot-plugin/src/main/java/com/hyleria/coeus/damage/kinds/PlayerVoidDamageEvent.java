@@ -1,17 +1,20 @@
-package com.simplexitymc.kraken.damage.kinds;
+package com.hyleria.coeus.damage.kinds;
 
-import com.simplexitymc.kraken.damage.DamageCause;
-import com.simplexitymc.kraken.damage.DamageEvent;
+import com.hyleria.coeus.damage.DamageCause;
+import com.hyleria.coeus.damage.DamageEvent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 
-/**
- * OutdatedVersion
- * 9:31 PM (Jul/31/2016)
- */
-
+ /**
+  * When a player falls into the
+  * void (past Y: 0) we'll encounter
+  * this event.
+  *
+  * @author Ben (OutdatedVersion)
+  * @since 9:31 PM (Jul/31/2016)
+  */
 public class PlayerVoidDamageEvent extends DamageEvent
 {
 
@@ -21,10 +24,10 @@ public class PlayerVoidDamageEvent extends DamageEvent
     }
 
     @Override
-    public BaseComponent[] getInformation()
+    public BaseComponent[] information()
     {
         return new ComponentBuilder("").append("World Void - ").color(ChatColor.GRAY)
-                .append(String.valueOf(getDamageDealt())).color(ChatColor.RED).create();
+                .append(String.valueOf(damageDealt())).color(ChatColor.RED).create();
     }
 
 }

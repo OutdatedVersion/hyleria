@@ -1,18 +1,18 @@
-package com.simplexitymc.kraken.damage.kinds;
+package com.hyleria.coeus.damage.kinds;
 
-import com.simplexitymc.kraken.damage.DamageEvent;
-import com.simplexitymc.kraken.damage.DamageCause;
+import com.hyleria.coeus.damage.DamageCause;
+import com.hyleria.coeus.damage.DamageEvent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 
 /**
- * OutdatedVersion
- * At: 10:41 PM (May/07/2016)
- * cave-realms
+ * Damage dealt by lava
+ *
+ * @author Ben (OutdatedVersion)
+ * @since 10:41 PM (May/07/2016)
  */
-
 public class LavaDamageEvent extends DamageEvent
 {
 
@@ -22,10 +22,10 @@ public class LavaDamageEvent extends DamageEvent
     }
 
     @Override
-    public BaseComponent[] getInformation()
+    public BaseComponent[] information()
     {
         return new ComponentBuilder("").append("Lava - ").color(ChatColor.GRAY)
-                .append(String.valueOf(getDamageDealt())).color(ChatColor.RED).create();
+                  .append(String.valueOf(damageDealt())).color(ChatColor.RED).create();
     }
 
 }

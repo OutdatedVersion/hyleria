@@ -1,8 +1,10 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
+import com.hyleria.coeus.damage.CombatDeathEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Diamond ore no longer drops diamonds,
@@ -14,6 +16,9 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class Diamondless extends UHCScenario
 {
+
+    /** one diamond */
+    private static final ItemStack DIAMOND = new ItemStack(Material.DIAMOND);
 
     @Override
     public String name()
@@ -28,6 +33,10 @@ public class Diamondless extends UHCScenario
             event.getBlock().getDrops().clear();
     }
 
-    // handle the dropping
+    @EventHandler
+    public void dropDiamond(CombatDeathEvent event)
+    {
+        event.by().getWorld().dropItem(event.victim().getLocation(), DIAMOND);
+    }
 
 }

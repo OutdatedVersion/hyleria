@@ -1,8 +1,10 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
+import com.hyleria.coeus.damage.CombatDeathEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * The ability to mine gold pieces
@@ -15,6 +17,9 @@ import org.bukkit.event.block.BlockBreakEvent;
  */
 public class Goldless extends UHCScenario
 {
+
+    /** one gold ingot */
+    private static final ItemStack GOLD = new ItemStack(Material.GOLD_INGOT);
 
     @Override
     public String name()
@@ -29,6 +34,10 @@ public class Goldless extends UHCScenario
             event.getBlock().getDrops().clear();
     }
 
-    // handle some CombatDeathEvent or etc
+    @EventHandler
+    public void dropDiamond(CombatDeathEvent event)
+    {
+        event.by().getWorld().dropItem(event.victim().getLocation(), GOLD);
+    }
 
 }

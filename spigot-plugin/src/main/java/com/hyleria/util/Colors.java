@@ -11,6 +11,9 @@ public class Colors
 
     private Colors() { }
 
+    /** the color for player related things */
+    public static final ChatColor PLAYER = ChatColor.GREEN;
+
     /**
      * Turns the provided {@link ChatColor} into
      * the bolded version of itself.
