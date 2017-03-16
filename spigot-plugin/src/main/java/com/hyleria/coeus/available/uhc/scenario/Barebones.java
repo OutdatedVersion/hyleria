@@ -20,6 +20,10 @@ public class Barebones extends UHCScenario
     /** one gapple */
     private static final ItemStack GAPPLE = new ItemStack(Material.GOLDEN_APPLE, 1, (byte) 1);
 
+    // 1 diamond
+    // 16 arrows
+    // 3 bits of string
+
     @Override
     public String name()
     {

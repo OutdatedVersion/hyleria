@@ -1,6 +1,5 @@
 package com.hyleria.util;
 
-import com.google.inject.Inject;
 import com.hyleria.Hyleria;
 import org.bukkit.event.Listener;
 
@@ -13,14 +12,14 @@ public abstract class Module implements Listener
 {
 
     /** our plugin instance */
-    @Inject private Hyleria plugin;
+    private Hyleria plugin;
 
     /**
-     * Guice delegate for this module (kind of)
      */
-    public void configure()
+    public void configure(Hyleria plugin)
     {
-        plugin.registerListeners(this.getClass());
+        // should always call super
+        this.plugin = plugin;
     }
 
     /**
@@ -31,7 +30,7 @@ public abstract class Module implements Listener
      *            an instance of the class you're grabbing
      * @return the thing you wanted
      */
-    <T> T require(Class<T> clazz)
+    public <T> T require(Class<T> clazz)
     {
         return plugin.injector().getInstance(clazz);
     }
@@ -39,7 +38,7 @@ public abstract class Module implements Listener
     /**
      * @return our plugin instance
      */
-    Hyleria plugin()
+    public Hyleria plugin()
     {
         return plugin;
     }

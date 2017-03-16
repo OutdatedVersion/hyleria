@@ -18,6 +18,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
+        <repository>
+            <id>sk89q</id>
+            <url>http://maven.sk89q.com/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -37,14 +42,21 @@
             <artifactId>commons</artifactId>
             <version>1.0</version>
         </dependency>
-        
-        <!-- need to get this done, so going to use -->
-        <!-- an API for world generation :: will probably -->
-        <!-- rewrite at some point to use an in-house solution -->
+
+        <!-- WorldEdit: Bukkit side -->
         <dependency>
-            <groupId>com.wimbli</groupId>
-            <artifactId>world-border</artifactId>
-            <version>LATEST</version>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>6.1.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- WorldEdit: API -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-core</artifactId>
+            <version>6.1.4-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

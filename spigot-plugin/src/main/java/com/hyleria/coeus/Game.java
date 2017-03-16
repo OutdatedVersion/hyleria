@@ -1,6 +1,7 @@
 package com.hyleria.coeus;
 
 import com.google.gson.Gson;
+import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.json.GSONUtil;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
@@ -24,6 +25,9 @@ public abstract class Game
 
     /** when someone dies we'll send them the hearts of their killer (if it's a player) */
     public boolean showKillerHeartsOnDeath;
+
+    /** the total number of players we need to start the game */
+    public int requiredPlayerCount = 2;
 
     /**
      * Invoked by the engine when the
@@ -51,6 +55,16 @@ public abstract class Game
     public abstract void end();
 
     /**
+     * Update the scoreboard within matches
+     *
+     * @param scoreboard the scoreboard
+     */
+    public void updateScoreboard(PlayerScoreboard scoreboard)
+    {
+
+    }
+
+    /**
      * Loads a game config that is stored
      * in the file named as provided.
      *
@@ -60,7 +74,7 @@ public abstract class Game
      */
     protected <T> T loadConfig(String name, Class<T> clazz)
     {
-        return GSONUtil.fromFile(name, clazz, GSON);
+        return GSONUtil.fromFile(name + "_data.json", clazz, GSON);
     }
 
     /**

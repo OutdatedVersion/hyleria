@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -14,9 +15,25 @@ public class PlayerUtil
 {
 
     /**
-     * @return a collection containing everyone that's online
+     * @return the online player count
      */
-    public static Stream<? extends Player> everyone()
+    public static int onlineCount()
+    {
+        return Bukkit.getServer().getOnlinePlayers().length;
+    }
+
+    /**
+     * @return a collection of every player who is online
+     */
+    public static List<? extends Player> everyone()
+    {
+        return Arrays.asList(Bukkit.getServer().getOnlinePlayers());
+    }
+
+    /**
+     * @return a stream containing everyone that's online
+     */
+    public static Stream<? extends Player> everyoneStream()
     {
         return Arrays.asList(Bukkit.getServer().getOnlinePlayers()).stream();
     }

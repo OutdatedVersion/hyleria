@@ -3,12 +3,13 @@ package com.hyleria.common.reflect;
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.common.mongo.DefaultValue;
 import com.simplexitymc.util.json.Exclude;
+import org.json.simple.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
- /**
+/**
   * @author Ben (OutdatedVersion)
   * @since Dec/25/2016 (12:32 AM)
   */
@@ -76,6 +77,37 @@ public class ReflectionUtil
 
             return null;
         }
+    }
+
+    /**
+     * Turn the provided object into
+     * a JSON object w/ the contents
+     * of every field in the object.
+     *
+     * @param object the object
+     */
+    public static void printOut(Object object)
+    {
+        final JSONObject _json = new JSONObject();
+
+        // iterate over each field, and insert it
+        for (Field field : object.getClass().getDeclaredFields())
+        {
+            field.setAccessible(true);
+
+            try
+            {
+                _json.put(field.getName(), field.get(object).toString());
+            }
+            catch (IllegalAccessException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        System.out.println();
+        System.out.println(_json.toJSONString());
+        System.out.println();
     }
 
 }

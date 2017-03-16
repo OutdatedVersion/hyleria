@@ -47,7 +47,7 @@ public class Issues
 
         final BaseComponent[] _message = _builder.create();
 
-        PlayerUtil.everyone().filter(Player::isOp).forEach(recipient -> recipient.spigot().sendMessage(_message));
+        PlayerUtil.everyoneStream().filter(Player::isOp).forEach(recipient -> recipient.spigot().sendMessage(_message));
     }
 
 }

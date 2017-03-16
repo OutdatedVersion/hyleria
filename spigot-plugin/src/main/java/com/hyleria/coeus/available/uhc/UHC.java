@@ -4,13 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.coeus.Game;
+import com.hyleria.coeus.available.uhc.world.Border;
 import com.hyleria.coeus.damage.CombatEvent;
+import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.reflect.ReflectionUtil;
 import com.hyleria.common.time.Tick;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
-import com.wimbli.WorldBorder.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,6 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Optional;
 
 import static com.hyleria.util.Colors.bold;
+import static org.bukkit.ChatColor.GREEN;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -50,18 +52,23 @@ public class UHC extends Game
     public void init()
     {
         config = loadConfig("uhc", UHCConfig.class);
+        ReflectionUtil.printOut(config);
+
         world = WorldCreator.name("uhc").createWorld();
 
-        Config.setBorder("uhc", config.radiusX, config.radiusZ, 0, 0);
+        plugin.registerListeners(new Border().init(config.apothem).generatePhysicalBorder());
     }
 
     @Override
     public void begin()
     {
+        MessageUtil.everyone(bold(GREEN) + "nifty starting message!!");
+
         // load scenarios
         config.enabledScenarios.stream()
                 .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
                 .forEach(plugin::boundInjection);
+
 
         // reset player's health after the provided time
         Scheduler.delayed(() ->
@@ -78,6 +85,20 @@ public class UHC extends Game
     public void end()
     {
 
+    }
+
+    @Override
+    public void updateScoreboard(PlayerScoreboard scoreboard)
+    {
+        scoreboard.purge();
+        scoreboard.space();
+        scoreboard.writeHead("Today");
+        scoreboard.write(ChatColor.RED + "Mar/15/17");
+        scoreboard.space();
+        scoreboard.writeHead("Players");
+        scoreboard.write(ChatColor.RED + "1");
+        scoreboard.writeURL();
+        scoreboard.draw();
     }
 
     @EventHandler
@@ -113,7 +134,6 @@ public class UHC extends Game
                 }
             }
         }
-
     }
 
 }

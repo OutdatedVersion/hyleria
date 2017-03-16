@@ -12,6 +12,10 @@ import java.util.Set;
 public class UHCConfig implements GameConfiguration
 {
 
+    /** the name of the world that everything takes place in */
+    @SerializedName ( "world_name" )
+    public String worldName;
+
     /** the <strong>CODE</strong> names of the scenarios we'll be using. (their class name) */
     @SerializedName ( "enabled_scenarios" )
     public Set<String> enabledScenarios;
@@ -24,13 +28,8 @@ public class UHCConfig implements GameConfiguration
     @SerializedName ( "pvp_time" )
     public int pvpTime = 20;
 
-    /** the radius of the border (x side) */
-    @SerializedName ( "radius_x" )
-    public int radiusX;
-
-    /** the radius of the border (z side) */
-    @SerializedName ( "radius_z" )
-    public int radiusZ;
+    /** the apothem of the border */
+    public int apothem;
 
     /** the time that must elapse before the border starts to shrink */
     @SerializedName ( "time_till_border_shrink" )

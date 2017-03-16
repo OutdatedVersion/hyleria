@@ -23,8 +23,4 @@ public class ServerConfig
     @SerializedName ( "game_config_mode" )
     public ConfigurationMode configMode;
 
-    /** data relating to the game currently going */
-    @SerializedName ( "game_config" )
-    public GameConfiguration gameConfig;
-
 }

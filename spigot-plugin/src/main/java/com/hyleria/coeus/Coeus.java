@@ -1,11 +1,17 @@
 package com.hyleria.coeus;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
+import com.hyleria.Hyleria;
+import com.hyleria.coeus.damage.DamageEventFactory;
 import com.hyleria.coeus.event.StatusChangeEvent;
+import com.hyleria.coeus.scoreboard.ScoreboardHandler;
 import com.hyleria.common.backend.ServerConfig;
+import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
+import com.hyleria.util.PlayerUtil;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -14,9 +20,6 @@ import com.hyleria.util.Module;
 @Singleton
 public class Coeus extends Module
 {
-
-    /** local injector */
-    @Inject private Injector injector;
 
     /** the type of the game we're playing */
     private GameChoice gameChoice;
@@ -28,12 +31,23 @@ public class Coeus extends Module
     private Status status;
 
     @Inject
-    public Coeus(ServerConfig config)
+    public Coeus(Hyleria plugin, ServerConfig config, AccountManager accountManager)
     {
         status = Status.INIT;  // we don't need to call the event quite yet
-        gameChoice = GameChoice.valueOf(config.forcedGame);
 
-        game = injector.getInstance(gameChoice.clazz);
+        gameChoice = GameChoice.valueOf(config.forcedGame.toUpperCase());
+        game = plugin.boundInjection(gameChoice.clazz);
+
+        // load up the basic game
+        game.init();
+
+        // ready for players
+        // the above operation is intended to be fully blocking
+        updateStatus(Status.IDLE);
+
+
+        new DamageEventFactory(game).init(plugin);
+        new ScoreboardHandler().game(game).init(plugin, this).initNametags(plugin, accountManager);
     }
 
     /**
@@ -52,6 +66,20 @@ public class Coeus extends Module
         this.status = to;
 
         return this;
+    }
+
+    @EventHandler
+    public void watchJoin(PlayerJoinEvent event)
+    {
+        if (status == Status.IDLE)
+        {
+            if (PlayerUtil.onlineCount() >= game.requiredPlayerCount)
+            {
+                // updateStatus(Status.COUNTDOWN);
+                // for now we'll just start it
+                game.begin();
+            }
+        }
     }
 
 }

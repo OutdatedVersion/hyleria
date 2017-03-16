@@ -1,6 +1,7 @@
 package com.hyleria.module;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
@@ -21,6 +22,7 @@ import static com.hyleria.util.RoleFormat.chatFormat;
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (6:53 PM)
  */
+@Singleton
 @StartParallel
 @Requires ( AccountManager.class )
 public class Chat extends Module

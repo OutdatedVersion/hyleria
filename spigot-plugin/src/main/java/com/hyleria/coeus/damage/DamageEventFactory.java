@@ -1,6 +1,7 @@
 package com.hyleria.coeus.damage;
 
 import com.google.common.collect.Maps;
+import com.hyleria.Hyleria;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.damage.kinds.*;
 import com.hyleria.common.time.Tick;
@@ -53,6 +54,16 @@ public class DamageEventFactory extends Module
     {
         this.game = game;
         this.logRelation = Maps.newHashMap();
+    }
+
+    /**
+     * Register this
+     *
+     * @param plugin our plugin
+     */
+    public void init(Hyleria plugin)
+    {
+        plugin.registerListeners(this);
     }
 
     /**
@@ -255,6 +266,7 @@ public class DamageEventFactory extends Module
         switch (event.getCause())
         {
             case FIRE:
+            case FIRE_TICK:
             {
                 FireDamageEvent _event = new FireDamageEvent(_player, _damage).call(FireDamageEvent.class);
 
