@@ -1,0 +1,13 @@
+{
+  "world_name": "uhc",
+  "enabled_scenarios": [ "Fireless", "Rodless" ],
+  "heal_time": 5,
+  "pvp_time": 10,
+  "apothem": "1000",
+  "time_till_border_shrink": 60,
+  "nether_enabled": false,
+  "pearl_damage": true,
+  "horse_healing": true,
+  "strength_one": false,
+  "strength_two": false
+}
