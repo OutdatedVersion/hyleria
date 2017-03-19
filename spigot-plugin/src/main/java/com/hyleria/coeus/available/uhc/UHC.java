@@ -3,12 +3,13 @@ package com.hyleria.coeus.available.uhc;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
+import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.available.uhc.world.Border;
 import com.hyleria.coeus.damage.CombatEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.reflect.ReflectionUtil;
-import com.hyleria.common.time.Tick;
+import com.hyleria.common.time.Time;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
@@ -49,7 +50,7 @@ public class UHC extends Game
     // handle stats engine side
 
     @Override
-    public void init()
+    public void init(Coeus engine)
     {
         config = loadConfig("uhc", UHCConfig.class);
         ReflectionUtil.printOut(config);
@@ -75,10 +76,10 @@ public class UHC extends Game
         {
             PlayerUtil.everyone().forEach(PlayerUtil::fullHealth);
             MessageUtil.everyone(bold(ChatColor.GOLD) + "You've all been healed.");
-        }, Tick.MINUTES.toTicks(config.healTime));
+        }, Time.MINUTES.toTicks(config.healTime));
 
         // allow PvP
-        Scheduler.delayed(() -> this.pvpEnabled = true, Tick.MINUTES.toTicks(config.pvpTime));
+        Scheduler.delayed(() -> this.pvpEnabled = true, Time.MINUTES.toTicks(config.pvpTime));
     }
 
     @Override
@@ -90,11 +91,10 @@ public class UHC extends Game
     @Override
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
-        scoreboard.purge();
-        scoreboard.space();
+        scoreboard.blank();
         scoreboard.writeHead("Today");
         scoreboard.write(ChatColor.RED + "Mar/15/17");
-        scoreboard.space();
+        scoreboard.blank();
         scoreboard.writeHead("Players");
         scoreboard.write(ChatColor.RED + "1");
         scoreboard.writeURL();

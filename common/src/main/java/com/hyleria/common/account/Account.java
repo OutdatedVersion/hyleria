@@ -1,11 +1,10 @@
 package com.hyleria.common.account;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.common.mongo.document.DocumentBuilder;
 import com.hyleria.common.mongo.document.DocumentCompatible;
 import com.hyleria.common.reference.Role;
-import com.hyleria.common.translation.Translators;
-import com.hyleria.common.translation.UseTranslator;
 import org.bson.Document;
 
 import java.util.List;
@@ -16,20 +15,18 @@ import java.util.UUID;
   * @author Ben (OutdatedVersion)
   * @since Dec/08/2016 (8:15 PM)
   */
+@SuppressWarnings ( "unchecked" )
 public class Account implements DocumentCompatible
 {
 
-    @UseTranslator ( Translators.UUID )
     private UUID uuid;
 
     private String name;
 
     @SerializedName ( "previous_names" )
-    private List<String> previousUsernames;
+    private List<String> previousUsernames = Lists.newArrayList();
 
-    private Role role;
-    private List<String> privileges;
-    private List<Package> packages;
+    private Role role = Role.PLAYER;
 
     // TODO(Ben): currency & XP?
 
@@ -37,8 +34,7 @@ public class Account implements DocumentCompatible
     private String currentIP;
 
     @SerializedName ( "previous_addresses" )
-    @UseTranslator ( Translators.PREVIOUS_ADDRESS )
-    private List<PreviousAddress> previousAddresses;
+    private List<PreviousAddress> previousAddresses = Lists.newArrayList();
 
     /** get -> {@link #uuid} */
     public UUID uuid()
@@ -83,7 +79,10 @@ public class Account implements DocumentCompatible
     {
         return DocumentBuilder.create()
                 .withFreshDoc()
+                .skipOver("uuid")  // we want to insert this on our own
                 .appendAllFields(this)
+                .append("uuid", this.uuid.toString())
+                .append("name_lower", this.name.toLowerCase())
                 .finished();
     }
 
@@ -92,7 +91,10 @@ public class Account implements DocumentCompatible
     {
         this.uuid = UUID.fromString(document.getString("uuid"));
         this.name = document.getString("name");
-        this.role = Role.ADMIN;
+        this.role = Role.valueOf(document.getString("role"));
+        this.previousUsernames = document.get("previous_names", List.class);
+        this.currentIP = document.getString("current_address");
+        this.previousAddresses = document.get("previous_addresses", List.class);
 
         return this;
     }
@@ -100,7 +102,7 @@ public class Account implements DocumentCompatible
     /**
      * Turns the provided data, retrieved
      * from a client when they login, into
-     * an account.
+     * a basic player {@link Account}.
      *
      * @param uuid the player's UUID
      * @param name the player's username

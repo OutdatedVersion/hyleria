@@ -1,7 +1,7 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
 import com.hyleria.coeus.damage.CombatDeathEvent;
-import com.hyleria.common.time.Tick;
+import com.hyleria.common.time.Time;
 import com.hyleria.util.Scheduler;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -44,7 +44,7 @@ public class Timebomb extends UHCScenario
             _chest.setType(Material.AIR);
             _chest.getWorld().createExplosion(_chest.getLocation(), EXPLOSION_DIAMETER);
             // may need to adjust the size of this explosion
-        }, Tick.SECONDS.toTicks(30));
+        }, Time.SECONDS.toTicks(30));
     }
 
 }

@@ -11,6 +11,7 @@ import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
 import com.hyleria.util.PlayerUtil;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
@@ -20,6 +21,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 @Singleton
 public class Coeus extends Module
 {
+
+    /** our plugin */
+    public final Hyleria plugin;
 
     /** the type of the game we're playing */
     private GameChoice gameChoice;
@@ -33,21 +37,25 @@ public class Coeus extends Module
     @Inject
     public Coeus(Hyleria plugin, ServerConfig config, AccountManager accountManager)
     {
+        this.plugin = plugin;
+
         status = Status.INIT;  // we don't need to call the event quite yet
 
         gameChoice = GameChoice.valueOf(config.forcedGame.toUpperCase());
         game = plugin.boundInjection(gameChoice.clazz);
 
         // load up the basic game
-        game.init();
+        game.init(this);
 
         // ready for players
         // the above operation is intended to be fully blocking
         updateStatus(Status.IDLE);
+        plugin.registerListeners(this);
 
 
         new DamageEventFactory(game).init(plugin);
-        new ScoreboardHandler().game(game).init(plugin, this).initNametags(plugin, accountManager);
+        new ScoreboardHandler().game(game).init(plugin, this).title(game.scoreboardTitle)
+                          .initNametags(plugin, accountManager);
     }
 
     /**
@@ -68,6 +76,24 @@ public class Coeus extends Module
         return this;
     }
 
+    /**
+     * @return the engine
+     */
+    public Coeus hookGameListener()
+    {
+        plugin.registerListeners(game);
+        return this;
+    }
+
+    /**
+     * @return the engine
+     */
+    public Coeus unhookGameListener()
+    {
+        HandlerList.unregisterAll(game);
+        return this;
+    }
+
     @EventHandler
     public void watchJoin(PlayerJoinEvent event)
     {
@@ -78,6 +104,7 @@ public class Coeus extends Module
                 // updateStatus(Status.COUNTDOWN);
                 // for now we'll just start it
                 game.begin();
+                plugin.registerListeners(game);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.hyleria.coeus;
 import com.google.gson.Gson;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.json.GSONUtil;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.function.Consumer;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
  * @author Ben (OutdatedVersion)
  * @since Mar/11/2017 (5:43 PM)
  */
-public abstract class Game
+public abstract class Game implements Listener
 {
 
     /** shared {@link Gson} instance for games */
@@ -29,6 +30,9 @@ public abstract class Game
     /** the total number of players we need to start the game */
     public int requiredPlayerCount = 2;
 
+    /** the title of the scoreboard */
+    public String scoreboardTitle = "Hyleria";
+
     /**
      * Invoked by the engine when the
      * server is first started. Until
@@ -38,7 +42,7 @@ public abstract class Game
      * Should contain semi time-consuming
      * logic
      */
-    public abstract void init();
+    public abstract void init(Coeus engine);
 
     /**
      * Invoked when we have the required

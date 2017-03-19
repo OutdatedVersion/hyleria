@@ -1,4 +1,5 @@
 {
+  "starting_host_name": "outdatedversion",
   "world_name": "uhc",
   "enabled_scenarios": [ "Fireless", "Rodless" ],
   "heal_time": 5,

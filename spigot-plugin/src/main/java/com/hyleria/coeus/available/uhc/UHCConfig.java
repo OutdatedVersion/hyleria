@@ -16,6 +16,9 @@ public class UHCConfig implements GameConfiguration
     @SerializedName ( "world_name" )
     public String worldName;
 
+    @SerializedName ( "starting_host_name" )
+    public String host;
+
     /** the <strong>CODE</strong> names of the scenarios we'll be using. (their class name) */
     @SerializedName ( "enabled_scenarios" )
     public Set<String> enabledScenarios;

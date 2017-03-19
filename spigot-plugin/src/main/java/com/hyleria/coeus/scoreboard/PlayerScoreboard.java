@@ -2,6 +2,7 @@ package com.hyleria.coeus.scoreboard;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.hyleria.coeus.Game;
 import com.hyleria.common.math.Math;
 import com.hyleria.common.time.TimeUtil;
 import org.bukkit.Bukkit;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import static com.hyleria.util.Colors.bold;
-import static org.bukkit.ChatColor.AQUA;
-import static org.bukkit.ChatColor.DARK_AQUA;
+import static org.bukkit.ChatColor.GOLD;
+import static org.bukkit.ChatColor.YELLOW;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -27,6 +28,9 @@ public class PlayerScoreboard
 
     /** the player this board is tied to */
     private final Player player;
+
+    /** the game used */
+    private Game game;
 
     /** the backing scoreboard */
     private Scoreboard scoreboard;
@@ -39,6 +43,12 @@ public class PlayerScoreboard
 
     /** what's currently rendered on the scoreboard */
     private String[] current = new String[15];
+
+    /** the title of the this scoreboard */
+    private String title;
+
+    /** point to cache the length of our title */
+    private int titleLength;
 
     /** the last time we went through a full animation sequence */
     private long lastAnimationCycle = System.currentTimeMillis();
@@ -55,7 +65,35 @@ public class PlayerScoreboard
         objective = scoreboard.registerNewObjective("h" + Math.random(999), "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        objective.setDisplayName(bold(AQUA) + "Hyleria UHC");
+        objective.setDisplayName(bold(GOLD) + "Hyleria");
+    }
+
+    /**
+     * Updates the game that backs
+     * this scoreboard
+     *
+     * @param game the game
+     * @return the player's scoreboard
+     */
+    public PlayerScoreboard game(Game game)
+    {
+        this.game = game;
+        return this;
+    }
+
+    /**
+     * Updates the title of the scoreboard
+     * objective
+     *
+     * @param title the new title
+     * @return this scoreboard
+     */
+    public PlayerScoreboard title(String title)
+    {
+        this.title = title;
+        this.titleLength = title.length();
+
+        return this;
     }
 
     /** actually send out the scoreboard */
@@ -136,7 +174,7 @@ public class PlayerScoreboard
     /**
      * Adds a blank line to the scoreboard
      */
-    public void space()
+    public void blank()
     {
         elements.add(" ");
     }
@@ -156,9 +194,11 @@ public class PlayerScoreboard
      *
      * @param content the text
      */
-    public void write(String content)
+    public void write(Object content)
     {
-        elements.add(content.substring(0, content.length() < 16 ? content.length() : 16));
+        // 1.7 only allows 16 total characters on the scoreboard - including color codes!
+        final String _asString = String.valueOf(content);
+        elements.add(_asString.substring(0, _asString.length() < 16 ? _asString.length() : 16));
     }
 
     /**
@@ -166,7 +206,7 @@ public class PlayerScoreboard
      */
     public void writeURL()
     {
-        space();
+        blank();
         elements.add(ChatColor.YELLOW + "hyleria.com");
     }
 
@@ -179,10 +219,9 @@ public class PlayerScoreboard
             return;
 
 
-        // TODO(Ben): take in name from game
-        objective.setDisplayName(addAnimation("Hyleria UHC"));
+        objective.setDisplayName(addAnimation(title));
 
-        if (animationIndex++ == 14)
+        if (animationIndex++ == (titleLength + 4))
         {
             animationIndex = 0;
             lastAnimationCycle = System.currentTimeMillis();
@@ -197,12 +236,12 @@ public class PlayerScoreboard
      */
     private String addAnimation(String to)
     {
-        String _working = bold(DARK_AQUA);
+        String _working = bold(GOLD);
 
         if (animationIndex == to.length() + 1 || animationIndex == to.length() + 3)
-            _working += bold(AQUA) + to;
+            _working += bold(YELLOW) + to;
         else if (animationIndex == to.length() + 2 || animationIndex == to.length() + 4)
-            _working += bold(DARK_AQUA) + to;
+            _working += bold(GOLD) + to;
         else
         {
             for (int i = 0; i < to.length(); i++)
@@ -210,7 +249,7 @@ public class PlayerScoreboard
                 char _character = to.charAt(i);
 
                 if (i == animationIndex)
-                    _working += bold(AQUA) + _character + bold(DARK_AQUA);
+                    _working += bold(YELLOW) + _character + bold(GOLD);
                 else
                     _working += _character;
             }

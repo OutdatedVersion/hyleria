@@ -1,14 +1,13 @@
 package com.hyleria.common.mongo.document;
 
+import com.google.common.collect.Lists;
 import com.hyleria.common.reflect.ReflectionUtil;
-import com.hyleria.common.translation.Translator;
-import com.hyleria.common.translation.UseTranslator;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -24,6 +23,9 @@ public class DocumentBuilder
 
     /** an instance of what we're working w/ for relfection usage */
     private Object object;
+
+    /** the name of the fields we should skip */
+    private List<String> skipFields;
 
     /**
      * @return a new builder
@@ -70,6 +72,25 @@ public class DocumentBuilder
     }
 
     /**
+     * Indicates that if we use one
+     * of the automatic methods here
+     * we should exclude the provided
+     * field w/ the matching name.
+     *
+     * @param fieldNames a set of the names
+     * @return this builder
+     */
+    public DocumentBuilder skipOver(String... fieldNames)
+    {
+        if (skipFields == null)
+            skipFields = Lists.newArrayList();
+
+        Collections.addAll(skipFields, fieldNames);
+
+        return this;
+    }
+
+    /**
      * Insert data into this document
      *
      * @param key the key
@@ -98,6 +119,9 @@ public class DocumentBuilder
         if (ReflectionUtil.skipOver(field))
             return this;
 
+        // respect this builder's exclusions
+        if (skipFields != null && skipFields.contains(field.getName()))
+            return this;
 
         try
         {
@@ -111,24 +135,11 @@ public class DocumentBuilder
             if (_fieldValue == null)
                 return this;
 
-            if (field.isAnnotationPresent(UseTranslator.class))
-            {
-                final Translator _translator = field.getAnnotation(UseTranslator.class).value().get();
-
-                if (_fieldValue instanceof Collection)
-                {
-                    System.out.println(((Collection) _fieldValue).stream().map(obj -> _translator.write(obj)).collect(Collectors.toList()).toString());
-                }
-                else
-                {
-                    _fieldValue = _translator.write(_fieldValue);
-                }
-            }
-
             // convert enums
             if (field.getType().isEnum())
                 _fieldValue = ((Enum) _fieldValue).name();
 
+            // we hope BSON handles most of the type conversion
             document.put(ReflectionUtil.nameFromField(field), _fieldValue);
         }
         catch (Exception ex)

@@ -38,7 +38,7 @@ public class RoleFormat
      */
     public static String chatFormat(Role role)
     {
-        return colorFor(role) + role.toNameColorless();
+        return role == Role.PLAYER ? ChatColor.GRAY.toString() : (colorFor(role) + role.toNameColorless());
     }
 
 }

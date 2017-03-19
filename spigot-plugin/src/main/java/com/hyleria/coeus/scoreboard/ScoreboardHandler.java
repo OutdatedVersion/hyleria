@@ -32,6 +32,9 @@ public class ScoreboardHandler implements Listener, Runnable
     /** the game behind this board */
     private Game game;
 
+    /** the title of all scoreboards created */
+    private String title;
+
     /** the game engine behind this board */
     private Coeus engine;
 
@@ -70,6 +73,19 @@ public class ScoreboardHandler implements Listener, Runnable
     }
 
     /**
+     * Updates the title on every board
+     *
+     * @param title the title
+     * @return this scoreboard
+     */
+    public ScoreboardHandler title(String title)
+    {
+        this.title = title;
+        boardRelation.values().forEach(board -> board.title(title));
+        return this;
+    }
+
+    /**
      * Start our nametags module
      *
      * @param plugin it needs this
@@ -87,7 +103,11 @@ public class ScoreboardHandler implements Listener, Runnable
         if (game == null)
             return;
 
-        boardRelation.forEach((player, board) -> game.updateScoreboard(board));
+        boardRelation.forEach((player, board) ->
+        {
+            board.purge();  // this is done every time, so we'll do it here
+            game.updateScoreboard(board);
+        });
     }
 
     /**
@@ -111,7 +131,7 @@ public class ScoreboardHandler implements Listener, Runnable
      */
     public void createBoard(Player player)
     {
-        updateBoard(player, new PlayerScoreboard(player));
+        updateBoard(player, new PlayerScoreboard(player).title(title));
     }
 
     /**

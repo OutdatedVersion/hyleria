@@ -10,6 +10,7 @@ import org.apache.commons.lang3.text.WordUtils;
 public enum Role
 {
 
+    DEV('c'),
     ADMIN('c'),
     SENIOR('b'),
     MOD('9'),

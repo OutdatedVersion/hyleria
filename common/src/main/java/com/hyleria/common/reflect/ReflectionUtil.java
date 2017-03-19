@@ -86,7 +86,7 @@ public class ReflectionUtil
      *
      * @param object the object
      */
-    public static void printOut(Object object)
+    public static String printOut(Object object)
     {
         final JSONObject _json = new JSONObject();
 
@@ -105,9 +105,14 @@ public class ReflectionUtil
             }
         }
 
+
+        final String _jsonString = _json.toJSONString();
+
         System.out.println();
-        System.out.println(_json.toJSONString());
+        System.out.println(_jsonString);
         System.out.println();
+
+        return _jsonString;
     }
 
 }

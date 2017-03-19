@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
+import com.hyleria.common.reference.Role;
 import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
 import com.hyleria.util.PlayerUtil;
@@ -29,7 +30,7 @@ public class Chat extends Module
 {
 
     /** the proper "[Role] Name message" format for messages */
-    public static final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) -> chatFormat(account.role()) + " " + player.getName() + " " + ChatColor.WHITE;
+    public static final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) -> (account.role() != Role.PLAYER ? (chatFormat(account.role()) + " ") : ChatColor.GRAY) + player.getName() + " " + ChatColor.WHITE;
 
     /** let's us interact with player accounts */
     @Inject private AccountManager accountManager;

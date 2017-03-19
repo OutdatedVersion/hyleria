@@ -7,12 +7,16 @@ import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
 import com.hyleria.common.inject.ConfigurationProvider;
 import com.hyleria.common.inject.StartParallel;
+import com.hyleria.common.mongo.codec.ExtraCodecs;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -33,8 +37,8 @@ import static com.mongodb.client.model.Filters.eq;
  * @author Ben (OutdatedVersion)
  * @since Dec/08/2016 (8:07 PM)
  */
-@StartParallel
 @Singleton
+@StartParallel
 public class Database
 {
 
@@ -57,10 +61,19 @@ public class Database
     public Database(ConfigurationProvider provider)
     {
         final DatabaseConfig _config = provider.read("database/{env}", DatabaseConfig.class);
+        final MongoClientOptions.Builder _builder = new MongoClientOptions.Builder();
+
+
+        // setup custom BSON codecs for the mongo driver
+        final CodecRegistry _default = MongoClient.getDefaultCodecRegistry();
+        final CodecRegistry _fresh = CodecRegistries.fromCodecs(ExtraCodecs.HYLERIA_CODECS);
+
+        _builder.codecRegistry(CodecRegistries.fromRegistries(_default, _fresh));
+
 
         client = new MongoClient(new ServerAddress(_config.connection.host, _config.connection.port),
-                                 Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())));
-
+                                 Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())),
+                                 _builder.build());
 
         database = client.getDatabase(_config.database);
         accounts = database.getCollection(_config.collection);
@@ -75,7 +88,7 @@ public class Database
 
     /**
      * Unbind the allocated resources for
-     * this account instance.
+     * this database instance.
      *
      * Note: Our {@link #executor} will finish executing
      * the set of tasks it currently has queued.
@@ -252,6 +265,7 @@ public class Database
                 if (_cacheHit.isPresent())
                     return _cacheHit;
             }
+
 
             // hit up mongo
             Document _document = accounts.find(!_useUsername

@@ -4,7 +4,7 @@ package com.hyleria.common.time;
  * @author Ben (OutdatedVersion)
  * @since Mar/15/2017 (12:01 AM)
  */
-public enum Tick
+public enum Time
 {
 
     SECONDS(1),
@@ -14,7 +14,7 @@ public enum Tick
     /** the amount of seconds in this value */
     private final int seconds;
 
-    Tick(int seconds)
+    Time(int seconds)
     {
         this.seconds = seconds;
     }

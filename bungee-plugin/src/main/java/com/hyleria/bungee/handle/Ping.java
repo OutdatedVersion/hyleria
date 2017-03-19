@@ -3,6 +3,7 @@ package com.hyleria.bungee.handle;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.bungee.Hyleria;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
@@ -21,7 +22,9 @@ public class Ping implements Listener
     @Inject private Hyleria hyleria;
 
     /** the text of our ping response */
-    private TextComponent pingResponse = new TextComponent("");
+    private TextComponent pingResponse = new TextComponent(ChatColor.GOLD.toString() + ChatColor.BOLD +
+            "Hyleria" + ChatColor.DARK_GRAY + " - mc.hyleria.com\n" +
+            ChatColor.YELLOW + "hi there");
 
     @EventHandler
     public void handlePing(final ProxyPingEvent event)
