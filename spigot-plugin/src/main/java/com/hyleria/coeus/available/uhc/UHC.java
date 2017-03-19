@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
+import com.hyleria.coeus.available.uhc.scenario.UHCScenario;
 import com.hyleria.coeus.available.uhc.world.Border;
 import com.hyleria.coeus.damage.CombatEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
@@ -24,6 +25,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.bold;
 import static org.bukkit.ChatColor.GREEN;
@@ -37,7 +41,8 @@ public class UHC extends Game
 {
 
     /** */
-    @Inject private Hyleria plugin;
+    @Inject
+    private Hyleria plugin;
 
     /**  */
     private UHCConfig config;
@@ -61,16 +66,15 @@ public class UHC extends Game
     }
 
     @Override
+    @SuppressWarnings ( "unchecked" )
     public void begin()
     {
         MessageUtil.everyone(bold(GREEN) + "nifty starting message!!");
 
         // load scenarios
-        config.enabledScenarios.stream()
-                .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
-                .forEach(plugin::boundInjection);
+        Set<UHCScenario> _scenarios = config.enabledScenarios.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name)).map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz)).collect(Collectors.toSet());
 
-
+        _scenarios.forEach(UHCScenario::start);
         // reset player's health after the provided time
         Scheduler.delayed(() ->
         {
@@ -104,7 +108,7 @@ public class UHC extends Game
     @EventHandler
     public void handlePvP(CombatEvent event)
     {
-        if (!pvpEnabled)
+        if (! pvpEnabled)
             event.setCancelled(true);
     }
 
@@ -121,13 +125,13 @@ public class UHC extends Game
 
             if (_effect.isPresent())
             {
-                if (!config.allowStrengthOne && _effect.get().getDuration() == 1)
+                if (! config.allowStrengthOne && _effect.get().getDuration() == 1)
                 {
                     event.setCancelled(true);
                     event.setItem(null);
                 }
 
-                if (!config.allowStrengthTwo && _effect.get().getDuration() == 2)
+                if (! config.allowStrengthTwo && _effect.get().getDuration() == 2)
                 {
                     event.setCancelled(true);
                     event.setItem(null);

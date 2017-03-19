@@ -2,6 +2,7 @@ package com.hyleria.coeus;
 
 import com.hyleria.coeus.available.lobby.Lobby;
 import com.hyleria.coeus.available.uhc.UHC;
+import com.hyleria.coeus.available.uhcg.UHCG;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -11,7 +12,8 @@ public enum GameChoice
 {
 
     UHC(UHC.class),
-    LOBBY(Lobby.class);
+    LOBBY(Lobby.class),
+    UHCG(UHCG.class);
 
     /** the class containing all of the logic for this game */
     public final Class<? extends Game> clazz;
