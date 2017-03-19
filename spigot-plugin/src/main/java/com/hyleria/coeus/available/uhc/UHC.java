@@ -77,7 +77,14 @@ public class UHC extends Game
         // load scenarios
          _scenarios = config.enabledScenarios.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name)).map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz)).collect(Collectors.toSet());
 
-        _scenarios.forEach(s -> s.start(this)); //Ensure the start of the scenarios (I guess this is redundant and code should be put in creation but whatever)
+        StringBuilder scenario_announcement = new StringBuilder(ChatColor.GREEN + "The following game modifications have been enabled!" + ChatColor.GOLD); //Its a generic string builder! Why use Guice for this.
+        _scenarios.forEach(s ->
+        {
+            scenario_announcement.append(" " + s.name()); //Meh, idc intellij. string builder just does this....
+            s.start(this);
+        }); //Ensure the start of the scenarios (I guess this is redundant and code should be put in creation but whatever) also add them to the announcement
+
+        MessageUtil.everyone(scenario_announcement.toString()); //Announce our available scenarios
         // reset player's health after the provided time
         Scheduler.delayed(() ->
         {
