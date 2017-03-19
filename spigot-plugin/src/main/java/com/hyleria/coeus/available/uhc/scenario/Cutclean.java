@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Anything that drops a smeltable/cookable
@@ -71,7 +70,11 @@ public class Cutclean extends UHCScenario
 
         // final Collection<ItemStack> _drops = event.getDrops();
 
-        event.getDrops().stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).map(ItemStack::new).collect(Collectors.toList());
+        //event.getDrops().stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).map(ItemStack::new).collect(Collectors.toList());
+
+        final Collection<ItemStack> previousDrops = event.getDrops(); //Get the previous drops, we will need to iterate thru this after clearing.
+        event.getDrops().clear(); //Clear the drops to pave the way from replacements!
+        previousDrops.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop))); //Set the drop to the smelted items
     }
 
     @EventHandler
