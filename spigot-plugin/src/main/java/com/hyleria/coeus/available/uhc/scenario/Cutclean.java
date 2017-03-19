@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -55,19 +54,13 @@ public class Cutclean extends UHCScenario
             return;
         }
 
-        final Optional<Material> _possibleItem = _drops.stream()
-                                                       .map(ItemStack::getType)
-                                                       .map(BlockUtil::preciousDropFromBlock)
-                                                       .filter(Objects::nonNull).findFirst();
-
-        if (_possibleItem.isPresent())
-        {
+        _drops.stream().map(ItemStack::getType).map(BlockUtil::preciousDropFromBlock).filter(Objects::nonNull).findFirst().ifPresent(possibleItem -> {
             _drops.clear();
-            _drops.add(new ItemStack(_possibleItem.get()));
+            _drops.add(new ItemStack(possibleItem));
 
             // remove the ability to gain experience
             event.setExpToDrop(0);
-        }
+        }); //More efficient/clean way of doing this (removes if statement
     }
 
     @EventHandler
@@ -78,12 +71,7 @@ public class Cutclean extends UHCScenario
 
         // final Collection<ItemStack> _drops = event.getDrops();
 
-        event.getDrops()
-                .stream()
-                .map(ItemStack::getType)
-                .map(ItemUtil::cookedItemFor)
-                .filter(Objects::nonNull).map(ItemStack::new)
-                .collect(Collectors.toList());
+        event.getDrops().stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).map(ItemStack::new).collect(Collectors.toList());
     }
 
     @EventHandler

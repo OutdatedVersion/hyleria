@@ -12,6 +12,7 @@ import java.util.stream.Stream;
  * @author Ben (OutdatedVersion)
  * @since Feb/25/2017 (12:13 PM)
  */
+@SuppressWarnings("unchecked")
 public class Hyleria extends Plugin
 {
 
