@@ -1,5 +1,6 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
+import com.hyleria.coeus.available.uhc.UHC;
 import org.bukkit.event.Listener;
 
 /**
@@ -9,7 +10,7 @@ import org.bukkit.event.Listener;
 public abstract class UHCScenario implements Listener
 {
 
-    public void start()
+    public void start(UHC uch)
     {
 
     }

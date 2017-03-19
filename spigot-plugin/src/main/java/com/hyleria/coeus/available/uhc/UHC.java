@@ -52,6 +52,9 @@ public class UHC extends Game
 
     private boolean pvpEnabled = false;
 
+    /** our enabled uhc scenarios */
+    private Set<UHCScenario> _scenarios;
+
     // handle stats engine side
 
     @Override
@@ -72,9 +75,9 @@ public class UHC extends Game
         MessageUtil.everyone(bold(GREEN) + "nifty starting message!!");
 
         // load scenarios
-        Set<UHCScenario> _scenarios = config.enabledScenarios.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name)).map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz)).collect(Collectors.toSet());
+         _scenarios = config.enabledScenarios.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name)).map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz)).collect(Collectors.toSet());
 
-        _scenarios.forEach(UHCScenario::start);
+        _scenarios.forEach(s -> s.start(this)); //Ensure the start of the scenarios (I guess this is redundant and code should be put in creation but whatever)
         // reset player's health after the provided time
         Scheduler.delayed(() ->
         {
