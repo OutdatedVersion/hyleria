@@ -60,6 +60,9 @@ public class Lobby extends Game
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
         scoreboard.blank();
+        scoreboard.writeHead("You");
+        scoreboard.write(scoreboard.player().getName());
+        scoreboard.blank();
         scoreboard.writeHead("Today");
         scoreboard.write(ChatColor.RED + this.date);
         scoreboard.blank();

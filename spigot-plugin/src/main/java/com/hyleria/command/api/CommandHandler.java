@@ -115,10 +115,14 @@ public class CommandHandler
         {
             final Parameter _working = _required[i];
 
-            // update
-            // TODO(Ben): UNSAFE. will throw NPE
-            _invokingWith[i] = providers.get(_working.getType()).get(player, _args);
+            final ArgumentSatisfier _provider = providers.get(_working.getType());
+
+            if (_provider != null)
+                _invokingWith[i] = _provider.get(player, _args);
+            else
+                throw new IllegalArgumentException("Missing provider for paramater");
         }
+
 
         try
         {
