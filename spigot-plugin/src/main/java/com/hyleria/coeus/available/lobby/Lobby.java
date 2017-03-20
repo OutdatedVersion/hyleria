@@ -18,9 +18,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.bukkit.ChatColor.DARK_GRAY;
-import static org.bukkit.ChatColor.GRAY;
-
 /**
  * @author Ben (OutdatedVersion)
  * @since Mar/18/2017 (7:26 PM)
@@ -83,14 +80,14 @@ public class Lobby extends Game
     @EventHandler
     public void teleport(PlayerJoinEvent event)
     {
-        event.setJoinMessage(DARK_GRAY + "Welcome » " + GRAY + event.getPlayer().getName());
+        event.setJoinMessage(null);
         event.getPlayer().teleport(spawn);
     }
 
     @EventHandler
     public void prettyLeave(PlayerQuitEvent event)
     {
-        event.setQuitMessage(DARK_GRAY + "Goodbye » " + GRAY + event.getPlayer().getName());
+        event.setQuitMessage(null);
     }
 
 }

@@ -27,6 +27,7 @@
             <groupId>com.destroystokyo</groupId>
             <artifactId>waterfall</artifactId>
             <version>1.11-R1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- our stuff -->

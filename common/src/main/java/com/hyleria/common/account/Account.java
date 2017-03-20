@@ -2,6 +2,7 @@ package com.hyleria.common.account;
 
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
+import com.hyleria.common.mongo.Database;
 import com.hyleria.common.mongo.document.DocumentBuilder;
 import com.hyleria.common.mongo.document.DocumentCompatible;
 import com.hyleria.common.reference.Role;
@@ -54,6 +55,12 @@ public class Account implements DocumentCompatible
         return role;
     }
 
+    public Account role(Role newRole, Database database)
+    {
+        // update in db
+        // call update event
+        return this;
+    }
 
     /**
      * Represents some other IP that

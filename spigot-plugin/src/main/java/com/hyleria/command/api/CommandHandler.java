@@ -2,11 +2,11 @@ package com.hyleria.command.api;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
+import com.hyleria.util.Issues;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,13 +28,17 @@ import static com.google.common.base.Preconditions.checkState;
 public class CommandHandler
 {
 
+    /** our plugin */
     @Inject private Hyleria hyleria;
 
+    /** make sure people have the perms to execute stuff */
     @Inject private PermissionManager permissionManager;
 
+    /** all of our commands */
     private Map<String, CommandInfo> commands = Maps.newHashMap();
 
-    private Map<Class, Provider> providers = Maps.newHashMap();
+    /** what we use to satisfy args */
+    private Map<Class, ArgumentSatisfier> providers = Maps.newHashMap();
 
     public void registerInPackage(String pkg)
     {
@@ -43,7 +47,7 @@ public class CommandHandler
                 {
                     Object _instance = hyleria.injector().getInstance(clazz);
 
-
+                    registerCommands(_instance);
                 }).scan();
     }
 
@@ -69,6 +73,7 @@ public class CommandHandler
                              ? method.getAnnotation(Permission.class).value()
                              : Role.PLAYER;
 
+                //
             }
         }
 
@@ -88,10 +93,10 @@ public class CommandHandler
                 .stream()
                 .filter(data -> Arrays.stream(data.executors).anyMatch(_command::equals))
                 .findFirst()
-                .ifPresent(info -> attemptCommandExecution(info.instanceOfPossessor, info.method, event.getPlayer(), info));
+                .ifPresent(info -> attemptCommandExecution(info.instanceOfPossessor, info.method, event.getPlayer(), info, _args));
     }
 
-    public void attemptCommandExecution(Object object, Method method, Player player, CommandInfo info)
+    public void attemptCommandExecution(Object object, Method method, Player player, CommandInfo info, String[] args)
     {
         // verify the player can actually execute this command
         if (info.role != Role.PLAYER)
@@ -100,12 +105,29 @@ public class CommandHandler
 
 
         // invoke
+        final Arguments _args = new Arguments(args);
         final Parameter[] _required = method.getParameters();
         Object[] _invokingWith = new Object[_required.length];
 
         _invokingWith[0] = player;
 
+        for (int i = 1; i < _required.length; i++)
+        {
+            final Parameter _working = _required[i];
 
+            // update
+            // TODO(Ben): UNSAFE. will throw NPE
+            _invokingWith[i] = providers.get(_working.getType()).get(player, _args);
+        }
+
+        try
+        {
+            method.invoke(info.instanceOfPossessor, _invokingWith);
+        }
+        catch (Exception ex)
+        {
+            Issues.handle("Command Execution", ex);
+        }
     }
 
     static class CommandInfo
