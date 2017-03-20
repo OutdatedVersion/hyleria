@@ -3,6 +3,7 @@ package com.hyleria.coeus.available.lobby;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.Status;
+import com.hyleria.coeus.damage.kinds.PlayerVoidDamageEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.PlayerUtil;
@@ -75,6 +76,15 @@ public class Lobby extends Game
     private String updateDate()
     {
         return this.date = FORMAT.format(new Date());
+    }
+
+    @EventHandler
+    public void keepOutOfVoid(PlayerVoidDamageEvent event)
+    {
+        // giant glass borders are (aesthetically) dumb
+
+        event.setCancelled(true);
+        event.victim().teleport(spawn);
     }
 
     @EventHandler

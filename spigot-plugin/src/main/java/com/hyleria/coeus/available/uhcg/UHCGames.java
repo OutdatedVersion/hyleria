@@ -4,12 +4,10 @@ import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
 
 /**
- * This file was created by @author thejp for the use of
- * hyleria. Please note, all rights to code are retained by
- * afore mentioned thejp unless otherwise stated.
- * File created: Sunday, March, 2017
+ * @author Jp78
+ * @since Sunday March/2017
  */
-public class UHCG extends Game
+public class UHCGames extends Game
 {
 
     @Override
