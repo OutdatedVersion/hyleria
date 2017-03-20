@@ -75,8 +75,8 @@ public class Cutclean extends UHCScenario
         // then do it the for-sure way
 
         final Collection<ItemStack> _drops = event.getDrops();
-        _drops.clear();
         _drops.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop)));
+        _drops.clear();
     }
 
     @EventHandler
