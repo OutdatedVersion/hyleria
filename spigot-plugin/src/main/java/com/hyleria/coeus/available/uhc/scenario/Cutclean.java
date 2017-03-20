@@ -60,12 +60,12 @@ public class Cutclean extends UHCScenario
                 .findFirst()
                 .ifPresent(possibleItem ->
                 {
-            _drops.clear();
-            _drops.add(new ItemStack(possibleItem));
+                    _drops.clear();
+                    _drops.add(new ItemStack(possibleItem));
 
-            // remove the ability to gain experience
-            event.setExpToDrop(0);
-        });
+                    // remove the ability to gain experience
+                    event.setExpToDrop(0);
+                });
     }
 
     @EventHandler

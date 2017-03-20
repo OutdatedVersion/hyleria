@@ -14,6 +14,7 @@ import com.hyleria.common.time.Time;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
+import com.hyleria.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.bold;
 import static org.bukkit.ChatColor.GREEN;
+import static org.bukkit.ChatColor.WHITE;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -87,7 +89,7 @@ public class UHC extends Game
         }, Time.MINUTES.toTicks(config.healTime));
 
         // allow PvP
-        Scheduler.delayed(() -> this.pvpEnabled = true, Time.MINUTES.toTicks(config.pvpTime));
+        Scheduler.delayed(this::togglePvP, Time.MINUTES.toTicks(config.pvpTime));
     }
 
     @Override
@@ -107,6 +109,15 @@ public class UHC extends Game
         scoreboard.write(ChatColor.RED + "1");
         scoreboard.writeURL();
         scoreboard.draw();
+    }
+
+    /**
+     * Switches PvP on/off & let's players know
+     */
+    private void togglePvP()
+    {
+        this.pvpEnabled = !this.pvpEnabled;
+        MessageUtil.everyone(bold(WHITE) + "PvP is now " + TextUtil.enabledDisabledBold(this.pvpEnabled));
     }
 
     @EventHandler
