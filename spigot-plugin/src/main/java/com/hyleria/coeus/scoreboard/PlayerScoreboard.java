@@ -96,6 +96,14 @@ public class PlayerScoreboard
         return this;
     }
 
+    /**
+     * @return the player this scoreboard is for
+     */
+    public Player player()
+    {
+        return player;
+    }
+
     /** actually send out the scoreboard */
     public void draw()
     {

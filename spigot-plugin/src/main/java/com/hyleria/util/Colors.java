@@ -11,6 +11,9 @@ public class Colors
 
     private Colors() { }
 
+    /** bold format */
+    public static final String BOLD = ChatColor.BOLD.toString();
+
     /** the color for player related things */
     public static final ChatColor PLAYER = ChatColor.GREEN;
 

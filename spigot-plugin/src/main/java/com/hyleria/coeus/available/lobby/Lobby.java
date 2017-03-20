@@ -3,6 +3,7 @@ package com.hyleria.coeus.available.lobby;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.Status;
+import com.hyleria.coeus.damage.kinds.PlayerVoidDamageEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.PlayerUtil;
@@ -17,9 +18,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static org.bukkit.ChatColor.DARK_GRAY;
-import static org.bukkit.ChatColor.GRAY;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -62,6 +60,9 @@ public class Lobby extends Game
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
         scoreboard.blank();
+        scoreboard.writeHead("You");
+        scoreboard.write(scoreboard.player().getName());
+        scoreboard.blank();
         scoreboard.writeHead("Today");
         scoreboard.write(ChatColor.RED + this.date);
         scoreboard.blank();
@@ -81,16 +82,25 @@ public class Lobby extends Game
     }
 
     @EventHandler
+    public void keepOutOfVoid(PlayerVoidDamageEvent event)
+    {
+        // giant glass borders are (aesthetically) dumb
+
+        event.setCancelled(true);
+        event.victim().teleport(spawn);
+    }
+
+    @EventHandler
     public void teleport(PlayerJoinEvent event)
     {
-        event.setJoinMessage(DARK_GRAY + "Welcome » " + GRAY + event.getPlayer().getName());
+        event.setJoinMessage(null);
         event.getPlayer().teleport(spawn);
     }
 
     @EventHandler
     public void prettyLeave(PlayerQuitEvent event)
     {
-        event.setQuitMessage(DARK_GRAY + "Goodbye » " + GRAY + event.getPlayer().getName());
+        event.setQuitMessage(null);
     }
 
 }

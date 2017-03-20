@@ -90,14 +90,11 @@ public class AccountManager extends Module
 
             if (_transaction.isPresent())
             {
-                System.out.println(_transaction.get().toString());
                 database.cacheCommit(_transaction.get());
                 // TODO(Ben): update account | name, IP
             }
             else
             {
-                System.out.println("NEW ACCOUNT");
-
                 final Account _account = Account.fromLoginData(event.getUniqueId(), event.getName(), event.getAddress().getHostAddress());
 
                 database.cacheCommit(_account);

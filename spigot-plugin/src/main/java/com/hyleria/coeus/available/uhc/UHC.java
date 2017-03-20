@@ -14,6 +14,7 @@ import com.hyleria.common.time.Time;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
+import com.hyleria.util.TextUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.bold;
 import static org.bukkit.ChatColor.GREEN;
+import static org.bukkit.ChatColor.WHITE;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -41,8 +43,7 @@ public class UHC extends Game
 {
 
     /** */
-    @Inject
-    private Hyleria plugin;
+    @Inject private Hyleria plugin;
 
     /**  */
     private UHCConfig config;
@@ -51,9 +52,6 @@ public class UHC extends Game
     private World world;
 
     private boolean pvpEnabled = false;
-
-    /** our enabled uhc scenarios */
-    private Set<UHCScenario> _scenarios;
 
     // handle stats engine side
 
@@ -69,22 +67,20 @@ public class UHC extends Game
     }
 
     @Override
-    @SuppressWarnings ( "unchecked" )
     public void begin()
     {
         MessageUtil.everyone(bold(GREEN) + "nifty starting message!!");
 
         // load scenarios
-         _scenarios = config.enabledScenarios.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name)).map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz)).collect(Collectors.toSet());
+        final Set<UHCScenario> _scenarios = config.enabledScenarios
+                .stream()
+                .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
+                .map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz))
+                .collect(Collectors.toSet());
 
-        StringBuilder scenario_announcement = new StringBuilder(ChatColor.GREEN + "The following game modifications have been enabled!" + ChatColor.GOLD); //Its a generic string builder! Why use Guice for this.
-        _scenarios.forEach(s ->
-        {
-            scenario_announcement.append(" " + s.name()); //Meh, idc intellij. string builder just does this....
-            s.start(this);
-        }); //Ensure the start of the scenarios (I guess this is redundant and code should be put in creation but whatever) also add them to the announcement
+        _scenarios.forEach(UHCScenario::init);
 
-        MessageUtil.everyone(scenario_announcement.toString()); //Announce our available scenarios
+
         // reset player's health after the provided time
         Scheduler.delayed(() ->
         {
@@ -93,7 +89,7 @@ public class UHC extends Game
         }, Time.MINUTES.toTicks(config.healTime));
 
         // allow PvP
-        Scheduler.delayed(() -> this.pvpEnabled = true, Time.MINUTES.toTicks(config.pvpTime));
+        Scheduler.delayed(this::togglePvP, Time.MINUTES.toTicks(config.pvpTime));
     }
 
     @Override
@@ -115,10 +111,19 @@ public class UHC extends Game
         scoreboard.draw();
     }
 
+    /**
+     * Switches PvP on/off & let's players know
+     */
+    private void togglePvP()
+    {
+        this.pvpEnabled = !this.pvpEnabled;
+        MessageUtil.everyone(bold(WHITE) + "PvP is now " + TextUtil.enabledDisabledBold(this.pvpEnabled));
+    }
+
     @EventHandler
     public void handlePvP(CombatEvent event)
     {
-        if (! pvpEnabled)
+        if (!pvpEnabled)
             event.setCancelled(true);
     }
 
@@ -135,13 +140,13 @@ public class UHC extends Game
 
             if (_effect.isPresent())
             {
-                if (! config.allowStrengthOne && _effect.get().getDuration() == 1)
+                if (!config.allowStrengthOne && _effect.get().getDuration() == 1)
                 {
                     event.setCancelled(true);
                     event.setItem(null);
                 }
 
-                if (! config.allowStrengthTwo && _effect.get().getDuration() == 2)
+                if (!config.allowStrengthTwo && _effect.get().getDuration() == 2)
                 {
                     event.setCancelled(true);
                     event.setItem(null);

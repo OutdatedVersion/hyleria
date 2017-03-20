@@ -53,13 +53,19 @@ public class Cutclean extends UHCScenario
             return;
         }
 
-        _drops.stream().map(ItemStack::getType).map(BlockUtil::preciousDropFromBlock).filter(Objects::nonNull).findFirst().ifPresent(possibleItem -> {
-            _drops.clear();
-            _drops.add(new ItemStack(possibleItem));
+        _drops.stream()
+                .map(ItemStack::getType)
+                .map(BlockUtil::preciousDropFromBlock)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .ifPresent(possibleItem ->
+                {
+                    _drops.clear();
+                    _drops.add(new ItemStack(possibleItem));
 
-            // remove the ability to gain experience
-            event.setExpToDrop(0);
-        }); //More efficient/clean way of doing this (removes if statement
+                    // remove the ability to gain experience
+                    event.setExpToDrop(0);
+                });
     }
 
     @EventHandler
@@ -68,13 +74,9 @@ public class Cutclean extends UHCScenario
         // try this way, if it doesn't maintain the changes made
         // then do it the for-sure way
 
-        // final Collection<ItemStack> _drops = event.getDrops();
-
-        //event.getDrops().stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).map(ItemStack::new).collect(Collectors.toList());
-
-        final Collection<ItemStack> previousDrops = event.getDrops(); //Get the previous drops, we will need to iterate thru this after clearing.
-        event.getDrops().clear(); //Clear the drops to pave the way from replacements!
-        previousDrops.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop))); //Set the drop to the smelted items
+        final Collection<ItemStack> _drops = event.getDrops();
+        _drops.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop)));
+        _drops.clear();
     }
 
     @EventHandler
