@@ -1,12 +1,13 @@
 package com.hyleria.command.api;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
  * @author Ben (OutdatedVersion)
  * @since Mar/01/2017 (4:20 PM)
  */
-public class Arguments
+public class Arguments implements Iterator<String>
 {
 
     private final String[] raw;
@@ -19,9 +20,18 @@ public class Arguments
     }
 
     /**
-     * @return the next element in our args
+     * @return the next element in our arguments
      */
-    public Optional<String> next()
+    public String next()
+    {
+        return raw[currentPosition++];
+    }
+
+    /**
+     * @return the next item in our arguments
+     *         wrapped in an optional
+     */
+    public Optional<String> nextSafe()
     {
         return (raw.length > currentPosition + 1)
                ? Optional.empty()
@@ -29,12 +39,12 @@ public class Arguments
     }
 
     /**
-     * @return the next item in our arguments
-     *         may throw an IOOB exception!
+     * @return whether or not there's another
+     *         element contained here
      */
-    public String nextUnsafe()
+    public boolean hasNext()
     {
-        return raw[currentPosition++];
+        return raw.length < currentPosition + 1;
     }
 
 }

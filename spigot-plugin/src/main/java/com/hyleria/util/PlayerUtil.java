@@ -1,6 +1,7 @@
 package com.hyleria.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;

@@ -10,6 +10,7 @@ import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -94,7 +95,9 @@ public class Lobby extends Game
     public void teleport(PlayerJoinEvent event)
     {
         event.setJoinMessage(null);
+
         event.getPlayer().teleport(spawn);
+        event.getPlayer().setGameMode(GameMode.SURVIVAL);
     }
 
     @EventHandler

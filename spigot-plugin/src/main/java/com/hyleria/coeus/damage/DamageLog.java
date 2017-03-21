@@ -20,6 +20,7 @@ public class DamageLog
 
     /** the player this log is for */
     private final Player player;
+
     private final List<DamageEvent> damageEvents;
 
     public DamageLog(Player player)

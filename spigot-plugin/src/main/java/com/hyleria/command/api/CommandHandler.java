@@ -40,17 +40,31 @@ public class CommandHandler
     /** what we use to satisfy args */
     private Map<Class, ArgumentSatisfier> providers = Maps.newHashMap();
 
+    /**
+     * Looks over the classes in the
+     * provided package, and if methods
+     * exist in it annotated with our
+     * command annotation, we'll process
+     * those.
+     *
+     * @param pkg the fully qualified
+     *            package name
+     */
     public void registerInPackage(String pkg)
     {
         new FastClasspathScanner()
                 .matchClassesWithMethodAnnotation(Command.class, (clazz, method) ->
-                {
-                    Object _instance = hyleria.injector().getInstance(clazz);
-
-                    registerCommands(_instance);
-                }).scan();
+                    registerCommands(hyleria.injector().getInstance(clazz))).scan();
     }
 
+    /**
+     * Look over the provided object
+     * and register any commands in it
+     * to our handler.
+     *
+     * @param object the object
+     * @return this handler
+     */
     public CommandHandler registerCommands(Object object)
     {
         // Iterate over a class looking for a method suitable
@@ -73,7 +87,10 @@ public class CommandHandler
                              ? method.getAnnotation(Permission.class).value()
                              : Role.PLAYER;
 
-                //
+                _info.instanceOfPossessor = object;
+
+                for (String executor : _info.executors)
+                    commands.put(executor, _info);
             }
         }
 
@@ -104,11 +121,12 @@ public class CommandHandler
                 return;
 
 
-        // invoke
+        // prepare parameters
         final Arguments _args = new Arguments(args);
         final Parameter[] _required = method.getParameters();
         Object[] _invokingWith = new Object[_required.length];
 
+        // the player who ran the command is always the first parameter
         _invokingWith[0] = player;
 
         for (int i = 1; i < _required.length; i++)
@@ -120,7 +138,7 @@ public class CommandHandler
             if (_provider != null)
                 _invokingWith[i] = _provider.get(player, _args);
             else
-                throw new IllegalArgumentException("Missing provider for paramater");
+                throw new IllegalArgumentException("Missing provider for parameter");
         }
 
 
