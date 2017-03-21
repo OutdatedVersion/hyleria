@@ -1,4 +1,4 @@
-package com.hyleria.coeus.available.uhcg.utils;
+package com.hyleria.coeus.available.uhcgames.utils;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -6,17 +6,15 @@ import java.util.stream.IntStream;
 import static com.hyleria.common.math.Math.chance;
 
 /**
- * This file was created by @author thejp for the use of
- * hyleria. Please note, all rights to code are retained by
- * afore mentioned thejp unless otherwise stated.
- * File created: Sunday, March, 2017
- * <p>
- * A class to control chest tiers
+ * @author Jp78
+ * @since Sunday Mar/17
  */
 public enum Tier
 {
-    BAD(90, 50, 0), LOW(95, 75, 7), HIGH(100, 75, 25);
 
+    BAD(90, 50, 0),
+    LOW(95, 75, 7),
+    HIGH(100, 75, 25);
 
     private Integer badChance;
     private Integer averageChance;
@@ -30,24 +28,24 @@ public enum Tier
      * @param averageChance The chance of getting an average item, so that some items won't appear or empty chests
      * @param goodChance    The chance of getting a good item
      */
-    private Tier(Integer badChance, Integer averageChance, Integer goodChance)
+    Tier(Integer badChance, Integer averageChance, Integer goodChance)
     {
         this.badChance = badChance;
         this.averageChance = averageChance;
         this.goodChance = goodChance;
     }
 
-    public Integer getAverageChance()
+    public Integer averageChance()
     {
         return averageChance;
     }
 
-    public Integer getBadChance()
+    public Integer badChance()
     {
         return badChance;
     }
 
-    public Integer getGoodChance()
+    public Integer goodChance()
     {
         return goodChance;
     }
@@ -69,19 +67,18 @@ public enum Tier
             case AVERAGE: return maxChance(max,averageChance);
             case GOOD: return maxChance(max,goodChance);
         }
+
         throw new RuntimeException("Chance instance did not match available chances! THIS IS NOT POSSIBLE");
     }
 
     private Integer maxChance(Integer max, Integer chance)
     {
-         return IntStream.range(0,max).filter(i -> chance(chance)).collect(ArrayList::new,ArrayList::add,ArrayList::addAll).size(); //Stupid boxing
-
+         return IntStream.range(0, max).filter(i -> chance(chance)).collect(ArrayList::new, ArrayList::add, ArrayList::addAll).size();
     }
 
     public enum Chance
     {
-        BAD, AVERAGE, GOOD;
-
-
+        BAD, AVERAGE, GOOD
     }
+
 }

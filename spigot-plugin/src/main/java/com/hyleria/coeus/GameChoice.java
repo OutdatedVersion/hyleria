@@ -2,7 +2,7 @@ package com.hyleria.coeus;
 
 import com.hyleria.coeus.available.lobby.Lobby;
 import com.hyleria.coeus.available.uhc.UHC;
-import com.hyleria.coeus.available.uhcg.UHCGames;
+import com.hyleria.coeus.available.uhcgames.UHCGames;
 
 /**
  * @author Ben (OutdatedVersion)

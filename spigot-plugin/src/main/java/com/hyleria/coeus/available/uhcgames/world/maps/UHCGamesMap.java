@@ -1,4 +1,4 @@
-package com.hyleria.coeus.available.uhcg.world.maps;
+package com.hyleria.coeus.available.uhcgames.world.maps;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This file was created by @author thejp for the use of
- * hyleria. Please note, all rights to code are retained by
- * afore mentioned thejp unless otherwise stated.
- * File created: Sunday, March, 2017
+ * @author Jp78
+ * @since Sunday Mar/17
  */
-public interface UHCGMap
+public interface UHCGamesMap
 {
 
     /**
@@ -37,8 +35,9 @@ public interface UHCGMap
     }
 
     /**
-     * Get a list of all the <strong>high {@link com.hyleria.coeus.available.uhcg.utils.Tier} chests (High quality)</strong> in the map. Typically these should be spawn chests.
+     * Get a list of all the <strong>high {@link com.hyleria.coeus.available.uhcgames.utils.Tier} chests (High quality)</strong> in the map. Typically these should be spawn chests.
      * @return Said list
      */
     List<Location> highChests();
+
 }

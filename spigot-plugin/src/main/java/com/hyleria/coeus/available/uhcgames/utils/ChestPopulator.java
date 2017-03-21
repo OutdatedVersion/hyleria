@@ -1,4 +1,4 @@
-package com.hyleria.coeus.available.uhcg.utils;
+package com.hyleria.coeus.available.uhcgames.utils;
 
 import com.google.common.collect.Lists;
 import com.hyleria.common.math.Math;
@@ -14,21 +14,20 @@ import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
- * This file was created by @author thejp for the use of
- * hyleria. Please note, all rights to code are retained by
- * afore mentioned thejp unless otherwise stated.
- * File created: Sunday, March, 2017
+ * @author Jp78
+ * @since Sunday Mar/17
  */
 public class ChestPopulator
 {
 
-
     /** Our list of bad items that'll be put in chests */
     private final List<ChestItem> badItems = null;
+
     /**
      * Our list of "normal" items that'll be put in chests
      */
     private final List<ChestItem> averageItems = null;
+
     /**
      * Our list of "good" items
      */
@@ -52,35 +51,39 @@ public class ChestPopulator
     {
         if (populated.contains(c.getLocation()))
             return;
+
         populated.add(c.getLocation());
-        //How many bad items we will put
+
+        // How many bad items we will put
         Integer includedBad = tier.chanceItem(maxBad, Tier.Chance.BAD);
-        //How many average items
+
+        // How many average items
         Integer includedAverage = tier.chanceItem(maxAverage, Tier.Chance.AVERAGE);
-        //How many good items
+
+        // How many good items
         Integer includedGood = tier.chanceItem(maxGood, Tier.Chance.AVERAGE);
-        //How many total items will be put in this chest.
+
+        // How many total items will be put in this chest.
         Integer totalItems = includedBad + includedAverage + includedGood;
 
-        //Where we will put these items
+        // Where we will put these items
         Set<Integer> slots = IntStream.range(0, totalItems).map(i -> Math.random(0, 26)).collect(HashSet::new, HashSet::add, HashSet::addAll);
+
         while ( slots.size() != totalItems )
         {
             slots = IntStream.range(0, totalItems).map(i -> Math.random(0, 26)).collect(HashSet::new, HashSet::add, HashSet::addAll); //To ensure we have 6 exact
         }
+
         Iterator<Integer> slotsit =  slots.iterator();
+
         IntStream.range(0, includedBad).forEach(i ->
-        {
-            c.getBlockInventory().setItem(slotsit.next(),badItems.get(Math.random(0,badItems.size() + 1)).toItemstack());
-        });
+            c.getBlockInventory().setItem(slotsit.next(), badItems.get(Math.random(0,badItems.size() + 1)).toItemstack()));
+
         IntStream.range(0, includedAverage).forEach(i ->
-        {
-            c.getBlockInventory().setItem(slotsit.next(),averageItems.get(Math.random(0,averageItems.size() + 1)).toItemstack());
-        });
+            c.getBlockInventory().setItem(slotsit.next(), averageItems.get(Math.random(0,averageItems.size() + 1)).toItemstack()));
+
         IntStream.range(0, includedGood).forEach(i ->
-        {
-            c.getBlockInventory().setItem(slotsit.next(),goodItems.get(Math.random(0,goodItems.size() + 1)).toItemstack());
-        });
+            c.getBlockInventory().setItem(slotsit.next(), goodItems.get(Math.random(0,goodItems.size() + 1)).toItemstack()));
     }
 
 
@@ -128,4 +131,5 @@ public class ChestPopulator
             return new ItemStack(chestMaterial, maximumItems);
         }
     }
+
 }
