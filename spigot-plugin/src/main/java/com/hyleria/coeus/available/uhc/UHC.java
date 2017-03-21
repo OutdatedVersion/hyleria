@@ -101,9 +101,8 @@ public class UHC extends Game
     @Override
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
-        scoreboard.blank();
-        scoreboard.writeHead("Today");
-        scoreboard.write(ChatColor.RED + "Mar/15/17");
+        scoreboard.writeHead("Hyleria UHC");
+        scoreboard.write(ChatColor.YELLOW + "Match Time");
         scoreboard.blank();
         scoreboard.writeHead("Players");
         scoreboard.write(ChatColor.RED + "1");

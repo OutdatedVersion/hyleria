@@ -1,5 +1,6 @@
 package com.hyleria.coeus.available.uhc.scenario;
 
+import com.google.common.collect.Lists;
 import com.hyleria.common.math.Math;
 import com.hyleria.util.BlockUtil;
 import com.hyleria.util.ItemUtil;
@@ -74,9 +75,9 @@ public class Cutclean extends UHCScenario
         // try this way, if it doesn't maintain the changes made
         // then do it the for-sure way
 
-        final Collection<ItemStack> _drops = event.getDrops();
-        _drops.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop)));
-        _drops.clear();
+        final Collection<ItemStack> dropClone = Lists.newArrayList(event.getDrops()); //Clone the drops, we need a clone not a reference. The object#clone() method may work, but this is a sure way
+        event.getDrops().clear(); //CLEAR IT OUT
+        dropClone.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop))); //Add the autocook
     }
 
     @EventHandler
