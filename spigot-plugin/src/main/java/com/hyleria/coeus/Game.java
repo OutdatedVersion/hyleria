@@ -3,8 +3,10 @@ package com.hyleria.coeus;
 import com.google.gson.Gson;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.json.GSONUtil;
+import com.hyleria.util.GameFlagHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.function.Consumer;
 
@@ -18,14 +20,16 @@ public abstract class Game implements Listener
     /** shared {@link Gson} instance for games */
     private static final Gson GSON = new Gson();
 
+    public GameFlagHandler<PlayerJoinEvent> announceJoin = GameFlagHandler.enabled(PlayerJoinEvent.class);
+
     /** if we should let people know someone died */
-    public boolean announceDeath;
+    public boolean announceDeath = true;
 
     /** a way to handle deaths in a special way per game */
     public Consumer<PlayerDeathEvent> deathHandler;
 
     /** when someone dies we'll send them the hearts of their killer (if it's a player) */
-    public boolean showKillerHeartsOnDeath;
+    public boolean showKillerHeartsOnDeath = true;
 
     /** the total number of players we need to start the game */
     public int requiredPlayerCount = 2;

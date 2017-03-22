@@ -36,5 +36,4 @@ public class UpdateRoleCommand
         target.sendMessage(GREEN + "Your role has been updated to " + DARK_GREEN + role.name);
     }
 
-
 }

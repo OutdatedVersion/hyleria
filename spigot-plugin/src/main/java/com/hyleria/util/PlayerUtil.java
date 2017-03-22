@@ -1,12 +1,18 @@
 package com.hyleria.util;
 
+import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.hyleria.util.Colors.bold;
+import static org.bukkit.ChatColor.*;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -49,6 +55,80 @@ public class PlayerUtil
     public static void fullHealth(Player player)
     {
         player.setHealth(player.getMaxHealth());
+    }
+
+    /**
+     * Looks for a player matching the
+     * name provided on the current server
+     *
+     * @param host person looking for said player
+     * @param target the player
+     * @param inform whether or not to send updates
+     * @return the player or null
+     */
+    public static Player search(Player host, String target, boolean inform)
+    {
+        inform = inform && host != null;
+
+        if (target.length() > 16)
+        {
+            if (inform)
+                host.sendMessage(bold(YELLOW) + target + bold(GRAY) + " is too long! (>16 characters)");
+
+            return null;
+        }
+
+        for (char character : target.toCharArray())
+        {
+            if (!Character.isLetterOrDigit(character) && !String.valueOf(character).equals("_"))
+            {
+                if (inform)
+                    host.sendMessage(bold(YELLOW) + target + bold(GRAY) + " is not a valid name!");
+
+                return null;
+            }
+        }
+
+        if (target.equalsIgnoreCase("me"))
+            return host;
+
+        final List<Player> _matches = Lists.newArrayList();
+
+        for (Player players : everyone())
+        {
+            final String _name = players.getName();
+
+            // :)
+            if (_name.equals("OutdatedVersion") && target.equalsIgnoreCase("ben"))
+                return players;
+
+            if (_name.toLowerCase().contains(target.toLowerCase()))
+                _matches.add(players);
+        }
+
+        if (_matches.size() != 1)
+        {
+            if (inform)
+                host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + "(" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
+
+            if (_matches.size() > 0)
+            {
+                String match = "";
+
+                for (Player t : _matches)
+                    match += bold(YELLOW) + t.getName() + bold(GRAY) + ", ";
+
+                if (match.length() > 1)
+                    match = match.substring(0, match.length() - 2);
+
+                if (inform)
+                    host.sendMessage(bold(GRAY) + "Matched names: " + match);
+            }
+
+            return null;
+        }
+
+        return _matches.get(0);
     }
 
 }

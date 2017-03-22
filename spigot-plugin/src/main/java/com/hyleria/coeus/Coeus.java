@@ -77,6 +77,31 @@ public class Coeus extends Module
     }
 
     /**
+     * @return the status of the current game
+     */
+    public Status status()
+    {
+        return status;
+    }
+
+    /**
+     * @return whether or not our current game
+     *         is actually active
+     */
+    public boolean isRunning()
+    {
+        return status == Status.ACTIVE_GAME;
+    }
+
+    /**
+     * @return the current game
+     */
+    public Game game()
+    {
+        return game;
+    }
+
+    /**
      * @return the engine
      */
     public Coeus hookGameListener()
@@ -101,7 +126,7 @@ public class Coeus extends Module
         {
             if (PlayerUtil.onlineCount() >= game.requiredPlayerCount)
             {
-                // updateStatus(Status.COUNTDOWN);
+                // updateStatus(Status.LOBBY_COUNTDOWN);
                 // for now we'll just start it
                 game.begin();
                 plugin.registerListeners(game);

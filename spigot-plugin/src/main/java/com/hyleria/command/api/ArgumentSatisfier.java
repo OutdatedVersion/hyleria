@@ -19,4 +19,11 @@ public interface ArgumentSatisfier<T>
      */
     T get(Player player, Arguments args);
 
+    /**
+     * @return the message to send when if
+     *         we fail to do what {@link #get(Player, Arguments)}
+     *         does
+     */
+    String fail();
+
 }

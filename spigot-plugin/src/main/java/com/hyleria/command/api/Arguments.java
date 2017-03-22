@@ -10,8 +10,10 @@ import java.util.Optional;
 public class Arguments implements Iterator<String>
 {
 
+    /** what the player typed */
     private final String[] raw;
 
+    /** where we currently are in the raw arguments */
     private int currentPosition;
 
     public Arguments(String[] raw)
@@ -22,6 +24,7 @@ public class Arguments implements Iterator<String>
     /**
      * @return the next element in our arguments
      */
+    @Override
     public String next()
     {
         return raw[currentPosition++];
@@ -42,6 +45,7 @@ public class Arguments implements Iterator<String>
      * @return whether or not there's another
      *         element contained here
      */
+    @Override
     public boolean hasNext()
     {
         return raw.length < currentPosition + 1;

@@ -6,8 +6,10 @@ import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
+import com.hyleria.util.Colors;
 import com.hyleria.util.Issues;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,7 +17,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -41,6 +42,18 @@ public class CommandHandler
     private Map<Class, ArgumentSatisfier> providers = Maps.newHashMap();
 
     /**
+     * @param clazz the class we're providing
+     * @param satisfier logic for the provider
+     * @param <T> type of provider
+     * @return this handler
+     */
+    public <T> CommandHandler addProvider(Class<T> clazz, ArgumentSatisfier<T> satisfier)
+    {
+        providers.put(clazz, satisfier);
+        return this;
+    }
+
+    /**
      * Looks over the classes in the
      * provided package, and if methods
      * exist in it annotated with our
@@ -52,7 +65,7 @@ public class CommandHandler
      */
     public void registerInPackage(String pkg)
     {
-        new FastClasspathScanner()
+        new FastClasspathScanner(pkg)
                 .matchClassesWithMethodAnnotation(Command.class, (clazz, method) ->
                     registerCommands(hyleria.injector().getInstance(clazz))).scan();
     }
@@ -87,10 +100,10 @@ public class CommandHandler
                              ? method.getAnnotation(Permission.class).value()
                              : Role.PLAYER;
 
-                _info.instanceOfPossessor = object;
+                _info.possessor = object;
 
                 for (String executor : _info.executors)
-                    commands.put(executor, _info);
+                    commands.put(executor.toLowerCase(), _info);
             }
         }
 
@@ -102,18 +115,31 @@ public class CommandHandler
     {
         final String[] _split = event.getMessage().split(" ");
         final String _command = _split[0].substring(1).toLowerCase();
-        final String[] _args = new String[_split.length - 1];
 
-        System.arraycopy(_split, 1, _args, 0, _args.length);
+        final CommandInfo _info = commands.get(_command);
 
-        commands.values()
-                .stream()
-                .filter(data -> Arrays.stream(data.executors).anyMatch(_command::equals))
-                .findFirst()
-                .ifPresent(info -> attemptCommandExecution(info.instanceOfPossessor, info.method, event.getPlayer(), info, _args));
+        if (_info != null)
+        {
+            final String[] _args = new String[_split.length - 1];
+            System.arraycopy(_split, 1, _args, 0, _args.length);
+
+            attemptCommandExecution(_info, _info.method, event.getPlayer(), _args);
+        }
+        else
+        {
+            event.getPlayer().sendMessage(Colors.bold(ChatColor.GRAY) + "We don't have anything matching that command for ya.");
+        }
+
+        event.setCancelled(true);
     }
 
-    public void attemptCommandExecution(Object object, Method method, Player player, CommandInfo info, String[] args)
+    /**
+     * @param info info
+     * @param method the method
+     * @param player the player
+     * @param rawArguments what the player typed
+     */
+    private void attemptCommandExecution(CommandInfo info, Method method, Player player, String[] rawArguments)
     {
         // verify the player can actually execute this command
         if (info.role != Role.PLAYER)
@@ -122,29 +148,61 @@ public class CommandHandler
 
 
         // prepare parameters
-        final Arguments _args = new Arguments(args);
+        final Arguments _args = new Arguments(rawArguments);
         final Parameter[] _required = method.getParameters();
         Object[] _invokingWith = new Object[_required.length];
 
         // the player who ran the command is always the first parameter
         _invokingWith[0] = player;
 
+        // let's start satisfying each parameter
         for (int i = 1; i < _required.length; i++)
         {
             final Parameter _working = _required[i];
 
-            final ArgumentSatisfier _provider = providers.get(_working.getType());
+            ArgumentSatisfier _provider;
 
-            if (_provider != null)
-                _invokingWith[i] = _provider.get(player, _args);
+            // if there's an annotation present we'll handle
+            // it based on the recommendation of that provider
+            // instead of the type of the parameter
+            if (_working.getDeclaredAnnotations().length > 0)
+            {
+                // TODO(Ben): allow for more versatile annotations. so they can do different things based on the type of the parameter
+                // only one deciding annotation allowed by parameter
+                _provider = providers.get(_working.getDeclaredAnnotations()[0].annotationType());
+            }
             else
-                throw new IllegalArgumentException("Missing provider for parameter");
+            {
+                _provider = providers.get(_working.getType());
+            }
+
+            // we should always have some sort of provider available
+            if (_provider != null)
+            {
+                _invokingWith[i] = _provider.get(player, _args);
+
+                if (_invokingWith[i] == null)
+                {
+                    if (_provider.fail() != null)
+                        player.sendMessage(_provider.fail());
+
+                    return;
+                }
+            }
+            // in the case there isn't a provider, let's just try providing a String
+            else if (_working.getType().isAssignableFrom(String.class))
+            {
+                _invokingWith[i] = _args.next();
+            }
+            // nothing we can do now, fail
+            else throw new IllegalArgumentException("Missing provider for parameter type: " + _working.getType().getName());
         }
 
 
         try
         {
-            method.invoke(info.instanceOfPossessor, _invokingWith);
+            // we've figured out our parameters; execute the command now
+            method.invoke(info.possessor, _invokingWith);
         }
         catch (Exception ex)
         {
@@ -152,12 +210,20 @@ public class CommandHandler
         }
     }
 
+
+    /** data for a command */
     static class CommandInfo
     {
-        Object instanceOfPossessor;
+        /** an instance of where command method resides */
+        Object possessor;
+
+        /** the method for this command */
         Method method;
 
+        /** what someone may type to run this command */
         String[] executors;
+
+        /** the role someone must have to run this command, default: player */
         Role role;
     }
 
