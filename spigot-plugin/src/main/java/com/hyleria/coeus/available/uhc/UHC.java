@@ -51,7 +51,7 @@ public class UHC extends Game
     /** the world the UHC is taking place on */
     private World world;
 
-    /** whether or not we allow PvP right now */
+    /** whether or not we allow combat right now */
     // TODO(Ben): replace with some game flag
     private boolean pvpEnabled = false;
 
