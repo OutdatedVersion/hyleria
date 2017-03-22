@@ -11,6 +11,9 @@ import org.bson.Document;
 import java.util.List;
 import java.util.UUID;
 
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
+
 
 /**
   * @author Ben (OutdatedVersion)
@@ -55,10 +58,19 @@ public class Account implements DocumentCompatible
         return role;
     }
 
+    /**
+     * Update this player's role in the database
+     *
+     * @param newRole the new role
+     * @param database database instance
+     * @return this account
+     */
     public Account role(Role newRole, Database database)
     {
-        // update in db
-        // call update event
+        this.role = newRole;
+
+        database.submitTask(() -> database.accounts.updateOne(eq("uuid", this.uuid.toString()), set("role", newRole.name())));
+
         return this;
     }
 

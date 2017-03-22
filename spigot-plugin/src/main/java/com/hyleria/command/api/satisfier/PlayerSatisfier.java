@@ -2,28 +2,26 @@ package com.hyleria.command.api.satisfier;
 
 import com.hyleria.command.api.ArgumentSatisfier;
 import com.hyleria.command.api.Arguments;
-import org.bukkit.ChatColor;
+import com.hyleria.util.PlayerUtil;
 import org.bukkit.entity.Player;
 
 /**
- * Returns whoever ran the command
- *
  * @author Ben (OutdatedVersion)
- * @since Mar/21/2017 (11:33 AM)
+ * @since Mar/21/2017 (9:28 PM)
  */
-public class ExecutedBySatisfier implements ArgumentSatisfier<Player>
+public class PlayerSatisfier implements ArgumentSatisfier<Player>
 {
 
     @Override
     public Player get(Player player, Arguments args)
     {
-        return player;
+        return PlayerUtil.search(player, args.next(), true);
     }
 
     @Override
     public String fail(String provided)
     {
-        return ChatColor.RED + "How in the hell did this fail? Please contact a developer with a picture of this.";
+        return null;
     }
 
     @Override

@@ -100,6 +100,15 @@ public class Database
     }
 
     /**
+     * @param runnable the task to run
+     * @return a future for this task
+     */
+    public Future submitTask(Runnable runnable)
+    {
+        return executor.submit(runnable);
+    }
+
+    /**
      * @return our local cache containing loaded accounts
      */
     public Cache<UUID, Account> cache()

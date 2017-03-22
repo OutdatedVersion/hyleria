@@ -1,35 +1,46 @@
 package com.hyleria.command.api;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
-import com.hyleria.common.inject.StartParallel;
+import com.hyleria.command.api.satisfier.ExecutedBySatisfier;
+import com.hyleria.command.api.satisfier.PlayerSatisfier;
+import com.hyleria.command.api.satisfier.RoleSatisfier;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
-import com.hyleria.util.Colors;
 import com.hyleria.util.Issues;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Collection;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.hyleria.util.Colors.bold;
+import static org.bukkit.ChatColor.RED;
 
 /**
  * @author Ben (OutdatedVersion)
  * @since Feb/28/2017 (5:50 PM)
  */
 @Singleton
-@StartParallel
-public class CommandHandler
+public class CommandHandler implements Listener
 {
+
+    /** all the providers we need */
+    public static final Collection<Class<? extends ArgumentSatisfier>> DEFAULT_PROVIDERS = Lists.newArrayList(
+            ExecutedBySatisfier.class, RoleSatisfier.class, PlayerSatisfier.class
+    );
 
     /** our plugin */
     @Inject private Hyleria hyleria;
@@ -44,7 +55,16 @@ public class CommandHandler
     private Map<Class, ArgumentSatisfier> providers = Maps.newHashMap();
 
     /**
-     * @param clazz the class we're providing
+     * @param satisfiers a collection of providers to register
+     * @return this handler
+     */
+    public CommandHandler addProviders(Collection<Class<? extends ArgumentSatisfier>> satisfiers)
+    {
+        satisfiers.forEach(this::addProvider);
+        return this;
+    }
+
+    /**
      * @param satisfier logic for the provider
      * @param <T> type of provider
      * @return this handler
@@ -140,6 +160,8 @@ public class CommandHandler
     @EventHandler ( priority = EventPriority.MONITOR, ignoreCancelled = true )
     public void interceptCommands(PlayerCommandPreprocessEvent event)
     {
+        event.setCancelled(true);
+
         final String[] _split = event.getMessage().split(" ");
         final String _command = _split[0].substring(1).toLowerCase();
 
@@ -152,12 +174,14 @@ public class CommandHandler
 
             attemptCommandExecution(_info, _info.method, event.getPlayer(), _args);
         }
+        else if (Bukkit.getHelpMap().getHelpTopic(_command) == null && !event.getPlayer().isOp())
+        {
+            event.getPlayer().sendMessage(bold(ChatColor.GRAY) + "We don't have anything matching that command for ya.");
+        }
         else
         {
-            event.getPlayer().sendMessage(Colors.bold(ChatColor.GRAY) + "We don't have anything matching that command for ya.");
+            event.setCancelled(false);
         }
-
-        event.setCancelled(true);
     }
 
     /**
@@ -168,16 +192,21 @@ public class CommandHandler
      */
     private void attemptCommandExecution(CommandInfo info, Method method, Player player, String[] rawArguments)
     {
+        if (rawArguments.length == 0 && method.getParameterCount() != 1)
+        {
+            player.sendMessage(bold(RED) + "You didn't include any details for this command to use!");
+            return;
+        }
+
         // verify the player can actually execute this command
         if (info.role != Role.PLAYER)
             if (!permissionManager.has(player, info.role))
                 return;
 
-
         // prepare parameters
         final Arguments _args = new Arguments(rawArguments);
         final Parameter[] _required = method.getParameters();
-        Object[] _invokingWith = new Object[_required.length];
+        final Object[] _invokingWith = new Object[_required.length];
 
         // the player who ran the command is always the first parameter
         _invokingWith[0] = player;
@@ -186,6 +215,8 @@ public class CommandHandler
         for (int i = 1; i < _required.length; i++)
         {
             final Parameter _working = _required[i];
+
+            Bukkit.broadcastMessage("Type at " + i + ": " + _working.getType().getName());
 
             ArgumentSatisfier _provider;
 
@@ -206,12 +237,14 @@ public class CommandHandler
             // we should always have some sort of provider available
             if (_provider != null)
             {
+                final Arguments _copy = _args.clone();
+
                 _invokingWith[i] = _provider.get(player, _args);
 
                 if (_invokingWith[i] == null)
                 {
-                    if (_provider.fail() != null)
-                        player.sendMessage(_provider.fail());
+                    if (_provider.fail(_copy.next()) != null)
+                        player.sendMessage(_provider.fail(_copy.next()));
 
                     return;
                 }

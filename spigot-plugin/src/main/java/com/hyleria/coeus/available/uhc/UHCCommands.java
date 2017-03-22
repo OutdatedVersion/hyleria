@@ -50,7 +50,7 @@ public class UHCCommands
                         .collect(Collectors.toList());
 
         player.sendMessage(
-                bold(DARK_AQUA) + "Top Kills this round" +
+                bold(DARK_AQUA) + "Top Kills this round\n" +
                 _sorted.subList(0, _sorted.size() < TOP_KILL_BOUND ? _sorted.size() : TOP_KILL_BOUND)
                 .stream()
                 .collect(StringBuilder::new, (builder, pair) ->

@@ -6,6 +6,7 @@ import com.hyleria.Hyleria;
 import com.hyleria.coeus.scoreboard.ScoreboardHandler;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.AccountManager;
+import com.hyleria.network.event.PlayerRoleUpdateEvent;
 import com.hyleria.util.Issues;
 import com.hyleria.util.Module;
 import com.hyleria.util.RoleFormat;
@@ -43,6 +44,12 @@ public class Nametags extends Module
 
     @EventHandler ( priority = EventPriority.HIGH )
     public void sendNametags(PlayerJoinEvent event)
+    {
+        refresh();
+    }
+
+    @EventHandler
+    public void sendNametags(PlayerRoleUpdateEvent event)
     {
         refresh();
     }

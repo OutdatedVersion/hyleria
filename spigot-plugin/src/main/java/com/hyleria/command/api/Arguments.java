@@ -7,7 +7,7 @@ import java.util.Optional;
  * @author Ben (OutdatedVersion)
  * @since Mar/01/2017 (4:20 PM)
  */
-public class Arguments implements Iterator<String>
+public class Arguments implements Iterator<String>, Cloneable
 {
 
     /** what the player typed */
@@ -49,6 +49,12 @@ public class Arguments implements Iterator<String>
     public boolean hasNext()
     {
         return raw.length < currentPosition + 1;
+    }
+
+    @Override
+    protected Arguments clone()
+    {
+        return new Arguments(this.raw);
     }
 
 }

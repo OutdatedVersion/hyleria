@@ -46,4 +46,19 @@ public class TextUtil
                    : bold ? Colors.BOLD : "" + (ChatColor.RED + "Disabled");
     }
 
+    /**
+     * Returns a {@link String} formatted to
+     * English's possessive S rule
+     *
+     * @param text input
+     * @return input formatted to a possessive {@code S}
+     */
+    public static String s(String text)
+    {
+        if (text.endsWith("s") || text.endsWith("z"))
+            return text + "'";
+
+        return text + "'s";
+    }
+
 }

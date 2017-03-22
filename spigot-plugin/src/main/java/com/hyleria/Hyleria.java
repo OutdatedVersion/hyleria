@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hyleria.coeus.Coeus;
+import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
@@ -70,6 +71,10 @@ public class Hyleria extends JavaPlugin
         });
 
 
+        // setup our command handler
+        boundInjection(CommandHandler.class).addProviders(CommandHandler.DEFAULT_PROVIDERS);
+
+        // automatic creation of modules
         System.out.println("Class path scanner filter: [" + getClass().getPackage().getName() + ".*]");
 
         final List<Class<?>> _toLoad = Lists.newArrayList();
@@ -89,6 +94,8 @@ public class Hyleria extends JavaPlugin
 
         _toLoad.forEach(this::boundInjection);
 
+        // let's register our commands now
+        injector.getInstance(CommandHandler.class).registerInPackage("com.hyleria.command");
 
         // I want to guarantee this will load last
         boundInjection(Coeus.class);
@@ -212,8 +219,7 @@ public class Hyleria extends JavaPlugin
 
         // auto register listeners
         if (_instance instanceof Listener)
-            if (Stream.of(clazz.getMethods()).anyMatch(method -> method.isAnnotationPresent(EventHandler.class)))
-                Bukkit.getPluginManager().registerEvents(((Listener) _instance), this);
+            Bukkit.getPluginManager().registerEvents(((Listener) _instance), this);
 
         return _instance;
     }
