@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
+import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
 import com.hyleria.util.Colors;
@@ -26,6 +27,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @since Feb/28/2017 (5:50 PM)
  */
 @Singleton
+@StartParallel
 public class CommandHandler
 {
 
@@ -54,6 +56,17 @@ public class CommandHandler
     }
 
     /**
+     * @param clazz the type we're providing
+     * @param satisfierClass class of some satisifier
+     * @return this handler
+     */
+    public <T> CommandHandler addProvider(Class<T> clazz, Class<? extends ArgumentSatisfier> satisfierClass)
+    {
+        providers.put(clazz, hyleria.injector().getInstance(satisfierClass));
+        return this;
+    }
+
+    /**
      * Looks over the classes in the
      * provided package, and if methods
      * exist in it annotated with our
@@ -68,6 +81,21 @@ public class CommandHandler
         new FastClasspathScanner(pkg)
                 .matchClassesWithMethodAnnotation(Command.class, (clazz, method) ->
                     registerCommands(hyleria.injector().getInstance(clazz))).scan();
+    }
+
+    /**
+     * Register all of the provided classes
+     * to our handler
+     *
+     * @param classes the classes
+     * @return this handler
+     */
+    public CommandHandler registerCommands(Class<?>... classes)
+    {
+        for (Class clazz : classes)
+            registerCommands(hyleria.injector().getInstance(clazz));
+
+        return this;
     }
 
     /**

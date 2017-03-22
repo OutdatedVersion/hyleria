@@ -1,6 +1,8 @@
 package com.hyleria.coeus;
 
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import com.google.inject.Singleton;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.json.GSONUtil;
 import com.hyleria.util.GameFlagHandler;
@@ -8,12 +10,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
  * @author Ben (OutdatedVersion)
  * @since Mar/11/2017 (5:43 PM)
  */
+@Singleton
 public abstract class Game implements Listener
 {
 
@@ -36,6 +40,9 @@ public abstract class Game implements Listener
 
     /** the title of the scoreboard */
     public String scoreboardTitle = "Hyleria";
+
+    /** TEMPORARY SOLUTION. to be replaced by full stat tracking system. */
+    public Multimap<UUID, String> kills;
 
     /**
      * Invoked by the engine when the

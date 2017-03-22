@@ -9,6 +9,7 @@ import com.hyleria.coeus.available.uhc.scenario.UHCScenario;
 import com.hyleria.coeus.available.uhc.world.Border;
 import com.hyleria.coeus.damage.CombatEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
+import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.reflect.ReflectionUtil;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.MessageUtil;
@@ -45,6 +46,9 @@ public class UHC extends Game
     /** our plugin */
     @Inject private Hyleria plugin;
 
+    /** need to register commands */
+    @Inject private CommandHandler commands;
+
     /** details for this UHC instance */
     private UHCConfig config;
 
@@ -64,6 +68,9 @@ public class UHC extends Game
         world = WorldCreator.name("uhc").createWorld();
 
         plugin.registerListeners(new Border().init(config.apothem).generatePhysicalBorder());
+
+        // add commands
+        commands.registerCommands(UHCCommands.class);
     }
 
     @Override
