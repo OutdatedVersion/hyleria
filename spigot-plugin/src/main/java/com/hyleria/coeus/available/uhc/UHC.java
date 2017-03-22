@@ -42,18 +42,18 @@ import static org.bukkit.ChatColor.WHITE;
 public class UHC extends Game
 {
 
-    /** */
+    /** our plugin */
     @Inject private Hyleria plugin;
 
-    /**  */
+    /** details for this UHC instance */
     private UHCConfig config;
 
-    /**  */
+    /** the world the UHC is taking place on */
     private World world;
 
+    /** whether or not we allow PvP right now */
+    // TODO(Ben): replace with some game flag
     private boolean pvpEnabled = false;
-
-    // handle stats engine side
 
     @Override
     public void init(Coeus engine)
