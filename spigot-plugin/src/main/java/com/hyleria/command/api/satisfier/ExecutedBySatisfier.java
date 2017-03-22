@@ -26,4 +26,10 @@ public class ExecutedBySatisfier implements ArgumentSatisfier<Player>
         return ChatColor.RED + "How in the hell did this fail? Please contact a developer with a picture of this.";
     }
 
+    @Override
+    public Class<Player> satisfies()
+    {
+        return Player.class;
+    }
+
 }

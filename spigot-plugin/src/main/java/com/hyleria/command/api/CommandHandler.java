@@ -49,20 +49,19 @@ public class CommandHandler
      * @param <T> type of provider
      * @return this handler
      */
-    public <T> CommandHandler addProvider(Class<T> clazz, ArgumentSatisfier<T> satisfier)
+    public <T> CommandHandler addProvider(ArgumentSatisfier<T> satisfier)
     {
-        providers.put(clazz, satisfier);
+        providers.put(satisfier.satisfies(), satisfier);
         return this;
     }
 
     /**
-     * @param clazz the type we're providing
      * @param satisfierClass class of some satisifier
      * @return this handler
      */
-    public <T> CommandHandler addProvider(Class<T> clazz, Class<? extends ArgumentSatisfier> satisfierClass)
+    public <T> CommandHandler addProvider(Class<? extends ArgumentSatisfier> satisfierClass)
     {
-        providers.put(clazz, hyleria.injector().getInstance(satisfierClass));
+        addProvider(hyleria.injector().getInstance(satisfierClass));
         return this;
     }
 

@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.PLAYER;
@@ -21,8 +23,8 @@ import static org.bukkit.ChatColor.*;
 public class UHCCommands
 {
 
-    /** the number of players to include in the top kill command */
-    private static final int TOP_KILL_BOUND = 8;
+    /** the number of players to include in the top kill command | compensates for zero-position index */
+    private static final int TOP_KILL_BOUND = 8 - 1;
 
     /** uhc game */
     @Inject private Game game;
@@ -40,14 +42,16 @@ public class UHCCommands
     public void topPlayers(Player player)
     {
         // idk lol
+        final List<Pair<UUID, Integer>> _sorted =
+                game.kills.asMap().entrySet()
+                        .stream()
+                        .map(entry -> Pair.of(entry.getKey(), entry.getValue().size()))
+                        .sorted(Comparator.comparingInt(Pair::getValue))
+                        .collect(Collectors.toList());
 
         player.sendMessage(
                 bold(DARK_AQUA) + "Top Kills this round" +
-                game.kills.asMap().entrySet().stream()
-                .map(entry -> Pair.of(entry.getKey(), entry.getValue().size()))
-                .sorted(Comparator.comparingInt(Pair::getValue))
-                .collect(Collectors.toList())
-                .subList(0, TOP_KILL_BOUND - 1)
+                _sorted.subList(0, _sorted.size() < TOP_KILL_BOUND ? _sorted.size() : TOP_KILL_BOUND)
                 .stream()
                 .collect(StringBuilder::new, (builder, pair) ->
                 {

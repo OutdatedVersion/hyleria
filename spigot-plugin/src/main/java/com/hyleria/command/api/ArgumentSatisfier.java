@@ -26,4 +26,9 @@ public interface ArgumentSatisfier<T>
      */
     String fail();
 
+    /**
+     * @return the class we're satisfying
+     */
+    Class<T> satisfies();
+
 }
