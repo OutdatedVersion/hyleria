@@ -19,13 +19,20 @@ public class RoleSatisfier implements ArgumentSatisfier<Role>
     @Override
     public Role get(Player player, Arguments args)
     {
-        return Role.valueOf(args.next().toUpperCase());
+        try
+        {
+            return Role.valueOf(args.next().toUpperCase());
+        }
+        catch (IllegalArgumentException ex)
+        {
+            return null;
+        }
     }
 
     @Override
     public String fail(String provided)
     {
-        return bold(GRAY) + "No role matching [" + bold(GREEN) + provided + bold(GRAY) + "].";
+        return bold(GRAY) + "No role matching [" + bold(GREEN) + provided.toUpperCase() + bold(GRAY) + "].";
     }
 
     @Override

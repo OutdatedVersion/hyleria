@@ -15,6 +15,7 @@ public enum Role
     SENIOR('b'),
     MOD('9'),
     TRIAL('6'),     // takes in "staff_focus"
+    MEDIA('5'),
     PLAYER('7');
 
     /** the color of the tag */

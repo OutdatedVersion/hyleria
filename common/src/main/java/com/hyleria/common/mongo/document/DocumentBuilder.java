@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -87,6 +88,19 @@ public class DocumentBuilder
 
         Collections.addAll(skipFields, fieldNames);
 
+        return this;
+    }
+
+    /**
+     * Insert data into the backing document
+     * in our own fashion
+     *
+     * @param doc the document
+     * @return this builder
+     */
+    public DocumentBuilder append(Consumer<Document> doc)
+    {
+        doc.accept(this.document);
         return this;
     }
 

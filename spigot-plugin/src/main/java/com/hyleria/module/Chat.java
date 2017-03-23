@@ -17,6 +17,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.function.BiFunction;
 
 import static com.hyleria.util.RoleFormat.chatFormat;
+import static com.hyleria.util.RoleFormat.chatFormatFromData;
 
 
 /**
@@ -30,7 +31,10 @@ public class Chat extends Module
 {
 
     /** the proper "[Role] Name message" format for messages */
-    public static final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) -> (account.role() != Role.PLAYER ? (chatFormat(account.role()) + " ") : ChatColor.GRAY) + player.getName() + " " + ChatColor.WHITE;
+    public final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) ->
+            (account.isPresent("chat_prefix") ? chatFormatFromData(account.val("chat_prefix", String.class))
+                                                   : (account.role() != Role.PLAYER ? (chatFormat(account.role()) + " ") : ChatColor.GRAY))
+                    + player.getName() + " " + ChatColor.WHITE;
 
     /** let's us interact with player accounts */
     @Inject private AccountManager accountManager;

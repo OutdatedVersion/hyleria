@@ -9,6 +9,7 @@ import com.hyleria.common.reference.Role;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -22,6 +23,9 @@ import static com.mongodb.client.model.Updates.set;
 @SuppressWarnings ( "unchecked" )
 public class Account implements DocumentCompatible
 {
+
+    private Document raw;
+    private Map<String, Object> customData;
 
     private UUID uuid;
 
@@ -56,6 +60,35 @@ public class Account implements DocumentCompatible
     public Role role()
     {
         return role;
+    }
+
+    /**
+     * Grab a value from the raw document
+     *
+     * @param key where it was stored
+     * @param type the type of said thing
+     * @return the thing
+     */
+    public <T> T val(String key, Class<T> type)
+    {
+        return raw.get(key, type);
+    }
+
+    /**
+     *
+     * @param key
+     * @param val
+     * @return
+     */
+    public Account addVal(String key, Object val)
+    {
+        customData.put(key, val);
+        return this;
+    }
+
+    public boolean isPresent(String key)
+    {
+        return raw.containsKey(key);
     }
 
     /**
@@ -98,10 +131,11 @@ public class Account implements DocumentCompatible
     {
         return DocumentBuilder.create()
                 .withFreshDoc()
-                .skipOver("uuid")  // we want to insert this on our own
+                .skipOver("uuid", "customData", "raw")  // we want to handle the uuid on our own
                 .appendAllFields(this)
                 .append("uuid", this.uuid.toString())
                 .append("name_lower", this.name.toLowerCase())
+                .append(doc -> doc.putAll(customData))
                 .finished();
     }
 
@@ -114,6 +148,7 @@ public class Account implements DocumentCompatible
         this.previousUsernames = document.get("previous_names", List.class);
         this.currentIP = document.getString("current_address");
         this.previousAddresses = document.get("previous_addresses", List.class);
+        this.raw = document;
 
         return this;
     }

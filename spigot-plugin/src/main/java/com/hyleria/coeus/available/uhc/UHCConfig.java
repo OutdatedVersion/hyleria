@@ -31,12 +31,16 @@ public class UHCConfig implements GameConfiguration
     @SerializedName ( "pvp_time" )
     public int pvpTime = 20;
 
-    /** the apothem of the border */
+    /** the apothem of the border | 1k would be a 500x500 border */
     public int apothem;
 
     /** the time that must elapse before the border starts to shrink */
     @SerializedName ( "time_till_border_shrink" )
     public int timeTillBorderShrink = 60 + 45;
+
+    /** how much to shrink by each iteration */
+    @SerializedName ( "shrink_progression" )
+    public int[] shrinkFactorProgression = new int[] { 500, 500, 500, 400, 50, 25 };
 
     /** whether or not you may enter the nether */
     @SerializedName ( "nether_enabled" )

@@ -9,6 +9,7 @@ import com.hyleria.util.GameFlagHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -24,7 +25,12 @@ public abstract class Game implements Listener
     /** shared {@link Gson} instance for games */
     private static final Gson GSON = new Gson();
 
-    public GameFlagHandler<PlayerJoinEvent> announceJoin = GameFlagHandler.enabled(PlayerJoinEvent.class);
+    public Consumer<PlayerJoinEvent> preGameJoinHandler;
+
+    /**  */
+    public GameFlagHandler<PlayerJoinEvent> joinHandler = GameFlagHandler.disabled(PlayerJoinEvent.class);
+
+    public GameFlagHandler<PlayerLoginEvent> loginHandler = GameFlagHandler.disabled(PlayerLoginEvent.class);
 
     /** if we should let people know someone died */
     public boolean announceDeath = true;
@@ -99,7 +105,7 @@ public abstract class Game implements Listener
      * @param clazz the type we want to be using
      * @return an instance of that class
      */
-    protected <T> T selfAs(Class<T> clazz)
+    public <T> T as(Class<T> clazz)
     {
        return clazz.cast(this);
     }

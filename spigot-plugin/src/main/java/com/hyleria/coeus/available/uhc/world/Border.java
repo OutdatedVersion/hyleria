@@ -2,17 +2,16 @@ package com.hyleria.coeus.available.uhc.world;
 
 import com.hyleria.util.VectorUtil;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hyleria.util.Colors.bold;
 import static com.hyleria.util.VectorUtil.fromBukkit;
-import static org.bukkit.ChatColor.GREEN;
 import static org.bukkit.ChatColor.RED;
 
 /**
@@ -29,7 +28,7 @@ public class Border implements Listener
     private World world;
 
     /** the center of our region */
-    private Location origin;
+    public Location origin;
 
     /** the content of this border's interior */
     private CuboidRegion region;
@@ -104,9 +103,27 @@ public class Border implements Listener
         return this;
     }
 
-    public Border updateBorder(int newApothem)
+    /**
+     * Shrink the border around the origin
+     * by the provided amount
+     *
+     * @param shrinkFactor the amount to shrink by
+     * @return this border
+     */
+    public Border shrink(int shrinkFactor)
     {
+        System.out.println("pre shrink: " + this.apothem);
+        init((this.apothem * 2) - shrinkFactor).generatePhysicalBorder();
+
         return this;
+    }
+
+    /**
+     * @return the region backing this border
+     */
+    public Region region()
+    {
+        return region;
     }
 
     @EventHandler
@@ -121,17 +138,6 @@ public class Border implements Listener
         {
             // event.setCancelled(true);
             event.getPlayer().sendMessage(bold(RED) + "You really shouldn't be leaving that border. :/");
-        }
-    }
-
-    @EventHandler
-    public void tp(PlayerCommandPreprocessEvent event)
-    {
-        if (event.getMessage().equalsIgnoreCase("/w"))
-        {
-            event.setCancelled(true);
-            event.getPlayer().teleport(origin);
-            event.getPlayer().sendMessage(bold(GREEN) + "You've been relocated.");
         }
     }
 

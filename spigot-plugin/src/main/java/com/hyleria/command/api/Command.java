@@ -14,6 +14,18 @@ import java.lang.annotation.Target;
 public @interface Command
 {
 
+    /**
+     * @return what the player may
+     *         use to run this command
+     */
     String[] executor();
+
+    /**
+     * @return if the player doesn't have
+     *         permission to run the command
+     *         and this is true a help message
+     *         will be sent
+     */
+    boolean hidden() default false;
 
 }

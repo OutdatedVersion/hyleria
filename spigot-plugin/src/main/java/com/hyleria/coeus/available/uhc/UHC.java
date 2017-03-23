@@ -1,7 +1,6 @@
 package com.hyleria.coeus.available.uhc;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
@@ -12,15 +11,15 @@ import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.reflect.ReflectionUtil;
 import com.hyleria.common.time.Time;
+import com.hyleria.common.time.TimeUtil;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
 import com.hyleria.util.TextUtil;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
@@ -32,22 +31,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.bold;
-import static org.bukkit.ChatColor.GREEN;
-import static org.bukkit.ChatColor.WHITE;
+import static org.bukkit.ChatColor.*;
 
 /**
  * @author Ben (OutdatedVersion)
  * @since Mar/08/2017 (5:42 PM)
  */
-@Singleton
 public class UHC extends Game
 {
 
     /** our plugin */
     @Inject private Hyleria plugin;
-
-    /** need to register commands */
-    @Inject private CommandHandler commands;
 
     /** details for this UHC instance */
     private UHCConfig config;
@@ -55,28 +49,72 @@ public class UHC extends Game
     /** the world the UHC is taking place on */
     private World world;
 
+    /** where players will go before the game starts */
+    private World lobby;
+
+    /** */
+    private Location spawnLocation;
+
+    private Border border;
+
     /** whether or not we allow combat right now */
     // TODO(Ben): replace with some game flag
     private boolean pvpEnabled = false;
 
+    private long startedAt = -1;
+
+    private int shrinkStage = 0;
+
     @Override
     public void init(Coeus engine)
     {
+        // just for now
+        scoreboardTitle = "Hyleria EU";
+
         config = loadConfig("uhc", UHCConfig.class);
         ReflectionUtil.printOut(config);
 
         world = WorldCreator.name("uhc").createWorld();
+        lobby = WorldCreator.name("uhc_lobby").createWorld();
+        spawnLocation = new Location(Bukkit.getWorld("uhc_lobby"), 1.5, 5, -.5, 55.3f, 5.3f);
 
-        plugin.registerListeners(new Border().init(config.apothem).generatePhysicalBorder());
+        plugin.registerListeners(border = new Border().init(config.apothem).generatePhysicalBorder());
 
         // add commands
-        commands.registerCommands(UHCCommands.class);
+        plugin.get(CommandHandler.class).registerCommandsFromObject(UHCCommands.class);
+
+        // handle start by host commands
+        requiredPlayerCount = -1;
+
+        preGameJoinHandler = event ->
+        {
+            event.setJoinMessage(null);
+            event.getPlayer().teleport(spawnLocation);
+            // TODO(Ben): eventually spread players out among the spawn
+        };
     }
 
     @Override
     public void begin()
     {
-        MessageUtil.everyone(bold(GREEN) + "nifty starting message!!");
+        System.out.println("[UHC] Starting player spread");
+
+        // one player must be in the game world first at 0, 0 for spreading w/ Minecraft's command
+        final Player _dummy = PlayerUtil.everyone().get(0);
+        _dummy.teleport(border.origin);
+
+        System.out.println("[UHC] Teleport dummy: " + _dummy.getName());
+
+        final String _command = "spreadplayers 0 0 "
+                + (config.apothem / 4) + " " + (config.apothem / 2) + " false " +
+                PlayerUtil.everyone().stream().collect(StringBuilder::new, (builder, player) -> builder.append(player.getName()).append(" "), StringBuilder::append);
+
+        System.out.println("[UHC] Spread command: [" + _command + "]");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), _command.trim());
+
+
+        startedAt = System.currentTimeMillis();
+        MessageUtil.everyone(bold(GREEN) + "We've started...");
 
         // load scenarios
         final Set<UHCScenario> _scenarios = config.enabledScenarios
@@ -92,11 +130,14 @@ public class UHC extends Game
         Scheduler.delayed(() ->
         {
             PlayerUtil.everyone().forEach(PlayerUtil::fullHealth);
-            MessageUtil.everyone(bold(ChatColor.GOLD) + "You've all been healed.");
+            MessageUtil.everyone(bold(GREEN) + "You've all been healed.");
         }, Time.MINUTES.toTicks(config.healTime));
 
         // allow PvP
         Scheduler.delayed(this::togglePvP, Time.MINUTES.toTicks(config.pvpTime));
+
+        System.out.println("Till shrink in ticks: " + Time.MINUTES.toTicks(config.timeTillBorderShrink));
+        Scheduler.timer(this::shrinkBorder, config.timeTillBorderShrink * 60);
     }
 
     @Override
@@ -108,11 +149,12 @@ public class UHC extends Game
     @Override
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
-        scoreboard.writeHead("Hyleria UHC");
-        scoreboard.write(ChatColor.YELLOW + "Match Time");
+        scoreboard.blank();
+        scoreboard.writeHead("Match Time");
+        scoreboard.write(ChatColor.RED + (startedAt == -1 ? "Not Started" : TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt)));
         scoreboard.blank();
         scoreboard.writeHead("Players");
-        scoreboard.write(ChatColor.RED + "1");
+        scoreboard.write(ChatColor.RED.toString() + PlayerUtil.onlineCount());
         scoreboard.writeURL();
         scoreboard.draw();
     }
@@ -124,6 +166,23 @@ public class UHC extends Game
     {
         this.pvpEnabled = !this.pvpEnabled;
         MessageUtil.everyone(bold(WHITE) + "PvP is now " + TextUtil.enabledDisabledBold(this.pvpEnabled));
+    }
+
+    /**
+     * Attempt to make the world border smaller
+     */
+    public void shrinkBorder()
+    {
+        System.out.println("ATTEMPT SHRINK");
+
+        if (config.shrinkFactorProgression.length >= shrinkStage + 1)
+        {
+            border.shrink(config.shrinkFactorProgression[shrinkStage++]);
+
+            PlayerUtil.play(Sound.WITHER_SPAWN);
+            MessageUtil.everyone(bold(GOLD) + "The border has shrunk!");
+            MessageUtil.everyone(bold(GRAY) + "Now at: " + bold(YELLOW) + border.region().getLength() + "x" + border.region().getWidth());
+        }
     }
 
     @EventHandler
@@ -159,6 +218,13 @@ public class UHC extends Game
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void disableNether(EntityCreatePortalEvent event)
+    {
+        if (!config.nether)
+            event.setCancelled(true);
     }
 
 }

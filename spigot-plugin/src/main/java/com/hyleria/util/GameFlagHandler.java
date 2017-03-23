@@ -40,7 +40,7 @@ public class GameFlagHandler<T>
     /**
      * @return the action backing this
      */
-    public Consumer<T> consumer()
+    public Consumer<T> action()
     {
         return consumer;
     }
@@ -52,7 +52,7 @@ public class GameFlagHandler<T>
      * @param consumer the action
      * @return this handler
      */
-    public GameFlagHandler<T> consumer(Consumer<T> consumer)
+    public GameFlagHandler<T> action(Consumer<T> consumer)
     {
          this.consumer = consumer;
          return this;

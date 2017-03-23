@@ -10,9 +10,15 @@ import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.network.AccountManager;
 import com.hyleria.util.Module;
 import com.hyleria.util.PlayerUtil;
+import com.hyleria.util.TextUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.stream.Stream;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -85,6 +91,15 @@ public class Coeus extends Module
     }
 
     /**
+     * @param statuses all of the statuses we're checking for
+     * @return whether or not it matches
+     */
+    public boolean isStatus(Status... statuses)
+    {
+        return Stream.of(statuses).anyMatch(s -> s == this.status);
+    }
+
+    /**
      * @return whether or not our current game
      *         is actually active
      */
@@ -99,6 +114,15 @@ public class Coeus extends Module
     public Game game()
     {
         return game;
+    }
+
+    /**
+     * @return the name of the game we're playing
+     */
+    public String gameName()
+    {
+        // may need to do this differently in the future..?
+        return TextUtil.formatEnum(this.gameChoice);
     }
 
     /**
@@ -119,19 +143,50 @@ public class Coeus extends Module
         return this;
     }
 
+    /**
+     * Start our game
+     *
+     * @return the current game
+     */
+    public Game startGame()
+    {
+        updateStatus(Status.PRE_GAME);
+
+        game.begin();
+        plugin.registerListeners(game);
+
+        return game;
+    }
+
     @EventHandler
     public void watchJoin(PlayerJoinEvent event)
     {
         if (status == Status.IDLE)
         {
-            if (PlayerUtil.onlineCount() >= game.requiredPlayerCount)
+            if (game.preGameJoinHandler != null)
+                game.preGameJoinHandler.accept(event);
+
+
+            // we allow the ability to disable this
+            if (game.requiredPlayerCount != -1)
             {
-                // updateStatus(Status.LOBBY_COUNTDOWN);
-                // for now we'll just start it
-                game.begin();
-                plugin.registerListeners(game);
+                if (PlayerUtil.onlineCount() >= game.requiredPlayerCount)
+                {
+                    // updateStatus(Status.LOBBY_COUNTDOWN);
+                    // for now we'll just start it
+                    // TODO(Ben): actually have a countdown for other games
+
+                    startGame();
+                }
             }
         }
+    }
+
+    @EventHandler ( priority = EventPriority.LOWEST )
+    public void watchLogin(AsyncPlayerPreLoginEvent event)
+    {
+        if (status == Status.INIT || status == Status.MAP_FETCH)
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "This server is still starting up.. give us a bit longer.");
     }
 
 }

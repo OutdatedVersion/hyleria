@@ -2,13 +2,11 @@ package com.hyleria.util;
 
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.hyleria.util.Colors.bold;
@@ -109,7 +107,7 @@ public class PlayerUtil
         if (_matches.size() != 1)
         {
             if (inform)
-                host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + "(" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
+                host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + " (" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
 
             if (_matches.size() > 0)
             {
@@ -129,6 +127,17 @@ public class PlayerUtil
         }
 
         return _matches.get(0);
+    }
+
+    /**
+     * Play the provided sound to
+     * every player online
+     *
+     * @param sound the sound
+     */
+    public static void play(Sound sound)
+    {
+        everyone().forEach(player -> player.playSound(player.getLocation(), sound, 100, 100));
     }
 
 }

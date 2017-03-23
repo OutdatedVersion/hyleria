@@ -1,5 +1,6 @@
 package com.hyleria.util;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 
 /**
@@ -59,6 +60,19 @@ public class TextUtil
             return text + "'";
 
         return text + "'s";
+    }
+
+    /**
+     * Turns the provided enum constant
+     * into a human-friendly version
+     * of itself
+     *
+     * @param val the enum
+     * @return the formatted name
+     */
+    public static String formatEnum(Enum val)
+    {
+        return WordUtils.capitalizeFully(val.name().toLowerCase().replaceAll("_", " "));
     }
 
 }

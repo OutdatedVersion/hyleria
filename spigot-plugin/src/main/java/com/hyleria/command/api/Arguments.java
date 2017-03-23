@@ -16,9 +16,22 @@ public class Arguments implements Iterator<String>, Cloneable
     /** where we currently are in the raw arguments */
     private int currentPosition;
 
+    /**
+     * @param raw the elements
+     */
     public Arguments(String[] raw)
     {
         this.raw = raw;
+    }
+
+    /**
+     * @param raw the elements
+     * @param position where we are
+     */
+    private Arguments(String[] raw, int position)
+    {
+        this.raw = raw;
+        this.currentPosition = position;
     }
 
     /**
@@ -51,10 +64,26 @@ public class Arguments implements Iterator<String>, Cloneable
         return raw.length < currentPosition + 1;
     }
 
+    /**
+     * @return where we currently are in the arguments
+     */
+    public int currentPosition()
+    {
+        return currentPosition;
+    }
+
+    /**
+     * @return how many places are left in the args
+     */
+    public int remainingElements()
+    {
+        return raw.length - currentPosition;
+    }
+
     @Override
     protected Arguments clone()
     {
-        return new Arguments(this.raw);
+        return new Arguments(this.raw, this.currentPosition);
     }
 
 }

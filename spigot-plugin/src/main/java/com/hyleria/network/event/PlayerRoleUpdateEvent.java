@@ -13,7 +13,7 @@ public class PlayerRoleUpdateEvent extends HyleriaEvent
 {
 
     /** Bukkit */
-    public static final HandlerList HANDLER_LIST = new HandlerList();
+    private static final HandlerList HANDLER_LIST = new HandlerList();
 
     /** player */
     private final Player player;
@@ -56,7 +56,7 @@ public class PlayerRoleUpdateEvent extends HyleriaEvent
     }
 
     /** Bukkit */
-    public HandlerList getHandlerList()
+    public static HandlerList getHandlerList()
     {
         return HANDLER_LIST;
     }

@@ -1,6 +1,4 @@
-package com.hyleria.command.api;
-
-import com.hyleria.common.reference.Role;
+package com.hyleria.command.api.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,13 +7,16 @@ import java.lang.annotation.Target;
 
 /**
  * @author Ben (OutdatedVersion)
- * @since Mar/01/2017 (4:08 PM)
+ * @since Mar/22/2017 (10:16 AM)
  */
 @Retention ( RetentionPolicy.RUNTIME )
-@Target ( ElementType.METHOD )
-public @interface Permission
+@Target ( ElementType.PARAMETER )
+public @interface Necessary
 {
 
-    Role value();
+    /**
+     * @return if not present send this
+     */
+    String value();
 
 }

@@ -3,6 +3,8 @@ package com.hyleria.coeus.available.uhc;
 import com.google.inject.Inject;
 import com.hyleria.coeus.Game;
 import com.hyleria.command.api.Command;
+import com.hyleria.command.api.annotation.Permission;
+import com.hyleria.common.reference.Role;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -63,6 +65,14 @@ public class UHCCommands
                                 .append(RED).append(pair.getValue())
                                 .append("\n");
                 }, StringBuilder::append).toString());
+    }
+
+    @Command ( executor = "shrinkborder" )
+    @Permission ( Role.ADMIN )
+    public void shrink(Player player)
+    {
+        player.sendMessage(bold(YELLOW) + "Manually shrinking border..");
+        game.as(UHC.class).shrinkBorder();
     }
 
 }

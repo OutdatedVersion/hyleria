@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hyleria.coeus.Coeus;
+import com.hyleria.coeus.EngineCommands;
 import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.common.inject.Requires;
@@ -72,7 +73,9 @@ public class Hyleria extends JavaPlugin
 
 
         // setup our command handler
-        boundInjection(CommandHandler.class).addProviders(CommandHandler.DEFAULT_PROVIDERS);
+        final CommandHandler _commands = boundInjection(CommandHandler.class);
+        _commands.addProviders(CommandHandler.DEFAULT_PROVIDERS);
+
 
         // automatic creation of modules
         System.out.println("Class path scanner filter: [" + getClass().getPackage().getName() + ".*]");
@@ -95,10 +98,11 @@ public class Hyleria extends JavaPlugin
         _toLoad.forEach(this::boundInjection);
 
         // let's register our commands now
-        injector.getInstance(CommandHandler.class).registerInPackage("com.hyleria.command");
+        _commands.registerInPackage("com.hyleria.command");
 
         // I want to guarantee this will load last
         boundInjection(Coeus.class);
+        _commands.registerCommands(EngineCommands.class);
     }
 
     @Override
@@ -136,6 +140,16 @@ public class Hyleria extends JavaPlugin
     public Injector injector()
     {
         return injector;
+    }
+
+    /**
+     * @param clazz class of what we're looking for
+     * @return an instance of the provided
+     *         class satisfied by {@link Guice}
+     */
+    public <T> T get(Class<T> clazz)
+    {
+        return injector.getInstance(clazz);
     }
 
     /**

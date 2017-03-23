@@ -11,6 +11,7 @@ import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -78,15 +79,16 @@ public class AccountManager extends Module
         database.releaseResources();
     }
 
-    @EventHandler
+    @EventHandler ( priority = EventPriority.LOW )
     public void handleLogin(AsyncPlayerPreLoginEvent event)
     {
         try
         {
+            if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED)
+                return;
+
             final long _startedAt = System.currentTimeMillis();
             final Optional<Account> _transaction = database.fetchAccountSync(event.getUniqueId());
-
-            System.out.println(database.cache().toString());
 
             if (_transaction.isPresent())
             {
