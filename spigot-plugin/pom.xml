@@ -113,6 +113,13 @@
                                     <shadedPattern>com.hyleria.lib.google</shadedPattern>
                                 </relocation>
                             </relocations>
+
+                            <artifactSet>
+                                <excludes>
+                                    <!-- we don't need test resources anymore -->
+                                    <exclude>junit:junit</exclude>
+                                </excludes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,6 +1,7 @@
 package com.hyleria.common.account;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.common.mongo.Database;
 import com.hyleria.common.mongo.document.DocumentBuilder;
@@ -25,7 +26,7 @@ public class Account implements DocumentCompatible
 {
 
     private Document raw;
-    private Map<String, Object> customData;
+    private Map<String, Object> customData = Maps.newHashMap();
 
     private UUID uuid;
 
@@ -75,10 +76,11 @@ public class Account implements DocumentCompatible
     }
 
     /**
+     * Add a custom value into our account document
      *
-     * @param key
-     * @param val
-     * @return
+     * @param key key of the value
+     * @param val custom thingy
+     * @return this account
      */
     public Account addVal(String key, Object val)
     {
