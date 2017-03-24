@@ -128,6 +128,9 @@ public class RedisHandler
      */
     public RedisHandler registerHook(RedisHook hook)
     {
+        if (hooks == null)
+            hooks = new ConcurrentHashMap<>();
+
         boolean _provisionedHook = false;
 
         for (Method method : hook.getClass().getMethods())
