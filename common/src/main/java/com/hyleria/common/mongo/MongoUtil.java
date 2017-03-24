@@ -1,8 +1,8 @@
 package com.hyleria.common.mongo;
 
 import com.google.gson.annotations.SerializedName;
+import com.hyleria.common.json.Exclude;
 import com.hyleria.common.reflect.ReflectionUtil;
-import com.simplexitymc.util.json.Exclude;
 import org.bson.Document;
 
 import java.lang.reflect.Field;
@@ -140,7 +140,7 @@ public class MongoUtil
 
                 for (Field field : value.getClass().getDeclaredFields())
                 {
-                    if (field.isAnnotationPresent(Exclude.class) || field.isAnnotationPresent(DefaultValue.class))
+                    if (field.isAnnotationPresent(Exclude.class))
                         continue;
 
                     final String _name = ReflectionUtil.nameFromField(field);

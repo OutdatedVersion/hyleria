@@ -1,7 +1,6 @@
 package com.hyleria.common.collection;
 
-import com.simplexitymc.util.json.JSON;
-import com.simplexitymc.util.json.JSONWrapper;
+import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -17,6 +16,9 @@ public class MapWrapper
 
     /** convert JSON to a POJO */
     private static final JSONParser JSON_PARSER = new JSONParser();
+
+    /** data conversion */
+    private static final Gson GSON = new Gson();
 
     /** that map we're fetching data from */
     private Map wrappedMap;
@@ -50,7 +52,7 @@ public class MapWrapper
      *
      * @param json The {@link JSONObject} to wrap
      *
-     * @return A new {@link JSONWrapper} tied to the supplied object
+     * @return A new {@link MapWrapper} tied to the supplied object
      */
     public static MapWrapper fromJSON(JSONObject json)
     {
@@ -101,7 +103,7 @@ public class MapWrapper
      */
     public <T> T fromJSON(String key, Class<T> clazz)
     {
-        return JSON.GSON.fromJson(findString(key), clazz);
+        return GSON.fromJson(findString(key), clazz);
     }
 
     /**
