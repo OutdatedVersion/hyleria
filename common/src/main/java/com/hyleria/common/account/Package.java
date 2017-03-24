@@ -1,7 +1,7 @@
 package com.hyleria.common.account;
 
 import com.google.gson.annotations.SerializedName;
-import com.simplexitymc.util.json.Exclude;
+import com.hyleria.common.json.Exclude;
 
  /**
   * @author Ben (OutdatedVersion)
