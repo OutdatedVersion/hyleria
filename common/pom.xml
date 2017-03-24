@@ -22,7 +22,7 @@
     
     <dependencies>
 
-        <!-- Primary account connector -->
+        <!-- Persistent data store -->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
@@ -35,12 +35,19 @@
             <artifactId>commons-pool2</artifactId>
             <version>2.4.2</version>
         </dependency>
-        
-        <!-- Working w/ JSON easily -->
+
+        <!-- Wrap JSON structures in Java objects -->
         <dependency>
-            <groupId>com.outdatedversion</groupId>
-            <artifactId>json-api</artifactId>
-            <version>e31c9365ee</version>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <!-- Google: Java objects <-> JSON -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
         </dependency>
 
         <!-- Google: All sorts of goodies -->
@@ -69,6 +76,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.5</version>
+        </dependency>
+
+        <!-- Redis interaction -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.8.1</version>
         </dependency>
 
     </dependencies>

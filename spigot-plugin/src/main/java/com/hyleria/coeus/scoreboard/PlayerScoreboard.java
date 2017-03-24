@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.hyleria.util.Colors.bold;
-import static org.bukkit.ChatColor.GOLD;
-import static org.bukkit.ChatColor.YELLOW;
+import static org.bukkit.ChatColor.*;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -194,7 +193,19 @@ public class PlayerScoreboard
      */
     public void writeHead(String title)
     {
-        write(ChatColor.BOLD + "» " + title);
+        write(GRAY + "» " + GREEN + title);
+    }
+
+    /**
+     * Write the provided text in a
+     * single line key-value format.
+     *
+     * @param prefix the "key"
+     * @param content the "value"
+     */
+    public void write(String prefix, String content)
+    {
+        write(GREEN + prefix + ": " + WHITE + content);
     }
 
     /**
@@ -215,7 +226,7 @@ public class PlayerScoreboard
     public void writeURL()
     {
         blank();
-        elements.add(ChatColor.YELLOW + "hyleria.com");
+        elements.add(AQUA + "hyleria.com");
     }
 
     /**
@@ -244,12 +255,12 @@ public class PlayerScoreboard
      */
     private String addAnimation(String to)
     {
-        String _working = bold(GOLD);
+        final StringBuilder _working = new StringBuilder(bold(GOLD));
 
         if (animationIndex == to.length() + 1 || animationIndex == to.length() + 3)
-            _working += bold(YELLOW) + to;
+            _working.append(bold(YELLOW)).append(to);
         else if (animationIndex == to.length() + 2 || animationIndex == to.length() + 4)
-            _working += bold(GOLD) + to;
+            _working.append(bold(GOLD)).append(to);
         else
         {
             for (int i = 0; i < to.length(); i++)
@@ -257,13 +268,13 @@ public class PlayerScoreboard
                 char _character = to.charAt(i);
 
                 if (i == animationIndex)
-                    _working += bold(YELLOW) + _character + bold(GOLD);
+                    _working.append(bold(YELLOW)).append(_character).append(bold(GOLD));
                 else
-                    _working += _character;
+                    _working.append(_character);
             }
         }
 
-        return _working;
+        return _working.toString();
     }
 
     /**

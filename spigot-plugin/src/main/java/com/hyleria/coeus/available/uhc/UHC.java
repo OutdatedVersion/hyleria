@@ -150,7 +150,7 @@ public class UHC extends Game
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
         scoreboard.blank();
-        scoreboard.writeHead("Match Time");
+        scoreboard.writeHead("Game Time");
         scoreboard.write(ChatColor.RED + (startedAt == -1 ? "Not Started" : TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt)));
         scoreboard.blank();
         scoreboard.writeHead("Players");

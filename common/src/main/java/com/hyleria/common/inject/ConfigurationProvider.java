@@ -1,12 +1,10 @@
 package com.hyleria.common.inject;
 
 import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.common.reference.Constants;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.function.Function;
@@ -84,56 +82,6 @@ public class ConfigurationProvider
         }
 
         return (T) object;
-    }
-
-    /**
-     * Allows us to have semi-dynamic code.
-     */
-    public static class ConfigurationInjector
-    {
-
-        /** an instance of our provider */
-        private final ConfigurationProvider provider;
-
-        /**
-         * @param provider our provider
-         */
-        @Inject
-        public ConfigurationInjector(ConfigurationProvider provider)
-        {
-            this.provider = provider;
-        }
-
-        /**
-         * @param clazz the class containing the {@link Config} annotated field
-         * @param <T> a type parameter for that class
-         */
-        public <T> void inject(Class<T> clazz)
-        {
-            try
-            {
-                for (Field field : clazz.getDeclaredFields())
-                {
-                    if (field.isAnnotationPresent(Config.class))
-                    {
-                        // chances are the field is private, so
-                        // let's just do this now
-                        field.setAccessible(true);
-
-                        // provider.read(field.getAnnotation(Config.class).value(), field.getType())
-
-                        field.set(clazz, clazz);
-
-                        System.out.println("Field: " + field.get(this).getClass().getName());
-                    }
-                }
-            }
-            catch (IllegalAccessException ex)
-            {
-                throw new RuntimeException(ex);
-            }
-        }
-
     }
 
 }
