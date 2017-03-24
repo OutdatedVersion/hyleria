@@ -22,6 +22,16 @@ public class PermissionManager
     @Inject private AccountManager accountManager;
 
     /**
+     * @param player the player
+     * @param role the role
+     * @return whether they have the perms or not
+     */
+    public boolean has(Player player, Role role)
+    {
+        return has(player, role, true);
+    }
+
+    /**
      * Checks whether the specified player has
      * the role (or something leveled hierarchy
      * higher). If they do not a missing permission
@@ -29,14 +39,16 @@ public class PermissionManager
      *
      * @param player the player
      * @param role the required role
+     * @param notify whether or not to tell the player they don't have permission
      * @return either yes or no
      */
-    public boolean has(Player player, Role role)
+    public boolean has(Player player, Role role, boolean notify)
     {
         if (accountManager.grab(player).role().ordinal() <= role.ordinal())
             return true;
 
-        player.sendMessage(GEN_MISSING_PERM_MESSAGE);
+        if (notify)
+            player.sendMessage(GEN_MISSING_PERM_MESSAGE);
 
         return false;
     }

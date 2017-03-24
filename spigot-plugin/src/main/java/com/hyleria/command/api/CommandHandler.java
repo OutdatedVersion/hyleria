@@ -54,7 +54,7 @@ public class CommandHandler implements Listener
 
     /** default commands that we won't let players run unless we have one that overrides it */
     public static final Set<String> BLOCKED_COMMANDS = Sets.newHashSet(
-            "help", "bungee", "pl", "plugins", "ver", "version", "icanhasbukkit", "about"
+            "help", "pl", "plugins", "ver", "version", "icanhasbukkit", "about"
     );
 
     /** our plugin */
@@ -190,8 +190,6 @@ public class CommandHandler implements Listener
     @EventHandler ( priority = EventPriority.MONITOR, ignoreCancelled = true )
     public void interceptCommands(PlayerCommandPreprocessEvent event)
     {
-        event.setCancelled(true);
-
         final String[] _split = event.getMessage().split(" ");
         final String _command = _split[0].substring(1).toLowerCase();
 
@@ -205,29 +203,33 @@ public class CommandHandler implements Listener
             // these are my least favorite things to do
             final CommandInfo[] _invokeInfo = { _info };
 
-            if (_args.length >= 1)
+            if (_args.length >= 1 && _info.subCommands != null)
             {
                 _info.subCommands.stream().filter(s -> s.executors.contains(_args[0])).findFirst().ifPresent(s -> _invokeInfo[0] = s);
             }
 
             attemptCommandExecution(_invokeInfo[0], _invokeInfo[0].method, event.getPlayer(), _invokeInfo[0] instanceof SubCommandInfo ? Arrays.copyOfRange(_args, 1, _args.length)
                                                                                                                                        : _args);
+
+            event.setCancelled(true);
+            return;
         }
         else if (BLOCKED_COMMANDS.contains(_command))
         {
             event.getPlayer().spigot().sendMessage(HELP_MESSAGE);
+            event.setCancelled(true);
         }
         else if (!permissionManager.has(event.getPlayer(), Role.ADMIN) && !event.getPlayer().isOp())
         {
             event.getPlayer().spigot().sendMessage(HELP_MESSAGE);
+            event.setCancelled(true);
         }
-        else if (hyleria.getServer().getHelpMap().getHelpTopic("/" + _command) == null)
+
+
+        if (!event.isCancelled() && hyleria.getServer().getHelpMap().getHelpTopic("/" + _command) == null)
         {
             event.getPlayer().spigot().sendMessage(HELP_MESSAGE);
-        }
-        else
-        {
-            event.setCancelled(false);
+            event.setCancelled(true);
         }
     }
 

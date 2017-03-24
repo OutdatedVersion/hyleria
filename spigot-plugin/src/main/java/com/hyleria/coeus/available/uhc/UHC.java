@@ -150,11 +150,27 @@ public class UHC extends Game
     public void updateScoreboard(PlayerScoreboard scoreboard)
     {
         scoreboard.blank();
-        scoreboard.writeHead("Game Time");
-        scoreboard.write(ChatColor.RED + (startedAt == -1 ? "Not Started" : TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt)));
-        scoreboard.blank();
-        scoreboard.writeHead("Players");
-        scoreboard.write(ChatColor.RED.toString() + PlayerUtil.onlineCount());
+
+        if (startedAt == -1)
+        {
+            scoreboard.write("i need");
+            scoreboard.write("something");
+            scoreboard.write("to");
+            scoreboard.write("write");
+            scoreboard.write("here");
+            scoreboard.write("!!");
+        }
+        else
+        {
+            scoreboard.writeHead("Game Time");
+            scoreboard.write(startedAt == -1 ? "Not Started" : TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt));
+            scoreboard.blank();
+            scoreboard.write("Alive", PlayerUtil.onlineCount());
+            scoreboard.write("Watching", 0);
+            scoreboard.blank();
+            scoreboard.write("Kills", kills.containsKey(scoreboard.player().getUniqueId()) ? kills.get(scoreboard.player().getUniqueId()).size() : 0);
+        }
+
         scoreboard.writeURL();
         scoreboard.draw();
     }

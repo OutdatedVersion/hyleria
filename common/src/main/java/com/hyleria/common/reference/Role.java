@@ -12,10 +12,10 @@ public enum Role
 
     DEV('c'),
     ADMIN('c'),
-    SENIOR('b'),
-    MOD('9'),
-    TRIAL('6'),     // takes in "staff_focus"
-    MEDIA('5'),
+    SENIOR('b'),    // full staff everywhere
+    FULL('9'),      // takes in "staff_focus"
+    TRIAL('6'),     // ^
+    MEDIA('5'),     // takes in "media_type"
     PLAYER('7');
 
     /** the color of the tag */
@@ -42,6 +42,25 @@ public enum Role
     public String toNameColorless()
     {
         return String.format("[%s]", this.name());
+    }
+
+    /**
+     * @return where we store the data the "special" roles need
+     */
+    public String additionalData()
+    {
+       switch (this)
+       {
+           case FULL:
+           case TRIAL:
+               return "staff.game_focus";
+
+           case MEDIA:
+               return "media_type";
+
+           default:
+               return null;
+       }
     }
 
 }

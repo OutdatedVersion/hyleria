@@ -64,7 +64,7 @@ public class PlayerScoreboard
         objective = scoreboard.registerNewObjective("h" + Math.random(999), "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        objective.setDisplayName(bold(GOLD) + "Hyleria");
+        objective.setDisplayName(bold(BLUE) + "Hyleria");
     }
 
     /**
@@ -203,9 +203,9 @@ public class PlayerScoreboard
      * @param prefix the "key"
      * @param content the "value"
      */
-    public void write(String prefix, String content)
+    public void write(String prefix, Object content)
     {
-        write(GREEN + prefix + ": " + WHITE + content);
+        write(GREEN + prefix + ": " + WHITE + String.valueOf(content));
     }
 
     /**
@@ -255,12 +255,12 @@ public class PlayerScoreboard
      */
     private String addAnimation(String to)
     {
-        final StringBuilder _working = new StringBuilder(bold(GOLD));
+        final StringBuilder _working = new StringBuilder(bold(BLUE));
 
         if (animationIndex == to.length() + 1 || animationIndex == to.length() + 3)
-            _working.append(bold(YELLOW)).append(to);
+            _working.append(bold(AQUA)).append(to);
         else if (animationIndex == to.length() + 2 || animationIndex == to.length() + 4)
-            _working.append(bold(GOLD)).append(to);
+            _working.append(bold(BLUE)).append(to);
         else
         {
             for (int i = 0; i < to.length(); i++)
@@ -268,7 +268,7 @@ public class PlayerScoreboard
                 char _character = to.charAt(i);
 
                 if (i == animationIndex)
-                    _working.append(bold(YELLOW)).append(_character).append(bold(GOLD));
+                    _working.append(bold(AQUA)).append(_character).append(bold(BLUE));
                 else
                     _working.append(_character);
             }

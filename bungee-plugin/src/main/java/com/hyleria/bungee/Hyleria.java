@@ -3,6 +3,8 @@ package com.hyleria.bungee;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.hyleria.bungee.handle.Ping;
+import com.hyleria.common.redis.RedisChannels;
+import com.hyleria.common.redis.RedisHandler;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -12,7 +14,7 @@ import java.util.stream.Stream;
  * @author Ben (OutdatedVersion)
  * @since Feb/25/2017 (12:13 PM)
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings ( "unchecked" )
 public class Hyleria extends Plugin
 {
 
@@ -22,9 +24,9 @@ public class Hyleria extends Plugin
     @Override
     public void onEnable()
     {
-        injector = Guice.createInjector(binder ->
-            binder.bind(Hyleria.class).toInstance(this));
+        injector = Guice.createInjector(binder -> binder.bind(Hyleria.class).toInstance(this));
 
+        injector.getInstance(RedisHandler.class).init().subscribe(RedisChannels.NETWORK);
 
         injectAndRegister(Ping.class);
     }

@@ -1,5 +1,6 @@
 package com.hyleria.common.redis;
 
+import com.google.inject.Provider;
 import com.hyleria.common.collection.MapWrapper;
 import com.hyleria.common.redis.api.Focus;
 import com.hyleria.common.redis.api.FromChannel;
@@ -12,6 +13,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
+import javax.inject.Singleton;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +25,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @author Ben (OutdatedVersion)
  * @since Mar/24/2017 (11:57 AM)
  */
+@Singleton
 public class RedisHandler
 {
 
@@ -158,6 +162,18 @@ public class RedisHandler
         checkState(_provisionedHook, "An annotation conforming to the standards of our hooks has not been found in [" + hook.getClass().getName() + "]. please fix!!");
 
         return this;
+    }
+
+    /**
+     *
+     */
+    public class JedisProvider implements Provider<Jedis>
+    {
+        @Override
+        public Jedis get()
+        {
+            return pool.getResource();
+        }
     }
 
     /**

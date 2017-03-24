@@ -26,7 +26,7 @@ public class Ping implements Listener
 
     /** the text of our ping response */
     private TextComponent pingResponse = new TextComponent(GOLD_BOLD + "Hyleria" + GRAY_BOLD + " » " +
-            RED + "We're releasing " + DARK_AQUA_BOLD + "Saturday, April 1st" + RED + " at " + AQUA_BOLD + "5PM UTC\n" +
+            RED + "Release " + DARK_AQUA_BOLD + "Saturday, April 1st" + RED + " at " + AQUA_BOLD + "5PM UTC\n" +
             GRAY + "Visit us at hyleria.com");
 
     @EventHandler

@@ -9,7 +9,6 @@ import com.hyleria.common.time.Time;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -65,10 +64,10 @@ public class Lobby extends Game
         scoreboard.write(scoreboard.player().getName());
         scoreboard.blank();
         scoreboard.writeHead("Today");
-        scoreboard.write(ChatColor.RED + this.date);
+        scoreboard.write(this.date);
         scoreboard.blank();
         scoreboard.writeHead("Players");
-        scoreboard.write(ChatColor.RED.toString() + PlayerUtil.onlineCount());
+        scoreboard.write(PlayerUtil.onlineCount());
         scoreboard.writeURL();
         scoreboard.draw();
     }

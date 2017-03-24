@@ -87,6 +87,7 @@ public class AccountManager extends Module
             if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED)
                 return;
 
+
             final long _startedAt = System.currentTimeMillis();
             final Optional<Account> _transaction = database.fetchAccountSync(event.getUniqueId());
 
@@ -103,7 +104,7 @@ public class AccountManager extends Module
                 database.accounts.insertOne(_account.asDocument());
             }
 
-            LogUtil.system("Login", "Elapsed for " + event.getName() + ": " + (System.currentTimeMillis() - _startedAt) + "ms");
+            LogUtil.system("Login", "Elapsed time for " + event.getName() + ": " + (System.currentTimeMillis() - _startedAt) + "ms");
         }
         catch (Exception ex)
         {

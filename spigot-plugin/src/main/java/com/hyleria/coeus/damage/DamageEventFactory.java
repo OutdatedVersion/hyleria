@@ -4,10 +4,8 @@ import com.google.common.collect.Maps;
 import com.hyleria.Hyleria;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.damage.kinds.*;
-import com.hyleria.common.time.Time;
 import com.hyleria.util.Issues;
 import com.hyleria.util.Module;
-import com.hyleria.util.Scheduler;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -135,7 +133,7 @@ public class DamageEventFactory extends Module
 
                 // players are removed when they die
                 // TODO(Ben): move this
-                Scheduler.delayed(() -> _player.kickPlayer("dc"), Time.SECONDS.toTicks(20));
+                // Scheduler.delayed(() -> _player.kickPlayer("dc"), Time.SECONDS.toTicks(20));
             }
             else game.deathHandler.accept(event);
         }

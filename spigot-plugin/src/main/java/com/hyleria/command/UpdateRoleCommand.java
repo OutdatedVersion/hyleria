@@ -30,7 +30,7 @@ public class UpdateRoleCommand
     /** access to player accounts */
     @Inject private AccountManager accountManager;
 
-    @Command ( executor = "role" )
+    @Command ( executor = { "role", "rank" } )
     @Permission ( Role.ADMIN )
     public void run(Player player, Player target, Role role)
     {

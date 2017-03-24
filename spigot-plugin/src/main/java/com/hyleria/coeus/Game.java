@@ -1,6 +1,7 @@
 package com.hyleria.coeus;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.google.gson.Gson;
 import com.google.inject.Singleton;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
@@ -48,7 +49,7 @@ public abstract class Game implements Listener
     public String scoreboardTitle = "Hyleria";
 
     /** TEMPORARY SOLUTION. to be replaced by full stat tracking system. */
-    public Multimap<UUID, String> kills;
+    public Multimap<UUID, String> kills = MultimapBuilder.hashKeys().arrayListValues().build();
 
     /**
      * Invoked by the engine when the

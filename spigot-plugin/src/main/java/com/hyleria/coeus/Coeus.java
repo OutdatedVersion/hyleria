@@ -182,7 +182,7 @@ public class Coeus extends Module
         }
     }
 
-    @EventHandler ( priority = EventPriority.LOWEST )
+    @EventHandler ( priority = EventPriority.HIGH )
     public void watchLogin(AsyncPlayerPreLoginEvent event)
     {
         if (status == Status.INIT || status == Status.MAP_FETCH)
