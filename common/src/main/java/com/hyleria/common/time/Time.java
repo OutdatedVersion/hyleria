@@ -37,19 +37,4 @@ public enum Time
         return quantity * toTicks();
     }
 
-    public static void main(String[] args)
-    {
-        System.out.println("One Second:");
-        System.out.println(Time.SECONDS.toTicks());
-        System.out.println();
-
-        System.out.println("One Minute:");
-        System.out.println(Time.MINUTES.toTicks());
-        System.out.println();
-
-        System.out.println("One Hour:");
-        System.out.println(Time.HOURS.toTicks());
-        System.out.println();
-    }
-
 }
