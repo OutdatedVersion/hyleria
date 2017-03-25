@@ -30,12 +30,8 @@ import static com.hyleria.util.RoleFormat.chatFormatFromData;
 public class Chat extends Module
 {
 
-    /** the proper "[Role] Name message" format for messages | this was much better before this gunk got here*/
-    // TODO(Ben): clean up
-    public final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) ->
-            (account.isPresent("chat_prefix") ? chatFormatFromData(account.val("chat_prefix", String.class)) + " "
-                                                   : (account.role() != Role.PLAYER ? (chatFormat(account.role()) + " ") : ChatColor.GRAY))
-                    + player.getName() + " " + ChatColor.WHITE;
+    /** the proper "[Role] Name message" format for messages */
+    public static final BiFunction<String, Player, String> CHAT_PREFIX = (prefix, player) -> prefix + player.getName() + " " + ChatColor.WHITE;
 
     /** let's us interact with player accounts */
     @Inject private AccountManager accountManager;
@@ -47,7 +43,21 @@ public class Chat extends Module
         final String _message = event.getMessage();
         final Account _account = accountManager.grab(_player);
 
-        String _sentOutMessage = CHAT_PREFIX.apply(_player, _account) + _message;
+
+        String _prefix;
+
+        // allow custom ones
+        if (_account.isPresent("chat_prefix"))
+        {
+            _prefix = chatFormatFromData(_account.val("chat_prefix", String.class)) + " ";
+        }
+        else
+        {
+            _prefix = _account.role() == Role.PLAYER ? "" : chatFormat(_account.role()) + " ";
+        }
+
+
+        String _sentOutMessage = CHAT_PREFIX.apply(_prefix, _player) + _message;
 
         PlayerUtil.everyone().forEach(online -> online.sendMessage(_sentOutMessage));
 
