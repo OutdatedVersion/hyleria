@@ -1,5 +1,7 @@
 package com.hyleria.common.redis.api;
 
+import com.hyleria.common.redis.RedisChannel;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,9 +17,9 @@ public @interface FromChannel
 {
 
     /**
-     * @return the specific channel that the {@link RedisHook}
-     *         we're using is listening to
+     * @return the specific channel that the
+     *         hook we're using is listening to
      */
-    String value();
+    RedisChannel value();
 
 }

@@ -1,12 +1,14 @@
 package com.hyleria.common.backend.payload;
 
 import com.hyleria.common.json.JSONBuilder;
-import com.hyleria.common.redis.RedisChannels;
+import com.hyleria.common.redis.RedisChannel;
 import com.hyleria.common.redis.api.Focus;
 import com.hyleria.common.redis.api.Payload;
 import org.json.simple.JSONObject;
 
 import java.util.UUID;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -36,6 +38,13 @@ public class SwitchPlayerServerPayload implements Payload
     }
 
     /**
+     * Construct a payload who's purpose
+     * is to change a proxied player's
+     * server from one to another. It'd be
+     * preferred for you to use a UUID, but if
+     * you can't (why?) then a username MUST
+     * be provided.
+     *
      * @param uuid the player's UUID
      * @param name the player's username
      * @param server the server to switch to
@@ -45,6 +54,9 @@ public class SwitchPlayerServerPayload implements Payload
         this.uuid = uuid;
         this.name = name;
         this.requestedServer = server;
+
+        if (uuid == null)
+            checkState(name != null, "Neither a UUID or name was provided");
     }
 
     @Override
@@ -58,9 +70,9 @@ public class SwitchPlayerServerPayload implements Payload
     }
 
     @Override
-    public String channel()
+    public RedisChannel channel()
     {
-        return RedisChannels.NETWORK;
+        return RedisChannel.NETWORK;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.hyleria.common.redis.api;
 
+import com.hyleria.common.redis.RedisChannel;
 import com.hyleria.common.redis.RedisHandler;
 import org.json.simple.JSONObject;
 
@@ -23,9 +24,9 @@ public interface Payload
      * @return the Redis channel this payload
      *         is to be sent over
      *
-     * @see com.hyleria.common.redis.RedisChannels
+     * @see RedisChannel
      */
-    String channel();
+    RedisChannel channel();
 
     /**
      * @return the object as a {@link String}
@@ -47,7 +48,7 @@ public interface Payload
      */
     default RedisHandler publish(RedisHandler redis)
     {
-        redis.publish(this.channel(), this);
+        redis.publish(this.channel().channel, this);
         return redis;
     }
 

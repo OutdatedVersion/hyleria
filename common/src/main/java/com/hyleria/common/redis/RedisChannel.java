@@ -4,23 +4,31 @@ package com.hyleria.common.redis;
  * @author Ben (OutdatedVersion)
  * @since Mar/24/2017 (3:31 PM)
  */
-public class RedisChannels
+public enum RedisChannel
 {
-
-    // sharing isn't caring
-    private RedisChannels() { }
 
     /**
      * Where communication that isn't related to any
      * particular topic goes.
      */
-    public static final String DEFAULT = channel("gen");
+    DEFAULT("gen"),
 
     /**
      * Where primarily backend related chatter goes.
      * For example, the state of a
      */
-    public static final String NETWORK = channel("backend");
+    NETWORK("backend");
+
+    /** the raw channel */
+    public final String channel;
+
+    /**
+     * @param val the ending part
+     */
+    RedisChannel(String val)
+    {
+        this.channel = channel(val);
+    }
 
     /**
      * Returns a channel with the provided

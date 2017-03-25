@@ -88,9 +88,15 @@ public class RedisHandler
      * @param channels the channels to listen to
      * @return this handler
      */
-    public RedisHandler subscribe(final String... channels)
+    public RedisHandler subscribe(final RedisChannel... channels)
     {
         checkNotNull(pool, "use RedisHandler#connect before starting up pub/sub");
+
+        // we need the channels we're subbing to as Strings so
+        final String[] _channelsAsString = new String[channels.length];
+
+        for (int i = 0; i < channels.length; i++)
+            _channelsAsString[i] = channels[i].channel;
 
         new Thread("Hyleria Redis Pub/Sub")
         {
@@ -137,7 +143,7 @@ public class RedisHandler
                             System.err.println();
                         }
                     }
-                }, channels);
+                }, _channelsAsString);
             }
         };
 
@@ -203,7 +209,7 @@ public class RedisHandler
 
                     _data.possessor = object;
                     _data.method = method;
-                    _data.channel = method.isAnnotationPresent(FromChannel.class) ? method.getAnnotation(FromChannel.class).value() : RedisChannels.DEFAULT;
+                    _data.channel = method.isAnnotationPresent(FromChannel.class) ? method.getAnnotation(FromChannel.class).value().channel : RedisChannel.DEFAULT.channel;
                     _data.focus = payloadFocusCache.get(method.getAnnotation(HandlesType.class).value());
 
                     hooks.put(_data.focus, _data);
