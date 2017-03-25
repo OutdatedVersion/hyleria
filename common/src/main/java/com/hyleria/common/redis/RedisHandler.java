@@ -1,10 +1,13 @@
 package com.hyleria.common.redis;
 
-import com.hyleria.common.collection.MapWrapper;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.gson.Gson;
 import com.hyleria.common.redis.api.Focus;
 import com.hyleria.common.redis.api.FromChannel;
+import com.hyleria.common.redis.api.HandlesType;
 import com.hyleria.common.redis.api.Payload;
-import com.hyleria.common.redis.api.RedisHook;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,8 +17,9 @@ import redis.clients.jedis.JedisPubSub;
 
 import javax.inject.Singleton;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -28,8 +32,29 @@ import static com.google.common.base.Preconditions.checkState;
 public class RedisHandler
 {
 
+    /** whether or not to print out debug messages here */
+    private static final boolean DEBUG_ENABLED = Boolean.valueOf(System.getProperty("com.hyleria.common.redis.debug", "false"));
+
     /** convert raw JSON strings into Java objects */
     private static final JSONParser JSON_PARSER = new JSONParser();
+
+    /** JSON <-> Java object */
+    private static final Gson GSON = new Gson();
+
+    /** load the focus from the provided payload class | cache due to the basic reflection present */
+    private LoadingCache<Class<? extends Payload>, String> payloadFocusCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(1, TimeUnit.HOURS)
+            .build(new CacheLoader<Class<? extends Payload>, String>()
+    {
+        @Override
+        public String load(Class<? extends Payload> key) throws Exception
+        {
+            checkState(key.isAnnotationPresent(Focus.class), "Invalid payload! Missing Focus annotation.");
+            debug("Fetching focus for payload type: " + key.getName());
+
+            return key.getAnnotation(Focus.class).value();
+        }
+    });
 
     /** a pool of redis connections */
     private JedisPool pool;
@@ -40,6 +65,9 @@ public class RedisHandler
     /** collection of hooks to our redis system */
     private ConcurrentHashMap<String, HookData> hooks;
 
+    /** run redis requests async */
+    private ExecutorService executor;
+
     /**
      * Start up our connection pool
      *
@@ -48,6 +76,8 @@ public class RedisHandler
     public RedisHandler init()
     {
         pool = new JedisPool();
+        executor = Executors.newCachedThreadPool();
+
         return this;
     }
 
@@ -60,7 +90,7 @@ public class RedisHandler
      */
     public RedisHandler subscribe(final String... channels)
     {
-        checkNotNull(pool, "use #connect before starting up pub/sub");
+        checkNotNull(pool, "use RedisHandler#connect before starting up pub/sub");
 
         new Thread("Hyleria Redis Pub/Sub")
         {
@@ -77,6 +107,9 @@ public class RedisHandler
                     {
                         try
                         {
+                            debug("Received JSON message on channel: " + channel);
+                            debug("Message: [" + message + "]");
+
                             final JSONObject _json = (JSONObject) JSON_PARSER.parse(message);
                             final String _focus = (String) _json.get("focus");
 
@@ -85,7 +118,9 @@ public class RedisHandler
                                 final HookData _data = hooks.get(_focus);
 
                                 if (_data.channel.equals(channel))
-                                    _data.hook.handleFromRedis(MapWrapper.fromJSON((JSONObject) _json.get("payload")));
+                                {
+                                    _data.method.invoke(_data.possessor, GSON.fromJson(((JSONObject) _json.get("payload")).toJSONString(), _data.payloadType));
+                                }
                             }
                         }
                         catch (ParseException ex)
@@ -93,6 +128,12 @@ public class RedisHandler
                             System.err.println("Invalid JSON provided to Redis system");
                             System.err.println("Verify this payload is correct:");
                             System.err.println(message);
+                            System.err.println();
+                        }
+                        catch (IllegalAccessException | InvocationTargetException ex)
+                        {
+                            ex.printStackTrace();
+                            System.err.println("Unable to manually invoke the method behind the provided Redis hook");
                             System.err.println();
                         }
                     }
@@ -113,10 +154,21 @@ public class RedisHandler
      */
     public RedisHandler publish(String channel, Payload payload)
     {
-        try (Jedis jedis = pool.getResource())
+        executor.submit(() ->
         {
-            jedis.publish(channel, payload.asString());
-        }
+            debug("Publishing payload on " + channel + "\npayload w/o focus: [" + payload.asJSON().toJSONString() + "]");
+
+            try (Jedis jedis = pool.getResource())
+            {
+                jedis.publish(channel, payload.asString(payloadFocusCache.get(payload.getClass())));
+            }
+            catch (ExecutionException ex)
+            {
+                ex.printStackTrace();
+                System.err.println("Issue fetching focus for payload: " + payload.getClass().getName());
+                System.err.println();
+            }
+        });
 
         return this;
     }
@@ -126,53 +178,82 @@ public class RedisHandler
      * this handler starts to take it into
      * consideration whilst processing payloads.
      *
-     * @param hook what you'd like to register
+     * @param object what you'd like to register
      * @return this handler
      */
-    public RedisHandler registerHook(RedisHook hook)
+    public RedisHandler registerHook(Object object)
     {
-        if (hooks == null)
-            hooks = new ConcurrentHashMap<>();
-
-        boolean _provisionedHook = false;
-
-        for (Method method : hook.getClass().getMethods())
+        try
         {
-            // every single RedisHook must have
-            if (method.isAnnotationPresent(Focus.class))
+            // lazy init
+            if (hooks == null)
+                hooks = new ConcurrentHashMap<>();
+
+            boolean _provisionedHook = false;
+
+            for (Method method : object.getClass().getMethods())
             {
-                final HookData _data = new HookData();
+                // every "virtual hook" must have one of these
+                if (method.isAnnotationPresent(HandlesType.class))
+                {
+                    checkState(method.getParameterCount() == 1, "We only invoke with the provided payload; nothing else!");
+                    checkState(method.getParameterTypes()[0].isAssignableFrom(Payload.class), "The provided parameter isn't a payload!");
 
-                _data.hook = hook;
-                _data.channel = method.isAnnotationPresent(FromChannel.class)
-                                ? method.getAnnotation(FromChannel.class).value()
-                                : RedisChannels.DEFAULT;
+                    final HookData _data = new HookData();
 
-                hooks.put(method.getAnnotation(Focus.class).value(), _data);
+                    _data.possessor = object;
+                    _data.method = method;
+                    _data.channel = method.isAnnotationPresent(FromChannel.class) ? method.getAnnotation(FromChannel.class).value() : RedisChannels.DEFAULT;
+                    _data.focus = payloadFocusCache.get(method.getAnnotation(HandlesType.class).value());
 
-                _provisionedHook = true;
+                    hooks.put(_data.focus, _data);
 
-                // only one per class, let's not waste our time
-                break;
+                    _provisionedHook = true;
+                }
             }
-        }
 
-        // in case someone screwed up
-        checkState(_provisionedHook, "An annotation conforming to the standards of our hooks has not been found in [" + hook.getClass().getName() + "]. please fix!!");
+            // in case someone screwed up
+            checkState(_provisionedHook, "A method conforming to the standards of our hooks has not been found in [" + object.getClass().getName() + "]. please fix!!");
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
 
         return this;
     }
 
     /**
-     * Set of data pertaining to a {@link RedisHook}
+     * Prints the provided message
+     * only if debug is enabled here
+     *
+     * @param message the message
+     */
+    private static void debug(String message)
+    {
+        if (DEBUG_ENABLED)
+            System.out.println("[Redis Debug] " + message);
+    }
+
+    /**
+     * Set of data pertaining to a Redis hook
      */
     private static class HookData
     {
+        /** instance of the item holding this hook */
+        Object possessor;
+
         /** Java method backing this hook */
-        RedisHook hook;
+        Method method;
 
         /** the redis channel we're looking for */
         String channel;
+
+        /** the intent of the payload for this hook */
+        String focus;
+
+        /** the payload type this hook is processing */
+        Class<? extends Payload> payloadType;
     }
 
 }

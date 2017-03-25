@@ -7,18 +7,13 @@ import java.lang.annotation.Target;
 
 /**
  * @author Ben (OutdatedVersion)
- * @since Mar/24/2017 (2:40 PM)
+ * @since Mar/25/2017 (3:07 PM)
  */
-@Target  ( ElementType.TYPE )
+@Target ( ElementType.METHOD )
 @Retention ( RetentionPolicy.RUNTIME )
-public @interface Focus
+public @interface HandlesType
 {
 
-    /**
-     * @return what the provided Redis hook
-     *         is handling; corresponds to the
-     *         {@code focus} field in received payload
-     */
-    String value();
+    Class<? extends Payload> value();
 
 }
