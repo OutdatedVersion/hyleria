@@ -42,14 +42,13 @@ public class RoleFormat
     }
 
     /**
-     *
-     * @param data
-     * @return
+     * @param data the raw data
+     * @return formatted role
      */
     public static String chatFormatFromData(String data)
     {
         final String[] _split = data.split(":");
-        return ChatColor.valueOf(_split[0]) + "[" + _split[1] + "]";
+        return ChatColor.valueOf(_split[0]) + "[" + _split[1].replaceAll("_", " ") + "]";
     }
 
 }

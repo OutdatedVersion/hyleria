@@ -53,7 +53,7 @@ public enum Role
        {
            case FULL:
            case TRIAL:
-               return "staff.game_focus";
+               return "staff_game_focus";
 
            case MEDIA:
                return "media_type";

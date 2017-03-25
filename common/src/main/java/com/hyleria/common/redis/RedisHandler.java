@@ -1,6 +1,5 @@
 package com.hyleria.common.redis;
 
-import com.google.inject.Provider;
 import com.hyleria.common.collection.MapWrapper;
 import com.hyleria.common.redis.api.Focus;
 import com.hyleria.common.redis.api.FromChannel;
@@ -162,18 +161,6 @@ public class RedisHandler
         checkState(_provisionedHook, "An annotation conforming to the standards of our hooks has not been found in [" + hook.getClass().getName() + "]. please fix!!");
 
         return this;
-    }
-
-    /**
-     *
-     */
-    public class JedisProvider implements Provider<Jedis>
-    {
-        @Override
-        public Jedis get()
-        {
-            return pool.getResource();
-        }
     }
 
     /**

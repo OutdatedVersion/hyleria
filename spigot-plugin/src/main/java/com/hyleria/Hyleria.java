@@ -10,7 +10,6 @@ import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
-import com.hyleria.common.redis.RedisHandler;
 import com.hyleria.common.reference.Constants;
 import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
@@ -23,7 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,8 +58,6 @@ public class Hyleria extends JavaPlugin
             binder.bind(Server.class).toInstance(Bukkit.getServer());
             binder.bind(BukkitScheduler.class).toInstance(Bukkit.getServer().getScheduler());
             binder.bind(WorldEditPlugin.class).toInstance(JavaPlugin.getPlugin(WorldEditPlugin.class));
-
-            binder.bind(Jedis.class).toProvider(RedisHandler.JedisProvider.class);
 
             try
             {

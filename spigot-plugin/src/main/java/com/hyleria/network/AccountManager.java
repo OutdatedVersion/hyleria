@@ -1,10 +1,13 @@
 package com.hyleria.network;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.mongo.Database;
+import com.hyleria.common.reference.Role;
+import com.hyleria.network.login.LoginHook;
 import com.hyleria.util.Issues;
 import com.hyleria.util.LogUtil;
 import com.hyleria.util.Module;
@@ -13,8 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +38,9 @@ public class AccountManager extends Module
 
     /** allows us to grab info from our mongo instance */
     @Inject private Database database;
+
+    /**  */
+    private List<LoginHook> loginHooks = Lists.newArrayList();
 
     /**
      * Attempts to grab an account by
@@ -116,6 +124,15 @@ public class AccountManager extends Module
     public void cleanupCache(PlayerQuitEvent event)
     {
         database.cacheInvalidate(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler
+    public void grantOperator(PlayerLoginEvent event)
+    {
+        // Admin+ is granted OP
+
+        if (grab(event.getPlayer()).role().ordinal() <= Role.ADMIN.ordinal())
+            event.getPlayer().setOp(true);
     }
 
 }

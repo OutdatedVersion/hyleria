@@ -336,6 +336,17 @@ public class CommandHandler implements Listener
                 : Role.PLAYER;
     }
 
+    /**
+     * Send's our "unknown command" message to
+     * the provided player
+     *
+     * @param player the target player
+     */
+    public static void sendHelpMessage(Player player)
+    {
+        player.spigot().sendMessage(HELP_MESSAGE);
+    }
+
     static abstract class CommandInfo
     {
         /** an instance of where command method resides */

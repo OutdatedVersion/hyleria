@@ -3,8 +3,10 @@ package com.hyleria.network;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.common.reference.Role;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import static com.hyleria.util.Colors.bold;
+import static org.bukkit.ChatColor.RED;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -15,8 +17,7 @@ public class PermissionManager
 {
 
     /** when someone attempts to do something they don't have the {@link Role} to do they'll be sent this message */
-    public static final String GEN_MISSING_PERM_MESSAGE = ChatColor.RED + "" + ChatColor.BOLD +
-                                                                    "Uh oh. You're missing the privileges to do that!";
+    public static final String GEN_MISSING_PERM_MESSAGE = bold(RED) + "Uh oh. You're missing the privileges to do that!";
 
     /** access player data */
     @Inject private AccountManager accountManager;

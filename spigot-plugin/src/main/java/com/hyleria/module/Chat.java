@@ -30,9 +30,10 @@ import static com.hyleria.util.RoleFormat.chatFormatFromData;
 public class Chat extends Module
 {
 
-    /** the proper "[Role] Name message" format for messages */
+    /** the proper "[Role] Name message" format for messages | this was much better before this gunk got here*/
+    // TODO(Ben): clean up
     public final BiFunction<Player, Account, String> CHAT_PREFIX = (player, account) ->
-            (account.isPresent("chat_prefix") ? chatFormatFromData(account.val("chat_prefix", String.class))
+            (account.isPresent("chat_prefix") ? chatFormatFromData(account.val("chat_prefix", String.class)) + " "
                                                    : (account.role() != Role.PLAYER ? (chatFormat(account.role()) + " ") : ChatColor.GRAY))
                     + player.getName() + " " + ChatColor.WHITE;
 
