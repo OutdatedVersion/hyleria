@@ -2,7 +2,6 @@ package com.hyleria.coeus.available.uhc.world;
 
 import com.hyleria.util.VectorUtil;
 import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -62,15 +61,19 @@ public class Border implements Listener
      */
     public Border init(int apothem, Location center)
     {
-        this.apothem = apothem;
+        this.apothem = apothem * 2 - 1;
         this.origin = center;
         this.world = center.getWorld();
 
-        region = CuboidRegion.fromCenter(fromBukkit(center.toVector()), apothem);
+        region = CuboidRegion.fromCenter(fromBukkit(center.toVector()), this.apothem);
 
         return this;
     }
 
+    /**
+     *
+     * @return this border
+     */
     public Border loadChunks()
     {
         checkNotNull(region, "call #init first");
@@ -113,7 +116,7 @@ public class Border implements Listener
     public Border shrink(int shrinkFactor)
     {
         System.out.println("pre shrink: " + this.apothem);
-        init((this.apothem * 2) - shrinkFactor).generatePhysicalBorder();
+        init((this.apothem * 2 - 1) - shrinkFactor).generatePhysicalBorder();
 
         return this;
     }
@@ -121,7 +124,7 @@ public class Border implements Listener
     /**
      * @return the region backing this border
      */
-    public Region region()
+    public CuboidRegion region()
     {
         return region;
     }

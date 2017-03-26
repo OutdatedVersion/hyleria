@@ -53,7 +53,7 @@ public class Chat extends Module
         }
         else
         {
-            _prefix = _account.role() == Role.PLAYER ? "" : chatFormat(_account.role()) + " ";
+            _prefix = _account.role() == Role.PLAYER ? ChatColor.GRAY.toString() : chatFormat(_account.role()) + " ";
         }
 
 

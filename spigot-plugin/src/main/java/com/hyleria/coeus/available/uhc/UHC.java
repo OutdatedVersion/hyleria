@@ -163,7 +163,7 @@ public class UHC extends Game
         else
         {
             scoreboard.writeHead("Game Time");
-            scoreboard.write(startedAt == -1 ? "Not Started" : TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt));
+            scoreboard.write(TimeUtil.niceTimeFormat(System.currentTimeMillis() - startedAt));
             scoreboard.blank();
             scoreboard.write("Alive", PlayerUtil.onlineCount());
             scoreboard.write("Watching", 0);
@@ -189,8 +189,6 @@ public class UHC extends Game
      */
     public void shrinkBorder()
     {
-        System.out.println("ATTEMPT SHRINK");
-
         if (config.shrinkFactorProgression.length >= shrinkStage + 1)
         {
             border.shrink(config.shrinkFactorProgression[shrinkStage++]);

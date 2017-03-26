@@ -2,7 +2,7 @@ package com.hyleria.backend;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.hyleria.commons.inject.StartParallel;
+import com.hyleria.common.inject.StartParallel;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 
 /**

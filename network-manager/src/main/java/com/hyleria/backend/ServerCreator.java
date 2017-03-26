@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.backend.data.ConnectedServer;
-import com.hyleria.commons.inject.StartParallel;
+import com.hyleria.common.inject.StartParallel;
 
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
