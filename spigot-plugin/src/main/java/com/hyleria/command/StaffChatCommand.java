@@ -64,9 +64,10 @@ public class StaffChatCommand
         final ComponentBuilder _builder = new ComponentBuilder("Staff Chat ").color(ChatColor.GOLD).bold(true)
                 .append("» ").color(ChatColor.GRAY);
 
-        _builder.append(payload.sentOn).color(ChatColor.DARK_AQUA).append(" ");
+        _builder.append("[" + payload.sentOn + "]").color(ChatColor.DARK_AQUA).append(" ");
         _builder.append(payload.role.name + " " + payload.name).color(ChatColor.valueOf(payload.colorEnum)).bold(false).append(" ");
 
+        _builder.append("» ").color(ChatColor.GRAY);
         _builder.append(payload.message).color(ChatColor.AQUA);
 
         final BaseComponent[] _message = _builder.create();
