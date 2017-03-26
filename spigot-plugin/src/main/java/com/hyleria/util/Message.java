@@ -1,6 +1,7 @@
 package com.hyleria.util;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
 
@@ -71,6 +72,16 @@ public class Message
     {
         player.spigot().sendMessage(builder.create());
         return player;
+    }
+
+    /**
+     * Send this message to everyone online
+     */
+    public void send()
+    {
+        final BaseComponent[] _message = builder.append(".").color(ChatColor.GRAY).create();
+
+        PlayerUtil.everyoneStream().forEach(player -> player.spigot().sendMessage(_message));
     }
 
 }
