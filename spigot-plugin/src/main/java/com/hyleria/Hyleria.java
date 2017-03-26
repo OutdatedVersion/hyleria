@@ -10,6 +10,8 @@ import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.common.inject.Requires;
 import com.hyleria.common.inject.StartParallel;
+import com.hyleria.common.redis.RedisChannel;
+import com.hyleria.common.redis.RedisHandler;
 import com.hyleria.common.reference.Constants;
 import com.hyleria.util.Module;
 import com.hyleria.util.ShutdownHook;
@@ -70,6 +72,8 @@ public class Hyleria extends JavaPlugin
             }
         });
 
+        // connect to Redis instance
+        boundInjection(RedisHandler.class).init().subscribe(RedisChannel.DEFAULT);
 
         // setup our command handler
         final CommandHandler _commands = boundInjection(CommandHandler.class);

@@ -8,13 +8,15 @@ import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.command.api.annotation.Necessary;
 import com.hyleria.command.api.annotation.Permission;
-import com.hyleria.command.api.satisfier.ExecutedBySatisfier;
 import com.hyleria.command.api.satisfier.PlayerSatisfier;
 import com.hyleria.command.api.satisfier.RoleSatisfier;
+import com.hyleria.command.api.satisfier.StringArraySatisfier;
 import com.hyleria.common.reference.Role;
 import com.hyleria.network.PermissionManager;
 import com.hyleria.util.Issues;
+import com.hyleria.util.Message;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
@@ -25,10 +27,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,7 +48,7 @@ public class CommandHandler implements Listener
 
     /** all the providers we need */
     public static final Collection<Class<? extends ArgumentSatisfier>> DEFAULT_PROVIDERS = Lists.newArrayList(
-            ExecutedBySatisfier.class, RoleSatisfier.class, PlayerSatisfier.class
+            RoleSatisfier.class, PlayerSatisfier.class, StringArraySatisfier.class
     );
 
     /** default commands that we won't let players run unless we have one that overrides it */
@@ -144,8 +143,20 @@ public class CommandHandler implements Listener
     {
         // Iterate over a class looking for a method suitable
         // for being a used as a command. Keep in mind, only
-        // public methods are eligible.
-        for (Method method : Stream.of(object.getClass().getMethods()).sorted((one, two) -> one.isAnnotationPresent(SubCommand.class) ? 1 : 0).collect(Collectors.toList()))
+        // public methods are eligible
+
+        final List<Method> _toProcess = Stream.of(object.getClass().getMethods())
+                .filter(method -> method.isAnnotationPresent(Command.class) || method.isAnnotationPresent(SubCommand.class))
+                .sorted((one, two) ->
+        {
+            if (one.isAnnotationPresent(Command.class) && two.isAnnotationPresent(SubCommand.class))
+                return -1;
+
+            return 0;
+        }).collect(Collectors.toList());
+
+
+        for (Method method : _toProcess)
         {
             if (method.isAnnotationPresent(Command.class))
             {
@@ -266,16 +277,16 @@ public class CommandHandler implements Listener
                 // make sure if we need something & it doesn't exist that we fail
                 final Necessary _necessary = _working.getDeclaredAnnotation(Necessary.class);
 
-                if (_necessary != null && _args.currentPosition() < i)
+                if (_necessary != null && _args.remainingElements() == 0)
                 {
-                    player.sendMessage(_necessary.value());
+                    Message.prefix("Commands").content(_necessary.value(), ChatColor.RED).send(player);
                     return;
                 }
 
                 // if there's an annotation present we'll handle
                 // it based on the recommendation of that provider
                 // instead of the type of the parameter
-                if (_working.getDeclaredAnnotations().length > 0)
+                if (_working.getDeclaredAnnotations().length > 0 && _working.getDeclaredAnnotations()[0].annotationType() != Necessary.class)
                 {
                     // TODO(Ben): allow for more versatile annotations. so they can do different things based on the type of the parameter
                     // only one deciding annotation allowed by parameter

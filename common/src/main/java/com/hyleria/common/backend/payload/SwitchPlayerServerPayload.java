@@ -1,5 +1,6 @@
 package com.hyleria.common.backend.payload;
 
+import com.google.gson.annotations.SerializedName;
 import com.hyleria.common.json.JSONBuilder;
 import com.hyleria.common.redis.RedisChannel;
 import com.hyleria.common.redis.api.Focus;
@@ -19,13 +20,18 @@ public class SwitchPlayerServerPayload implements Payload
 {
 
     /** ID */
-    public final UUID uuid;
+    public UUID uuid;
 
     /** varied ID */
-    public final String name;
+    public String name;
 
     /** the server we'd like the player to go to */
-    public final String requestedServer;
+    @SerializedName ( "server" )
+    public String requestedServer;
+
+    /** whether or not the proxy should verify the server is online */
+    @SerializedName ( "attempt_ping" )
+    public boolean attemptPing;
 
     /**
      * @param uuid the player's UUID as a string
@@ -35,6 +41,15 @@ public class SwitchPlayerServerPayload implements Payload
     public SwitchPlayerServerPayload(String uuid, String name, String server)
     {
         this(UUID.fromString(uuid), name, server);
+    }
+
+    /**
+     * @param uuid the player's UUID
+     * @param server the server to switch to
+     */
+    public SwitchPlayerServerPayload(UUID uuid, String server)
+    {
+        this(uuid, null, server);
     }
 
     /**
@@ -62,11 +77,7 @@ public class SwitchPlayerServerPayload implements Payload
     @Override
     public JSONObject asJSON()
     {
-        return JSONBuilder.builder()
-                        .add("uuid", uuid == null ? null : uuid.toString())
-                        .add("name", name)
-                        .add("server", requestedServer)
-                        .asJSON();
+        return JSONBuilder.builder().addAllFields(this).asJSON();
     }
 
     @Override

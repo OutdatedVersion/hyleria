@@ -37,7 +37,7 @@ public class EngineCommands
     @Permission ( Role.ADMIN )
     public void forceStart(Player player)
     {
-        engine.game().begin();
+        engine.startGame();
         player.sendMessage(bold(GREEN) + "You've started the game.");
     }
 

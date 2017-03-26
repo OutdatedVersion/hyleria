@@ -2,7 +2,6 @@ package com.hyleria.command.api.satisfier;
 
 import com.hyleria.command.api.ArgumentSatisfier;
 import com.hyleria.command.api.Arguments;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -23,7 +22,7 @@ public class ExecutedBySatisfier implements ArgumentSatisfier<Player>
     @Override
     public String fail(String provided)
     {
-        return ChatColor.RED + "How in the hell did this fail? Please contact a developer with a picture of this.";
+        return "How in the hell did this fail? Please contact a developer with a picture of this.";
     }
 
     @Override

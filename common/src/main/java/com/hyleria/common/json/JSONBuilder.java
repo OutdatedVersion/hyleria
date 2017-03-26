@@ -1,8 +1,10 @@
 package com.hyleria.common.json;
 
+import com.hyleria.common.reflect.ReflectionUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -58,7 +60,40 @@ public class JSONBuilder
             if (values[0] instanceof UUID)
                 values[0] = values[0].toString();
 
+            if (values[0] instanceof Enum)
+                values[0] = ((Enum) values[0]).name();
+
             base.put(key, values[0]);
+        }
+
+        return this;
+    }
+
+    /**
+     * Adds the value of every field in
+     * in this object to our JSON
+     *
+     * @param object the object
+     * @return this builder
+     */
+    public JSONBuilder addAllFields(Object object)
+    {
+        for (Field field : object.getClass().getFields())
+        {
+            // respect exclusion annotation
+            if (ReflectionUtil.skipOver(field))
+                continue;
+
+            try
+            {
+                add(ReflectionUtil.nameFromField(field), field.get(object));
+            }
+            catch (IllegalAccessException ex)
+            {
+                ex.printStackTrace();
+                System.err.println("Unable to get field value");
+                System.err.println();
+            }
         }
 
         return this;

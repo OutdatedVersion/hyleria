@@ -1,5 +1,6 @@
 package com.hyleria.util;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 
@@ -11,6 +12,9 @@ public class TextUtil
 {
 
     private TextUtil() { }
+
+    /** join on spaces */
+    public static final Joiner SPACE_JOINER = Joiner.on(" ");
 
     /**
      * Formats the provided boolean into
@@ -73,6 +77,18 @@ public class TextUtil
     public static String formatEnum(Enum val)
     {
         return WordUtils.capitalizeFully(val.name().toLowerCase().replaceAll("_", " "));
+    }
+
+    /**
+     * Turn the provided array into a
+     * single String
+     *
+     * @param array the array
+     * @return the string
+     */
+    public static String arrayToString(String[] array)
+    {
+        return SPACE_JOINER.join(array);
     }
 
 }

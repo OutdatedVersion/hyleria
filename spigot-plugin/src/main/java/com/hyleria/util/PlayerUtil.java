@@ -130,6 +130,18 @@ public class PlayerUtil
     }
 
     /**
+     * Player the provided sound
+     * to the specified player
+     *
+     * @param player the player
+     * @param sound the sound
+     */
+    public static void play(Player player, Sound sound)
+    {
+        player.playSound(player.getLocation(), sound, 100, 100);
+    }
+
+    /**
      * Play the provided sound to
      * every player online
      *
@@ -137,7 +149,7 @@ public class PlayerUtil
      */
     public static void play(Sound sound)
     {
-        everyone().forEach(player -> player.playSound(player.getLocation(), sound, 100, 100));
+        everyone().forEach(player -> play(player, sound));
     }
 
 }

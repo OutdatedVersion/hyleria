@@ -14,6 +14,11 @@ import java.lang.annotation.Target;
 public @interface HandlesType
 {
 
+    /**
+     * @return the class of the payload
+     *         that the hook this is
+     *         annotating is for
+     */
     Class<? extends Payload> value();
 
 }

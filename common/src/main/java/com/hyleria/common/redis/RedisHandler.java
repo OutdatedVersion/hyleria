@@ -82,6 +82,20 @@ public class RedisHandler
     }
 
     /**
+     * Disconnect all of our stuff
+     *
+     * @return this handler
+     */
+    public RedisHandler releaseResources()
+    {
+        pool.close();
+        executor.shutdown();
+        subscriber.close();
+
+        return this;
+    }
+
+    /**
      * Start receiving data from the provided
      * Redis channels
      *
@@ -145,7 +159,7 @@ public class RedisHandler
                     }
                 }, _channelsAsString);
             }
-        };
+        }.start();
 
         return this;
     }
@@ -203,14 +217,14 @@ public class RedisHandler
                 if (method.isAnnotationPresent(HandlesType.class))
                 {
                     checkState(method.getParameterCount() == 1, "We only invoke with the provided payload; nothing else!");
-                    checkState(method.getParameterTypes()[0].isAssignableFrom(Payload.class), "The provided parameter isn't a payload!");
+                    checkState(Payload.class.isAssignableFrom(method.getParameterTypes()[0]), "The provided parameter isn't a payload!");
 
                     final HookData _data = new HookData();
 
                     _data.possessor = object;
                     _data.method = method;
                     _data.channel = method.isAnnotationPresent(FromChannel.class) ? method.getAnnotation(FromChannel.class).value().channel : RedisChannel.DEFAULT.channel;
-                    _data.focus = payloadFocusCache.get(method.getAnnotation(HandlesType.class).value());
+                    _data.focus = payloadFocusCache.get(_data.payloadType = method.getAnnotation(HandlesType.class).value());
 
                     hooks.put(_data.focus, _data);
 
