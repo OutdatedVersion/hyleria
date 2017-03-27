@@ -17,4 +17,3 @@ function install {
 
 install "./paper.jar" "com.destroystokyo" "paper" "1.7-R1"
 install "./waterfall.jar" "com.destroystokyo" "waterfall" "1.11-R1"
-install "./worldborder.jar" "com.wimbli" "world-border" "1.8.6"

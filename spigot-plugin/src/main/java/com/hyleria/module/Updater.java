@@ -76,11 +76,11 @@ public class Updater
         catch (IOException ex)
         {
             Issues.handle("Copy Plugin Update Jar", ex);
-            return;
         }
-
-
-        Scheduler.delayed(this::restart, Time.SECONDS.toTicks(4));
+        finally
+        {
+            Scheduler.delayed(this::restart, Time.SECONDS.toTicks(4));
+        }
     }
 
     /**
