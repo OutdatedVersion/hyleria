@@ -42,7 +42,7 @@ public class CommandHandler implements Listener
 {
 
     /** the message sent when someone runs a command that doesn't exist */
-    private static final BaseComponent[] HELP_MESSAGE = new ComponentBuilder("Unknown command.. we're here to ")
+    private static final BaseComponent[] HELP_MESSAGE = new ComponentBuilder("Unknown command... we're here to ")
             .color(net.md_5.bungee.api.ChatColor.GRAY).bold(true).append("/help").color(net.md_5.bungee.api.ChatColor.YELLOW)
             .append(" you.").color(net.md_5.bungee.api.ChatColor.GRAY).create();
 
@@ -113,7 +113,7 @@ public class CommandHandler implements Listener
     {
         new FastClasspathScanner(pkg)
                 .matchClassesWithMethodAnnotation(Command.class, (clazz, method) ->
-                    registerCommandsFromObject(hyleria.injector().getInstance(clazz))).scan();
+                    registerObject(hyleria.injector().getInstance(clazz))).scan();
     }
 
     /**
@@ -123,10 +123,10 @@ public class CommandHandler implements Listener
      * @param classes the classes
      * @return this handler
      */
-    public CommandHandler registerCommands(Class<?>... classes)
+    public CommandHandler register(Class<?>... classes)
     {
         for (Class clazz : classes)
-            registerCommandsFromObject(hyleria.get(clazz));
+            registerObject(hyleria.get(clazz));
 
         return this;
     }
@@ -139,7 +139,7 @@ public class CommandHandler implements Listener
      * @param object the object
      * @return this handler
      */
-    public CommandHandler registerCommandsFromObject(Object object)
+    public CommandHandler registerObject(Object object)
     {
         // Iterate over a class looking for a method suitable
         // for being a used as a command. Keep in mind, only

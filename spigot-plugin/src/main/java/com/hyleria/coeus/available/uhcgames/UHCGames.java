@@ -95,8 +95,9 @@ public class UHCGames extends Game
         MessageUtil.everyone(ChatColor.AQUA + "Game starting in 10 seconds!");
 
         final Wrapper<Integer> timer = new Wrapper<>();
-        timer.set(30);//30 seconds to start
-        engine.updateStatus(Status.PRE_GAME); //Lets start the countdown!
+        timer.set(30); // 30 seconds till start
+        engine.updateStatus(Status.PRE_GAME);
+
         Scheduler.loopUntil(() ->
         {
             int temp = timer.get() - 1;
@@ -107,12 +108,14 @@ public class UHCGames extends Game
             MessageUtil.everyone(ChatColor.BLUE + "Game started!");
             engine.updateStatus(Status.ACTIVE_GAME);
         }, 1, 10);
+
         Scheduler.loopUntil(() ->
         {
             populator.populated.clear();
             MessageUtil.everyone(ChatColor.GREEN + "Chests have been refilled!");
-        },null,300,5); //Refill the chests / make em refillable
+        },null,300,5);
 
+        // refill the chests / make em refillable
     }
 
     @Override

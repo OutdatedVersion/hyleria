@@ -45,7 +45,7 @@ public class Lobby extends Game
 
         Scheduler.timerExact(this::updateDate, Time.MINUTES.toTicks(2));
 
-        engine.plugin.get(CommandHandler.class).registerCommands(CuboidTesting.class);
+        engine.plugin.get(CommandHandler.class).register(CuboidTesting.class);
     }
 
     @Override

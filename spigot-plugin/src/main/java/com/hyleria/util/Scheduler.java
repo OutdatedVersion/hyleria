@@ -66,24 +66,28 @@ public class Scheduler
             end(id);
             callback.run();
         }, ticksLater);
+
         return get();
     }
 
     /**
-     * Runs the given runnable every x seconds (where x is the provided interval) for y amount of times(where y is the provided times)
-     * @param r The runnable to run
+     * Runs the given runnable every x seconds
+     * (where x is the provided interval) for y
+     * amount of times(where y is the provided times)
+     *
+     * @param task The runnable to run
      * @param callback The callback after its run x amount of times
      * @param interval How often to run it in seconds
      * @param times How many times to run it
      * @return The task id, in case you need to cancel it.
      */
-    public static int loopUntil(Runnable r, Runnable callback, int interval, int times)
+    public static int loopUntil(Runnable task, Runnable callback, int interval, int times)
     {
-        int id = timer(r, interval);
-        int tickslater = (times * interval) * 20; //The ticks later
-        tickslater = tickslater - 5; //Task has been running this long
-        endAfter(id,tickslater,callback);
-        return  id;
+        final int _id = timer(task, interval);
+
+        endAfter(_id, ((times * interval) * 20) - 5, callback);
+
+        return _id;
     }
 
     /**

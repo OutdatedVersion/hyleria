@@ -106,7 +106,7 @@ public class Hyleria extends JavaPlugin
 
         // I want to guarantee this will load last
         boundInjection(Coeus.class);
-        _commands.registerCommands(EngineCommands.class);
+        _commands.register(EngineCommands.class);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class Hyleria extends JavaPlugin
         {
             try
             {
-                method.invoke(this);
+                method.invoke(injector.getInstance(method.getClass()));
             }
             catch (Exception ex)
             {

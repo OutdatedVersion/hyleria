@@ -1,7 +1,7 @@
 package com.hyleria.coeus.available.uhc;
 
 import com.google.inject.Inject;
-import com.hyleria.coeus.Game;
+import com.hyleria.coeus.Coeus;
 import com.hyleria.command.api.Command;
 import com.hyleria.command.api.annotation.Permission;
 import com.hyleria.common.reference.Role;
@@ -29,12 +29,12 @@ public class UHCCommands
     private static final int TOP_KILL_BOUND = 8 - 1;
 
     /** uhc game */
-    @Inject private Game game;
+    @Inject private Coeus engine;
 
     @Command ( executor = { "kc", "killcount", "kills" } )
     public void killCount(Player player, Player target)
     {
-        int _amount = game.kills.get(target.getUniqueId()).size();
+        int _amount = engine.game().kills.get(target.getUniqueId()).size();
 
         player.sendMessage(bold(PLAYER) + target.getName() + bold(GRAY) + " has "
                             + _amount + bold(GRAY) + (_amount == 1 ? " kill." : " kills."));
@@ -45,7 +45,7 @@ public class UHCCommands
     {
         // idk lol
         final List<Pair<UUID, Integer>> _sorted =
-                game.kills.asMap().entrySet()
+                engine.game().kills.asMap().entrySet()
                         .stream()
                         .map(entry -> Pair.of(entry.getKey(), entry.getValue().size()))
                         .sorted(Comparator.comparingInt(Pair::getValue))
@@ -72,7 +72,7 @@ public class UHCCommands
     public void shrink(Player player)
     {
         player.sendMessage(bold(YELLOW) + "Manually shrinking border..");
-        game.as(UHC.class).shrinkBorder();
+        engine.game().as(UHC.class).shrinkBorder();
     }
 
 }

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.Hyleria;
 import com.hyleria.command.api.Command;
+import com.hyleria.command.api.CommandHandler;
 import com.hyleria.command.api.SubCommand;
 import com.hyleria.command.api.annotation.Permission;
 import com.hyleria.common.backend.ServerConfig;
@@ -17,6 +18,7 @@ import com.hyleria.util.Scheduler;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_7_R4.MinecraftServer;
 import net.minecraft.util.org.apache.commons.io.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.spigotmc.AsyncCatcher;
 import org.spigotmc.WatchdogThread;
@@ -49,8 +51,10 @@ public class Updater
     @Inject private Hyleria plugin;
 
     @Inject
-    public Updater(RedisHandler redis, ServerConfig config)
+    public Updater(RedisHandler redis, ServerConfig config, CommandHandler command)
     {
+        command.registerObject(this);
+
         this.serverName = config.name;
         // TODO(Ben): implement ServerUpdateRequestPayload
     }
@@ -77,11 +81,10 @@ public class Updater
         catch (IOException ex)
         {
             Issues.handle("Copy Plugin Update Jar", ex);
+            return;
         }
-        finally
-        {
-            Scheduler.delayed(this::restart, Time.SECONDS.toTicks(4));
-        }
+
+        Scheduler.delayed(this::restart, Time.SECONDS.toTicks(3));
     }
 
     /**
@@ -93,17 +96,7 @@ public class Updater
         {
             AsyncCatcher.enabled = false;
 
-            // stop the thread that watches for crashes
-            WatchdogThread.doStop();
-            Thread.sleep(100);
-
-            // close connections
-            MinecraftServer.getServer().getServerConnection().b();
-            Thread.sleep(100);
-
-            // alright, let's shut it down
-            MinecraftServer.getServer().stop();
-
+            // need to make sure we're restarting..
             final Thread _restartThread = new Thread(() ->
             {
                 try
@@ -119,6 +112,18 @@ public class Updater
 
             _restartThread.setDaemon(true);
             Runtime.getRuntime().addShutdownHook(_restartThread);
+
+
+            // stop the thread that watches for crashes
+            WatchdogThread.doStop();
+            Thread.sleep(80);
+
+            // close connections
+            MinecraftServer.getServer().getServerConnection().b();
+            Thread.sleep(80);
+
+            // alright, let's shut it down
+            Bukkit.shutdown();
         }
         catch (Exception ex)
         {

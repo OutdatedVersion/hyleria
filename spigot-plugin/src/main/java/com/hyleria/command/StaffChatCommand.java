@@ -45,7 +45,7 @@ public class StaffChatCommand
         this.redis = redis.registerHook(this);
     }
 
-    @Command ( executor = { "staffchat", "sc" } )
+    @Command ( executor = { "staffchat", "sc", "c" } )
     @Permission ( Role.TRIAL )
     public void run(Player player, String[] message)
     {
