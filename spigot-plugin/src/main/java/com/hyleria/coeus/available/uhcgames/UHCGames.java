@@ -131,10 +131,10 @@ public class UHCGames extends Game
         } scoreboard.purge();
         scoreboard.title(ChatColor.GREEN + "UHC Games");
         scoreboard.blank();
-        scoreboard.writeHead(ChatColor.DARK_RED + "Time till death match");
+        scoreboard.writeHead(ChatColor.DARK_RED + "Deathmatch");
         scoreboard.write(ChatColor.RED + String.valueOf(TimeUnit.SECONDS.toMinutes(time)) + " Minutes");
         scoreboard.blank();
-        scoreboard.writeHead(ChatColor.BLUE + "Time till chest refill");
+        scoreboard.writeHead(ChatColor.BLUE + "Chest Refill");
         scoreboard.write(ChatColor.WHITE + String.valueOf(TimeUnit.SECONDS.toMinutes(refillTime) + " Minutes"));
         scoreboard.blank();
         scoreboard.writeURL();
