@@ -63,6 +63,7 @@ public class Updater
     }
 
     @SubCommand ( of = "update", executors = "dev" )
+    @Permission ( value = Role.DEV, note = "Due to the nature of this command, only developers may use it" )
     public void devUpdate(Player player)
     {
         Message.prefix("Update").content(this.serverName, ChatColor.GREEN)

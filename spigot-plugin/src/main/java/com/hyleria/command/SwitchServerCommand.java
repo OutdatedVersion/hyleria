@@ -32,7 +32,7 @@ public class SwitchServerCommand
     }
 
     @Command ( executor = { "server", "s" } )
-    public void run(Player player, @Necessary ( "You must provide a server to switch to" ) String server)
+    public void switchServers(Player player, @Necessary ( "You must provide a server to switch to" ) String server)
     {
         server = formatServerName(server);
 
@@ -51,6 +51,12 @@ public class SwitchServerCommand
     public void whereAmI(Player player)
     {
         Message.prefix("Network").content("You're currently connected to").content(serverName, GREEN).send(player);
+    }
+
+    @Command ( executor = { "lobby", "hub", "leave" } )
+    public void goToLobby(Player player)
+    {
+        switchServers(player, "Lobby-1");
     }
 
     /**
