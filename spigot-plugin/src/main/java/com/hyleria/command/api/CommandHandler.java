@@ -169,7 +169,7 @@ public class CommandHandler implements Listener
 
                 _info.method = method;
                 _info.executors = Sets.newHashSet(_ann.executor());
-                _info.role = roleFromMethod(method);
+                permissionDataFromMethod(method, _info);
 
                 _info.possessor = object;
 
@@ -188,8 +188,8 @@ public class CommandHandler implements Listener
 
                 _info.executors = Sets.newHashSet(_ann.executors());
                 _info.method = method;
-                _info.role = roleFromMethod(method);
                 _info.possessor = object;
+                permissionDataFromMethod(method, _info);
 
                 commands.get(_ann.of()).addSubCommand(_info);
             }
@@ -256,7 +256,7 @@ public class CommandHandler implements Listener
         {
             // verify the player can actually execute this command
             if (info.role != Role.PLAYER)
-                if (!permissionManager.has(player, info.role))
+                if (!permissionManager.has(player, info.role, info.permissionMessage))
                     return;
 
             // prepare parameters
@@ -337,14 +337,25 @@ public class CommandHandler implements Listener
     }
 
     /**
-     * @param method the method
-     * @return the role for permission tasks
+     * @param method the method we're scanning
+     * @param info the info we'll be assigning the found data to
      */
-    private static Role roleFromMethod(Method method)
+    private static void permissionDataFromMethod(Method method, CommandInfo info)
     {
-        return method.isAnnotationPresent(Permission.class)
-                ? method.getAnnotation(Permission.class).value()
-                : Role.PLAYER;
+        final Permission _perm = method.getAnnotation(Permission.class);
+
+        if (_perm != null)
+        {
+            info.role = _perm.value();
+            info.permissionMessage = _perm.note().equals("DEFAULT_MESSAGE")
+                                     ? PermissionManager.GEN_MISSING_PERM_MESSAGE
+                                     : _perm.note();
+        }
+        else
+        {
+            info.role = Role.PLAYER;
+            info.permissionMessage = PermissionManager.GEN_MISSING_PERM_MESSAGE;
+        }
     }
 
     /**
@@ -371,6 +382,9 @@ public class CommandHandler implements Listener
 
         /** the role someone must have to run this command, default: player */
         Role role;
+
+        /** message to send if our player doesn't have the provided {@link Role} */
+        String permissionMessage;
     }
 
     /** data for a command */

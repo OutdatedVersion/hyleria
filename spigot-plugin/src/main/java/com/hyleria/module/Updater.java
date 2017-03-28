@@ -59,7 +59,7 @@ public class Updater
     @Permission ( Role.ADMIN )
     public void baseCommand(Player player)
     {
-        Message.prefix("Version").content("Running Hyleria version").content(plugin.getDescription().getVersion(), ChatColor.YELLOW).send(player);
+        Message.prefix("Version").content("This server is currently running:").content(plugin.getDescription().getVersion(), ChatColor.YELLOW).send(player);
     }
 
     @SubCommand ( of = "update", executors = "dev" )

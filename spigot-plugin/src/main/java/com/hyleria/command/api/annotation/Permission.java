@@ -16,6 +16,17 @@ import java.lang.annotation.Target;
 public @interface Permission
 {
 
+    /**
+     * @return the role that someone needs
+     *         to run the annotated command
+     */
     Role value();
+
+    /**
+     * @return the message we send in case
+     *         the player doesn't have the
+     *         role
+     */
+    String note() default "DEFAULT_MESSAGE";
 
 }

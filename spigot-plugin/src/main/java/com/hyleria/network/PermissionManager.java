@@ -24,12 +24,23 @@ public class PermissionManager
 
     /**
      * @param player the player
-     * @param role the role
+     * @param role the role to check for
      * @return whether they have the perms or not
      */
     public boolean has(Player player, Role role)
     {
-        return has(player, role, true);
+        return has(player, role, GEN_MISSING_PERM_MESSAGE);
+    }
+
+    /**
+     * @param player the player
+     * @param role the role
+     * @param permissionMessage the messages
+     * @return whether they have the perms or not
+     */
+    public boolean has(Player player, Role role, String permissionMessage)
+    {
+        return has(player, role, true, permissionMessage);
     }
 
     /**
@@ -41,15 +52,16 @@ public class PermissionManager
      * @param player the player
      * @param role the required role
      * @param notify whether or not to tell the player they don't have permission
+     * @param permissionMessage message to send if they don't have it
      * @return either yes or no
      */
-    public boolean has(Player player, Role role, boolean notify)
+    public boolean has(Player player, Role role, boolean notify, String permissionMessage)
     {
         if (accountManager.grab(player).role().ordinal() <= role.ordinal())
             return true;
 
         if (notify)
-            player.sendMessage(GEN_MISSING_PERM_MESSAGE);
+            player.sendMessage(permissionMessage);
 
         return false;
     }

@@ -81,7 +81,7 @@ public class UHC extends Game
         plugin.registerListeners(border = new Border().init(config.apothem).generatePhysicalBorder());
 
         // add commands
-        plugin.get(CommandHandler.class).registerCommandsFromObject(UHCCommands.class);
+        plugin.get(CommandHandler.class).registerCommands(UHCCommands.class);
 
         // handle start by host commands
         requiredPlayerCount = -1;
