@@ -17,7 +17,6 @@ import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
 import com.hyleria.util.TextUtil;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -100,11 +99,6 @@ public class UHC extends Game
         System.out.println("[UHC] Starting player spread");
 
         // one player must be in the game world first at 0, 0 for spreading w/ Minecraft's command
-        final Player _dummy = PlayerUtil.everyone().get(0);
-        _dummy.teleport(border.origin);
-
-        System.out.println("[UHC] Teleport dummy: " + _dummy.getName());
-
         final String _command = "spreadplayers 0 0 "
                 + (config.apothem / 4) + " " + (config.apothem / 2) + " false " +
                 PlayerUtil.everyone().stream().collect(StringBuilder::new, (builder, player) -> builder.append(player.getName()).append(" "), StringBuilder::append);

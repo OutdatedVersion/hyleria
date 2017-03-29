@@ -1,6 +1,8 @@
 package com.hyleria.coeus.available.uhc.world;
 
+import com.hyleria.common.time.TimeUtil;
 import com.hyleria.util.VectorUtil;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -10,7 +12,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hyleria.util.Colors.bold;
-import static com.hyleria.util.VectorUtil.fromBukkit;
 import static org.bukkit.ChatColor.RED;
 
 /**
@@ -20,23 +21,20 @@ import static org.bukkit.ChatColor.RED;
 public class Border implements Listener
 {
 
-    /** the size (one way) of the region */
-    private int apothem;
-
     /** the world that this border is in */
     private World world;
 
     /** the center of our region */
-    public Location origin;
+    private Vector center = new Vector(0, 0, 0);
+
+    /** two end points of our region */
+    private Vector minPoint, maxPoint;
 
     /** the content of this border's interior */
-    private CuboidRegion region;
+    private CuboidRegion region = CuboidRegion.fromCenter(center, 1);
 
     /** what our border is made out of */
     private Material borderMaterial = Material.BEDROCK;
-
-    // create the physical border
-    // keep players from exiting it
 
     /**
      * Creates a border, but from default values.
@@ -55,23 +53,25 @@ public class Border implements Listener
      * Sets the values for this, and loads
      * up the region backing this border.
      *
-     * @param apothem the size of the border
+     * @param distance the size of the border
      * @param center the center of the border
      * @return this border
      */
-    public Border init(int apothem, Location center)
+    public Border init(int distance, Location center)
     {
-        this.apothem = apothem * 2 - 1;
-        this.origin = center;
         this.world = center.getWorld();
+        this.center = VectorUtil.fromBukkit(center.toVector());
 
-        region = CuboidRegion.fromCenter(fromBukkit(center.toVector()), this.apothem);
+        this.minPoint = new Vector(this.center).add(0, 0, distance).subtract(distance, center.getBlockY(), 0);
+        this.maxPoint = new Vector(this.center).add(distance, 255 - center.getBlockY(), 0).subtract(0, 0, distance);
+
+        region.setPos1(minPoint);
+        region.setPos2(maxPoint);
 
         return this;
     }
 
     /**
-     *
      * @return this border
      */
     public Border loadChunks()
@@ -80,7 +80,7 @@ public class Border implements Listener
 
         long _startedAt = System.currentTimeMillis();
         region.getChunks().forEach(vec -> world.getChunkAtAsync(vec.getBlockX(), vec.getBlockZ(), Chunk::load));
-        System.out.println("TIME: " + (System.currentTimeMillis() - _startedAt));
+        System.out.println("[UHC] Elapsed time for world pre-generation: " + TimeUtil.niceTimeFormat((System.currentTimeMillis() - _startedAt)));
 
         return this;
     }
@@ -100,7 +100,7 @@ public class Border implements Listener
             // height check?
 
             final Block _block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
-            _block.setType(Material.BEDROCK);
+            _block.setType(borderMaterial);
         });
 
         return this;
@@ -115,8 +115,6 @@ public class Border implements Listener
      */
     public Border shrink(int shrinkFactor)
     {
-        System.out.println("pre shrink: " + this.apothem);
-        init((this.apothem * 2 - 1) - shrinkFactor).generatePhysicalBorder();
 
         return this;
     }
