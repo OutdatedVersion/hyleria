@@ -8,12 +8,14 @@ import com.hyleria.command.api.CommandHandler;
 import com.hyleria.command.api.SubCommand;
 import com.hyleria.command.api.annotation.Permission;
 import com.hyleria.common.backend.ServerConfig;
+import com.hyleria.common.backend.payload.SwitchPlayerServerPayload;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.redis.RedisHandler;
 import com.hyleria.common.reference.Role;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.Issues;
 import com.hyleria.util.Message;
+import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_7_R4.MinecraftServer;
@@ -47,16 +49,21 @@ public class Updater
     /** name of this server */
     private final String serverName;
 
+    /** network interaction */
+    private final RedisHandler redis;
+
     /** our plugin */
     @Inject private Hyleria plugin;
 
     @Inject
     public Updater(RedisHandler redis, ServerConfig config, CommandHandler command)
     {
+        // TODO(Ben): implement ServerUpdateRequestPayload
+        this.redis = redis;
+
         command.registerObject(this);
 
         this.serverName = config.name;
-        // TODO(Ben): implement ServerUpdateRequestPayload
     }
 
     @Command ( executor = "update" )
@@ -96,7 +103,25 @@ public class Updater
         {
             AsyncCatcher.enabled = false;
 
-            // need to make sure we're restarting..
+
+            // TODO(Ben): this all sucks, redo at some point
+
+            if (serverName.equals("Lobby-1"))
+            {
+                // NOT a scaling approach; needs to be redone
+                PlayerUtil.everyoneStream().forEach(player ->
+                        player.kickPlayer(ChatColor.GOLD + "Hyleria " + ChatColor.GRAY + " - " + ChatColor.YELLOW));
+            }
+            else
+            {
+                // TODO(Ben): implement bulk player switch, way too much traffic here
+                PlayerUtil.everyoneStream().forEach(player -> new SwitchPlayerServerPayload(player.getUniqueId(), "Lobby-1").publish(redis));
+            }
+
+            // ^ let that process
+            Thread.sleep(80);
+
+            // should probably actually restart the server
             final Thread _restartThread = new Thread(() ->
             {
                 try

@@ -31,8 +31,8 @@ public class UHCConfig implements GameConfiguration
     @SerializedName ( "pvp_time" )
     public int pvpTime = 20;
 
-    /** the apothem of the border | 1k would be a 500x500 border */
-    public int apothem;
+    /** the distance of the border | 1k would be a 500x500 border */
+    public int borderDistance;
 
     /** the time that must elapse before the border starts to shrink */
     @SerializedName ( "time_till_border_shrink" )

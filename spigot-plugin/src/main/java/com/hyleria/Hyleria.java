@@ -118,7 +118,7 @@ public class Hyleria extends JavaPlugin
         {
             try
             {
-                method.invoke(injector.getInstance(method.getClass()));
+                method.invoke(injector.getInstance(method.getDeclaringClass()));
             }
             catch (Exception ex)
             {

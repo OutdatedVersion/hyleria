@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.command.api.Command;
 import com.hyleria.command.api.annotation.Permission;
+import com.hyleria.common.inject.Requires;
 import com.hyleria.common.reference.Role;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
@@ -22,6 +23,7 @@ import static org.bukkit.ChatColor.*;
  * @author Ben (OutdatedVersion)
  * @since Mar/21/2017 (7:42 PM)
  */
+@Requires ( Coeus.class )
 public class UHCCommands
 {
 

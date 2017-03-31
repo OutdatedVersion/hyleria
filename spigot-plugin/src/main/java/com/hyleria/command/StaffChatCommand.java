@@ -62,7 +62,7 @@ public class StaffChatCommand
     public void handleIncoming(StaffChatPayload payload)
     {
         // [Staff Chat]
-        final ComponentBuilder _builder = new ComponentBuilder("[Staff Chat]").color(ChatColor.GOLD).bold(true);
+        final ComponentBuilder _builder = new ComponentBuilder("[Staff Chat] ").color(ChatColor.GOLD).bold(true);
 
         // [Lobby-1]
         _builder.append("[" + payload.sentOn + "]").color(ChatColor.DARK_AQUA).bold(false).append(" ");

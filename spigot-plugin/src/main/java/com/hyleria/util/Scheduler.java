@@ -152,6 +152,17 @@ public class Scheduler
     }
 
     /**
+     * @param runnable task
+     * @param delayBeforeNextLoop till next
+     * @param interval run at
+     * @return task ID
+     */
+    public static int timerExact(Runnable runnable, long delayBeforeNextLoop, long interval)
+    {
+        return get().runTaskTimer(Hyleria.get(), runnable, delayBeforeNextLoop, interval).getTaskId();
+    }
+
+    /**
      * Runs a task at the rate provided
      *
      * @param runnable the task to run
@@ -161,7 +172,7 @@ public class Scheduler
      */
     public static int timerExact(Runnable runnable, long interval)
     {
-        return get().runTaskTimer(Hyleria.get(), runnable, 0L, interval).getTaskId();
+        return timerExact(runnable, 0, interval);
     }
 
 }

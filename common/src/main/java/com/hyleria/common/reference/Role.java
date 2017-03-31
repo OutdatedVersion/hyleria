@@ -12,10 +12,10 @@ public enum Role
 
     DEV('c'),
     ADMIN('c'),
-    SENIOR('b'),    // full staff everywhere
-    FULL('9'),      // takes in "staff_focus"
+    SENIOR('d'),    // full staff everywhere
+    FULL('5'),      // takes in "staff_focus"
     TRIAL('6'),     // ^
-    MEDIA('5'),     // takes in "media_type"
+    MEDIA('9'),     // takes in "media_type"
     PLAYER('7');
 
     /** the color of the tag */

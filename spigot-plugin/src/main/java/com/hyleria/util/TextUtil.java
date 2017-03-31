@@ -47,8 +47,8 @@ public class TextUtil
      */
     private static String enabledDisabled(boolean val, boolean bold)
     {
-        return val ? bold ? Colors.BOLD : "" + (ChatColor.GREEN + "Enabled")
-                   : bold ? Colors.BOLD : "" + (ChatColor.RED + "Disabled");
+        return val ? (bold ? Colors.BOLD : "" + (ChatColor.GREEN + "Enabled"))
+                   : (bold ? Colors.BOLD : "" + (ChatColor.RED + "Disabled"));
     }
 
     /**

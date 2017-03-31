@@ -36,7 +36,11 @@ public interface Payload
         final JSONObject _json = new JSONObject();
 
         _json.put("focus", focus);
-        _json.put("payload", this.asJSON());
+
+        final JSONObject _payload = this.asJSON();
+
+        if (_payload != null)
+            _json.put("payload", _payload);
 
         return _json.toJSONString();
     }

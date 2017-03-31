@@ -46,7 +46,7 @@ public class Database
     private final MongoClient client;
 
     /** the only Mongo account we're using */
-    public final MongoDatabase database;
+    public final MongoDatabase mongo;
 
     /** the collection accounts are stored in (used for most things) */
     public final MongoCollection<Document> accounts;
@@ -75,8 +75,8 @@ public class Database
                                  Collections.singletonList(MongoCredential.createCredential(_config.auth.username, _config.database, _config.auth.password.toCharArray())),
                                  _builder.build());
 
-        database = client.getDatabase(_config.database);
-        accounts = database.getCollection(_config.collection);
+        mongo = client.getDatabase(_config.database);
+        accounts = mongo.getCollection(_config.collection);
 
         executor = Executors.newCachedThreadPool();
 

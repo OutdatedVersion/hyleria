@@ -63,10 +63,12 @@ public class Border implements Listener
         this.center = VectorUtil.fromBukkit(center.toVector());
 
         this.minPoint = new Vector(this.center).add(0, 0, distance).subtract(distance, center.getBlockY(), 0);
-        this.maxPoint = new Vector(this.center).add(distance, 255 - center.getBlockY(), 0).subtract(0, 0, distance);
+        this.maxPoint = new Vector(this.center).add(distance, 200 - center.getBlockY(), 0).subtract(0, 0, distance);
 
         region.setPos1(minPoint);
         region.setPos2(maxPoint);
+
+        System.out.println("[UHC] Border initialized (" + region.getWidth() + 'x' + region.getLength() + ')');
 
         return this;
     }
@@ -93,12 +95,10 @@ public class Border implements Listener
      */
     public Border generatePhysicalBorder()
     {
-        checkNotNull(region, "The #init method must be invoked before anything else");
-
-        region.getWalls().iterator().forEachRemaining(vec ->
+        checkNotNull(region, "The #init method must be invoked before anything else")
+                .getWalls().iterator().forEachRemaining(vec ->
         {
             // height check?
-
             final Block _block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
             _block.setType(borderMaterial);
         });
@@ -115,7 +115,7 @@ public class Border implements Listener
      */
     public Border shrink(int shrinkFactor)
     {
-
+        Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "#shrink invoked FOR SOME REASON" + ChatColor.GRAY + " (factor: " + shrinkFactor + ")");
         return this;
     }
 
