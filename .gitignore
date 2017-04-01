@@ -10,4 +10,7 @@
 # Maven
 */target/
 */dependency-reduced-pom.xml
+
+
+# Other
 *.pem
