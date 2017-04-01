@@ -38,6 +38,7 @@ public class UHCCommands
     {
         int _amount = engine.game().kills.get(target.getUniqueId()).size();
 
+        // before our message build existed..
         player.sendMessage(bold(PLAYER) + target.getName() + bold(GRAY) + " has "
                             + _amount + bold(GRAY) + (_amount == 1 ? " kill." : " kills."));
     }

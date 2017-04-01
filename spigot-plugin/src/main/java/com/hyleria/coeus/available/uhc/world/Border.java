@@ -80,6 +80,9 @@ public class Border implements Listener
     {
         checkNotNull(region, "call #init first");
 
+        // horrible way to do this, should be doing it in batches at the very least
+        // with that new scatter system we did kind of solve this, and just no longer invoke it
+
         long _startedAt = System.currentTimeMillis();
         region.getChunks().forEach(vec -> world.getChunkAtAsync(vec.getBlockX(), vec.getBlockZ(), Chunk::load));
         System.out.println("[UHC] Elapsed time for world pre-generation: " + TimeUtil.niceTimeFormat((System.currentTimeMillis() - _startedAt)));
@@ -101,6 +104,10 @@ public class Border implements Listener
             // height check?
             final Block _block = world.getBlockAt(vec.getBlockX(), vec.getBlockY(), vec.getBlockZ());
             _block.setType(borderMaterial);
+
+            // once again, this was the first (quick) implementation of this
+            // wayyy better ways to do this. to start, AsyncWorldEdit would
+            // be a great idea. just getting their API kind of sucks..
         });
 
         return this;
@@ -115,7 +122,8 @@ public class Border implements Listener
      */
     public Border shrink(int shrinkFactor)
     {
-        Bukkit.broadcastMessage(ChatColor.DARK_AQUA + "#shrink invoked FOR SOME REASON" + ChatColor.GRAY + " (factor: " + shrinkFactor + ")");
+        // I removed this awhile back
+
         return this;
     }
 

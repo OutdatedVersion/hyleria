@@ -57,10 +57,10 @@ public class UHC extends Game
     /** where players will go before the game starts */
     private World lobby;
 
-    /** */
+    /** where player's go when joining this server */
     private Location spawnLocation;
 
-    /** */
+    /** our border */
     private Border border;
 
     /** whether or not we allow combat right now */
@@ -73,7 +73,7 @@ public class UHC extends Game
     /** how many times we've shrinked the border */
     private int shrinkStage = 0;
 
-    /** */
+    /** where players will go when the scatter starts */
     private List<Vector> playerSpawnLocations = Lists.newArrayList();
 
     @Override
@@ -112,7 +112,12 @@ public class UHC extends Game
 
         System.out.println("[UHC] Starting player spread");
 
-        // split up list?
+
+        // I only had a short amount of time to complete this spread
+        // I'd like for it to be much different in favor of performance
+        // It wasn't an option then, so you get this disappointing
+        // solution instead.
+
         final List<? extends Player> _players = PlayerUtil.everyone();
         final AtomicInteger _count = new AtomicInteger(_players.size());
 
@@ -123,24 +128,12 @@ public class UHC extends Game
             _location.getChunk().load();
 
             Scheduler.delayed(() -> _players.get(_count.getAndDecrement() - 1).teleport(_location), 20);
-
-            Bukkit.broadcastMessage("Handling " + _players.get(_count.get() - 1).getName());
         }, 0, 2);
 
          Scheduler.endAfter(_id, 12 * _players.size());
 
         // teleport into cage
         // break cages when everyone has been relocated
-
-        /*PlayerUtil.everyone().get(0).teleport(new Location(world, 0, world.getHighestBlockYAt(0, 0), 0));
-
-        final String _command = "spreadplayers 0 0 "
-                + (config.borderDistance / 4) + " " + (config.borderDistance / 2) + " false " +
-                PlayerUtil.everyoneStream().collect(StringBuilder::new, (builder, player) -> builder.append(player.getName()).append(" "), StringBuilder::append);
-
-        System.out.println("[UHC] Spread command: [" + _command + "]");
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), _command.trim());*/
-
 
         startedAt = System.currentTimeMillis();
         MessageUtil.everyone(bold(GREEN) + "We've started...");
@@ -229,8 +222,10 @@ public class UHC extends Game
     }
 
     /**
+     * Finds a spawn location for the
+     * provided player
      *
-     * @param player
+     * @param player the player
      */
     private void reserveLocationFor(Player player)
     {
@@ -253,6 +248,8 @@ public class UHC extends Game
             Vector _closest = new Vector();
             double _closestDistance = 0;
 
+            // should look into using the alternate solution
+            // bad idea performance wise to be doing this
             for (Vector previous : playerSpawnLocations)
             {
                 if (previous.distance(_closest) < _closestDistance)

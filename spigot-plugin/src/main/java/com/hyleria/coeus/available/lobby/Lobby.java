@@ -3,10 +3,8 @@ package com.hyleria.coeus.available.lobby;
 import com.hyleria.coeus.Coeus;
 import com.hyleria.coeus.Game;
 import com.hyleria.coeus.Status;
-import com.hyleria.coeus.available.uhc.test.CuboidTesting;
 import com.hyleria.coeus.damage.kinds.PlayerVoidDamageEvent;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
-import com.hyleria.command.api.CommandHandler;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.PlayerUtil;
 import com.hyleria.util.Scheduler;
@@ -44,8 +42,6 @@ public class Lobby extends Game
         engine.hookGameListener();
 
         Scheduler.timerExact(this::updateDate, Time.MINUTES.toTicks(2));
-
-        engine.plugin.get(CommandHandler.class).register(CuboidTesting.class);
     }
 
     @Override
