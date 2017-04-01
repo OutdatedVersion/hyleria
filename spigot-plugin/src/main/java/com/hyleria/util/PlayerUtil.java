@@ -61,7 +61,8 @@ public class PlayerUtil
      *
      * @param host person looking for said player
      * @param target the player
-     * @param inform whether or not to send updates
+     * @param inform whether or not to send updates regarding
+     *               the status of the search
      * @return the player or null
      */
     public static Player search(Player host, String target, boolean inform)
@@ -106,15 +107,15 @@ public class PlayerUtil
 
         if (_matches.size() != 1)
         {
-            if (inform)
+            if (inform && _matches.size() != 0)
                 host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + " (" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
 
             if (_matches.size() > 0)
             {
                 String match = "";
 
-                for (Player t : _matches)
-                    match += bold(YELLOW) + t.getName() + bold(GRAY) + ", ";
+                for (Player working : _matches)
+                    match += bold(YELLOW) + working.getName() + bold(GRAY) + ", ";
 
                 if (match.length() > 1)
                     match = match.substring(0, match.length() - 2);

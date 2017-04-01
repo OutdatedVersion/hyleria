@@ -240,7 +240,7 @@ public class UHC extends Game
         Vector _bestChoice = new Vector();
         double _bestDistance = 0;
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 5; i++)
         {
             Vector _try = new Vector(Math.random(border.region().getWidth() / 2), 0, Math.random(border.region().getLength() / 2));
 
@@ -259,7 +259,6 @@ public class UHC extends Game
                 {
                     _closest = previous;
                     _closestDistance = previous.distance(_closest);
-                    break;
                 }
             }
 
