@@ -12,7 +12,6 @@ import com.hyleria.coeus.available.uhcgames.world.maps.UHCGamesMap;
 import com.hyleria.coeus.scoreboard.PlayerScoreboard;
 import com.hyleria.common.math.Math;
 import com.hyleria.common.reflect.ReflectionUtil;
-import com.hyleria.common.util.Wrapper;
 import com.hyleria.util.Issues;
 import com.hyleria.util.MessageUtil;
 import com.hyleria.util.PlayerUtil;
@@ -29,6 +28,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -94,16 +94,13 @@ public class UHCGames extends Game
 
         MessageUtil.everyone(ChatColor.AQUA + "Game starting in 10 seconds!");
 
-        final Wrapper<Integer> timer = new Wrapper<>();
+        final AtomicInteger timer = new AtomicInteger();
         timer.set(30); // 30 seconds till start
         engine.updateStatus(Status.PRE_GAME);
 
         Scheduler.loopUntil(() ->
-        {
-            int temp = timer.get() - 1;
-            timer.set(temp);
-            MessageUtil.everyone(ChatColor.RED + "Game starting in " + temp);
-        }, () ->
+                    MessageUtil.everyone(ChatColor.RED + "Game starting in " + timer.getAndDecrement()),
+        () ->
         {
             MessageUtil.everyone(ChatColor.BLUE + "Game started!");
             engine.updateStatus(Status.ACTIVE_GAME);
