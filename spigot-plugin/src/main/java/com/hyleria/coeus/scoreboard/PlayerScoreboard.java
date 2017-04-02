@@ -118,7 +118,7 @@ public class PlayerScoreboard
 
                 for (String otherLine : _fresh)
                 {
-                    if (_line.toString().equals(otherLine))
+                    if (line.equals(otherLine))
                     {
                         _line.append(ChatColor.RESET);
                         matched = true;
@@ -129,7 +129,7 @@ public class PlayerScoreboard
                     break;
             }
 
-            _fresh.add(line = _line.toString());
+            _fresh.add(_line.toString());
         }
 
         final Set<Integer> _adding = Sets.newHashSet();
