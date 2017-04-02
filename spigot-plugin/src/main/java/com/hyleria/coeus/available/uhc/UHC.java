@@ -30,10 +30,8 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static com.hyleria.util.Colors.bold;
 import static org.bukkit.ChatColor.*;
@@ -139,13 +137,10 @@ public class UHC extends Game
         MessageUtil.everyone(bold(GREEN) + "We've started...");
 
         // load scenarios
-        final Set<UHCScenario> _scenarios = config.enabledScenarios
-                .stream()
-                .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
-                .map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz))
-                .collect(Collectors.toSet());
-
-        _scenarios.forEach(UHCScenario::init);
+        config.enabledScenarios.stream()
+        .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
+        .map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz))
+        .forEach(UHCScenario::init);
 
 
         // reset player's health after the provided time
@@ -230,7 +225,7 @@ public class UHC extends Game
     private void reserveLocationFor(Player player)
     {
         // uses poisson-disc distribution via mitchell's best-candidate algo
-        // THIS CODE IS COMPLETE SHIT (just warning you)
+        // horrible implementation of it, needed to be done quick. :/
 
         Vector _bestChoice = new Vector();
         double _bestDistance = 0;
@@ -248,8 +243,9 @@ public class UHC extends Game
             Vector _closest = new Vector();
             double _closestDistance = 0;
 
-            // should look into using the alternate solution
-            // bad idea performance wise to be doing this
+            // should look into a different method
+            // of traversing nearby points
+            // O(n) op hits us hard
             for (Vector previous : playerSpawnLocations)
             {
                 if (previous.distance(_closest) < _closestDistance)

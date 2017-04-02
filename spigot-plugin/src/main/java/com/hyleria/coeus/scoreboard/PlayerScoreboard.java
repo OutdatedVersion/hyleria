@@ -110,15 +110,17 @@ public class PlayerScoreboard
 
         for (String line : elements)
         {
+            final StringBuilder _line = new StringBuilder(line);
+
             while (true)
             {
                 boolean matched = false;
 
                 for (String otherLine : _fresh)
                 {
-                    if (line.equals(otherLine))
+                    if (_line.toString().equals(otherLine))
                     {
-                        line += ChatColor.RESET;
+                        _line.append(ChatColor.RESET);
                         matched = true;
                     }
                 }
@@ -127,7 +129,7 @@ public class PlayerScoreboard
                     break;
             }
 
-            _fresh.add(line);
+            _fresh.add(line = _line.toString());
         }
 
         final Set<Integer> _adding = Sets.newHashSet();
@@ -161,12 +163,6 @@ public class PlayerScoreboard
             String newLine = _fresh.get(i);
             objective.getScore(newLine).setScore(15 - i);
             current[i] = newLine;
-        }
-
-        int _size = nonNullSize();
-        for (int i = 0; i < _size; i++)
-        {
-            objective.getScore(_fresh.get(i)).setScore(_size - i);
         }
     }
 
@@ -275,21 +271,6 @@ public class PlayerScoreboard
         }
 
         return _working.toString();
-    }
-
-    /**
-     * @return the size of the elements in this
-     *         scoreboard that are NOT null
-     */
-    private int nonNullSize()
-    {
-        int _counter = 0;
-
-        for (String line : current)
-            if (line != null)
-                _counter++;
-
-        return _counter;
     }
 
     /**

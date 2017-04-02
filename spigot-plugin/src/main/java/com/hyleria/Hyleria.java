@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 /**
  * Handles the setup & initialization
- * of Hyleria
+ * of the Bukkit side Hyleria.
  *
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (5:48 PM)
@@ -43,7 +43,10 @@ import java.util.stream.Stream;
 public class Hyleria extends JavaPlugin
 {
 
+    /** our injector */
     private Injector injector;
+
+    /** a collection of our shutdown hooks */
     private List<Method> shutdownHooks;
 
     @Override
