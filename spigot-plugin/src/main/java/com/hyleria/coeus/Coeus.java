@@ -48,7 +48,7 @@ public class Coeus extends Module
         status = Status.INIT;  // we don't need to call the event quite yet
 
         gameChoice = GameChoice.valueOf(config.forcedGame.toUpperCase());
-        game = plugin.boundInjection(gameChoice.clazz);
+        game = plugin.inject(gameChoice.clazz);
 
         // load up the basic game
         game.init(this);

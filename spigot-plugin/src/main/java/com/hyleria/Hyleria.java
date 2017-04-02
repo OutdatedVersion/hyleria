@@ -76,11 +76,10 @@ public class Hyleria extends JavaPlugin
         });
 
         // connect to Redis instance
-        boundInjection(RedisHandler.class).init().subscribe(RedisChannel.DEFAULT);
+        inject(RedisHandler.class).init().subscribe(RedisChannel.DEFAULT);
 
         // setup our command handler
-        final CommandHandler _commands = boundInjection(CommandHandler.class);
-        _commands.addProviders(CommandHandler.DEFAULT_PROVIDERS);
+        final CommandHandler _commandService = inject(CommandHandler.class).addProviders(CommandHandler.DEFAULT_PROVIDERS);
 
 
         // automatic creation of modules
@@ -93,6 +92,9 @@ public class Hyleria extends JavaPlugin
                 .matchClassesWithMethodAnnotation(ShutdownHook.class, (clazz, method) -> shutdownHooks.add(method)).scan();
 
         // verify that we're creating these in the right order
+        // well, this may not be properly required. Guice should order things
+        // in the order we need them for creation. We'll keep this instead we
+        // do actually have some underlying need for the order.
         _toLoad.sort((one, two) ->
         {
             if (two.isAnnotationPresent(Requires.class))
@@ -102,14 +104,14 @@ public class Hyleria extends JavaPlugin
             return 0;
         });
 
-        _toLoad.forEach(this::boundInjection);
+        _toLoad.forEach(this::inject);
 
         // let's register our commands now
-        _commands.registerInPackage("com.hyleria.command");
+        _commandService.registerInPackage("com.hyleria.command");
 
         // I want to guarantee this will load last
-        boundInjection(Coeus.class);
-        _commands.register(EngineCommands.class);
+        inject(Coeus.class);
+        _commandService.register(EngineCommands.class);
     }
 
     @Override
@@ -150,6 +152,8 @@ public class Hyleria extends JavaPlugin
     }
 
     /**
+     * Helpful little shortcut
+     *
      * @param clazz class of what we're looking for
      * @return an instance of the provided
      *         class satisfied by {@link Guice}
@@ -230,7 +234,7 @@ public class Hyleria extends JavaPlugin
      * @param <T> a type parameter for the type
      *            of the provided class
      */
-    public <T> T boundInjection(Class<T> clazz)
+    public <T> T inject(Class<T> clazz)
     {
         T _instance = injector.getInstance(clazz);
 

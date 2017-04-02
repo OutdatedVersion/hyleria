@@ -139,7 +139,7 @@ public class UHC extends Game
         // load scenarios
         config.enabledScenarios.stream()
         .map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".scenario." + name))
-        .map((Function<Class<?>, UHCScenario>) clazz -> plugin.boundInjection((Class<UHCScenario>) clazz))
+        .map((Function<Class<?>, UHCScenario>) clazz -> plugin.inject((Class<UHCScenario>) clazz))
         .forEach(UHCScenario::init);
 
 

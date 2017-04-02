@@ -13,11 +13,8 @@ import java.util.regex.Pattern;
 public class Constants
 {
 
-    /** the name of the file used to detect the {@link #ENV}  */
-    public static final String DEV_SERVER_FILE_NAME = "dev_server.json";
-
     /** the current environment of this place. represented by a {@link Stage} from Guice. */
-    public static final Stage ENV = new File(DEV_SERVER_FILE_NAME).exists() ? Stage.DEVELOPMENT : Stage.PRODUCTION;
+    public static final Stage ENV = Stage.valueOf(System.getProperty("env", "DEVELOPMENT").toUpperCase());
 
     /** where the Minecraft related items are stored */
     public static final String BASE_PATH = "/home/mc/";

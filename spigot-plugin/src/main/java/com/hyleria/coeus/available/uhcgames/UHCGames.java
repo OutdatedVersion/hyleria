@@ -59,7 +59,7 @@ public class UHCGames extends Game
 
         final UHCGamesConfig config = loadConfig("uhc_games", UHCGamesConfig.class);
 
-        List<UHCGamesMap> maps = config.maps.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".world.maps." + name)).map((Function<Class<?>, UHCGamesMap>) clazz -> plugin.boundInjection((Class<UHCGamesMap>) clazz)).collect(Collectors.toList());
+        List<UHCGamesMap> maps = config.maps.stream().map(name -> ReflectionUtil.classForName(getClass().getPackage().getName() + ".world.maps." + name)).map((Function<Class<?>, UHCGamesMap>) clazz -> plugin.inject((Class<UHCGamesMap>) clazz)).collect(Collectors.toList());
 
         engine.updateStatus(Status.MAP_FETCH);
         map = maps.get(Math.random(1, maps.size() + 1));
