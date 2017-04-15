@@ -22,7 +22,7 @@ public class DocumentBuilder
     /** the {@link Document} backing this builder */
     private Document document;
 
-    /** an instance of what we're working w/ for relfection usage */
+    /** an instance of what we're working w/ for reflection usage */
     private Object object;
 
     /** the name of the fields we should skip */

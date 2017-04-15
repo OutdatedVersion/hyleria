@@ -12,9 +12,10 @@ import java.util.stream.Stream;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/23/2016 (5:07 PM)
-  */
+ * @author Ben (OutdatedVersion)
+ * @since Dec/23/2016 (5:07 PM)
+ */
+@Deprecated
 public class MongoUtil
 {
 
