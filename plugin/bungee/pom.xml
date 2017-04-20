@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hyleria</groupId>
+        <artifactId>plugin-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+
+    <artifactId>bungee</artifactId>
+    <version>1.0</version>
+
+
+    <properties>
+        <plugin.main>com.hyleria.bungee.Hyleria</plugin.main>
+        <plugin.name>Hyleria</plugin.name>
+    </properties>
+
+
+    <repositories>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+
+    <dependencies>
+
+        <!-- BungeeCord proxy -->
+        <dependency>
+            <groupId>com.destroystokyo</groupId>
+            <artifactId>waterfall</artifactId>
+            <version>${version.waterfall}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- our stuff -->
+        <dependency>
+            <groupId>com.hyleria</groupId>
+            <artifactId>common</artifactId>
+            <version>${version.common}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

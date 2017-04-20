@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hyleria</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>common</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -13,13 +13,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-    
+
     <dependencies>
 
         <!-- Persistent data store -->

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hyleria</groupId>
+        <artifactId>plugin-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+
+    <artifactId>coeus</artifactId>
+    <version>1.0</version>
+
+
+    <properties>
+        <plugin.main>com.hyleria.coeus.Coeus</plugin.main>
+        <plugin.name>Coeus</plugin.name>
+    </properties>
+    
+    
+    <dependencies>
+
+        <!-- server -->
+        <dependency>
+            <groupId>com.destroystokyo</groupId>
+            <artifactId>paper</artifactId>
+            <version>${version.paper}</version>
+        </dependency>
+
+        <!-- our plugin -->
+        <dependency>
+            <groupId>com.hyleria</groupId>
+            <artifactId>core</artifactId>
+            <version>${version.core}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- WorldEdit: Bukkit side -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>${version.worldedit}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- WorldEdit: API -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-core</artifactId>
+            <version>${version.worldedit-core}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
