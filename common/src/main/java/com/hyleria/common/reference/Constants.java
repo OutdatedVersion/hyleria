@@ -2,9 +2,6 @@ package com.hyleria.common.reference;
 
 import com.google.inject.Stage;
 
-import java.io.File;
-import java.util.regex.Pattern;
-
 
 /**
  * @author Ben (OutdatedVersion)
@@ -24,8 +21,5 @@ public class Constants
 
     /** where the hard Minecraft servers are located */
     public static final String BASE_SERVER_FOLDER = BASE_PATH + "network/prod/";
-
-    /** allows us to check that a {@link String} is in fact an {@link java.util.UUID} */
-    public static Pattern UUID_REGEX = Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 
 }
