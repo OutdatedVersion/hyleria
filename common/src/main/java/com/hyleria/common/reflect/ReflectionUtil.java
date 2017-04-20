@@ -83,6 +83,11 @@ public class ReflectionUtil
      * a JSON object w/ the contents
      * of every field in the object.
      *
+     * <p>
+     *     No guarantees on how well this
+     *     performs. Only meant for testing!
+     * </p>
+     *
      * @param object the object
      */
     public static String printOut(Object object)
