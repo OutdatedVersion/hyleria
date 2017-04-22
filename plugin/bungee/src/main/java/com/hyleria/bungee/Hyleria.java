@@ -38,6 +38,12 @@ public class Hyleria extends Plugin
         injectAndRegister(Ping.class);
     }
 
+    @Override
+    public void onDisable()
+    {
+        injector.getInstance(RedisHandler.class).releaseResources();
+    }
+
     /**
      * @param classes the classes to inject
      */

@@ -3,10 +3,10 @@ package com.hyleria.common.account;
 import com.google.gson.annotations.SerializedName;
 import com.hyleria.common.json.Exclude;
 
- /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/13/2016 (4:46 PM)
-  */
+/**
+ * @author Ben (OutdatedVersion)
+ * @since Dec/13/2016 (4:46 PM)
+ */
 public class Package
 {
 

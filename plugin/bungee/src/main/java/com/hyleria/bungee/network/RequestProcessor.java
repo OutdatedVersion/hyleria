@@ -17,7 +17,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class RequestProcessor
 {
 
-    /** bungeecord proxy */
+    /** BungeeCord proxy */
     @Inject private ProxyServer proxy;
 
     /**
