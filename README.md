@@ -10,6 +10,6 @@ The code powering all of Hyleria (when it was a thing) is contained within this 
  - `script` A set of bash scripts that save some time on backend tasks
 
 
-#### License: MIT
+#### License: Mozilla Public License 2.0
 
 See `LICENSE` for further details

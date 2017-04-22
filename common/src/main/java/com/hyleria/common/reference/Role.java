@@ -1,6 +1,5 @@
 package com.hyleria.common.reference;
 
-
 import org.apache.commons.lang3.text.WordUtils;
 
 /**

@@ -4,7 +4,6 @@
 
 # for special spots
 */.idea/*
-*/*.iml
 
 
 # Maven
