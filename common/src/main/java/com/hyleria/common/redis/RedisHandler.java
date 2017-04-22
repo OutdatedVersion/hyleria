@@ -4,6 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.gson.Gson;
+import com.google.inject.Singleton;
 import com.hyleria.common.redis.api.Focus;
 import com.hyleria.common.redis.api.FromChannel;
 import com.hyleria.common.redis.api.HandlesType;
@@ -14,8 +15,6 @@ import org.json.simple.parser.ParseException;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
-
-import javax.inject.Singleton;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,7 +42,7 @@ public class RedisHandler
 
     /** load the focus from the provided payload class | cache due to the basic reflection present */
     private LoadingCache<Class<? extends Payload>, String> payloadFocusCache = CacheBuilder.newBuilder()
-            .expireAfterAccess(1, TimeUnit.HOURS)
+            .expireAfterAccess(4, TimeUnit.HOURS)
             .build(new CacheLoader<Class<? extends Payload>, String>()
     {
         @Override
@@ -139,7 +138,9 @@ public class RedisHandler
 
                                 if (_data.channel.equals(channel))
                                 {
-                                    _data.method.invoke(_data.possessor, GSON.fromJson(((JSONObject) _json.get("payload")).toJSONString(), _data.payloadType));
+                                    _data.method.invoke(_data.possessor, GSON.fromJson(_json.containsKey("payload")
+                                                                                       ? ((JSONObject) _json.get("payload")).toJSONString()
+                                                                                       : "", _data.payloadType));
                                 }
                             }
                         }

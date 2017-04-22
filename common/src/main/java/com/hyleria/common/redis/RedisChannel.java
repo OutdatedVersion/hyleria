@@ -23,23 +23,12 @@ public enum RedisChannel
     public final String channel;
 
     /**
-     * @param val the ending part
+     * @param val the ending part; so we may format
+     *            it to how it should be
      */
     RedisChannel(String val)
     {
-        this.channel = channel(val);
-    }
-
-    /**
-     * Returns a channel with the provided
-     * name. Of course, our prefix is included.
-     *
-     * @param val the name
-     * @return formatted channel name
-     */
-    private static String channel(String val)
-    {
-        return "hyleria-" + val;
+        this.channel = "hyleria-" + val;
     }
 
 }
