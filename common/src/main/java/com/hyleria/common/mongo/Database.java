@@ -2,6 +2,7 @@ package com.hyleria.common.mongo;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
@@ -291,7 +292,7 @@ public class Database
             if (async)
                 return (R) executor.submit(_transaction);
             else
-                return (R) executor.submit(_transaction).get();
+                return (R) Futures.immediateFuture(_transaction.call());
         }
         catch (Exception ex)
         {

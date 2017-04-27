@@ -79,7 +79,7 @@ public class PlayerUtil
 
         for (char character : target.toCharArray())
         {
-            if (!Character.isLetterOrDigit(character) && !String.valueOf(character).equals("_"))
+            if (!Character.isLetterOrDigit(character) && character != '_')
             {
                 if (inform)
                     host.sendMessage(bold(YELLOW) + target + bold(GRAY) + " is not a valid name!");
@@ -93,16 +93,16 @@ public class PlayerUtil
 
         final List<Player> _matches = Lists.newArrayList();
 
-        for (Player players : everyone())
+        for (Player player : everyone())
         {
-            final String _name = players.getName();
+            final String _name = player.getName();
 
             // :)
             if (_name.equals("OutdatedVersion") && target.equalsIgnoreCase("ben"))
-                return players;
+                return player;
 
             if (_name.toLowerCase().contains(target.toLowerCase()))
-                _matches.add(players);
+                _matches.add(player);
         }
 
         if (_matches.size() != 1)
@@ -112,16 +112,17 @@ public class PlayerUtil
 
             if (_matches.size() > 0)
             {
-                String match = "";
+                final StringBuilder _builder = new StringBuilder();
 
                 for (Player working : _matches)
-                    match += bold(YELLOW) + working.getName() + bold(GRAY) + ", ";
+                    _builder.append(bold(YELLOW)).append(working.getName()).append(bold(GRAY)).append(", ");
 
-                if (match.length() > 1)
-                    match = match.substring(0, match.length() - 2);
+                // remove last ", "
+                if (_builder.length() > 1)
+                    _builder.delete(_builder.length() - 2, _builder.length());
 
                 if (inform)
-                    host.sendMessage(bold(GRAY) + "Matched names: " + match);
+                    host.sendMessage(bold(GRAY) + "Matched names: " + _builder.toString());
             }
 
             return null;

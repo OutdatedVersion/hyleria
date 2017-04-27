@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -42,9 +43,7 @@ public class DocumentBuilder
      */
     public DocumentBuilder withDoc(Document document)
     {
-        checkState(this.document == null, "You've already set the document!");
-
-        this.document = document;
+        this.document = checkNotNull(document, "You've already set the document!");
         return this;
     }
 
@@ -66,9 +65,7 @@ public class DocumentBuilder
      */
     public DocumentBuilder withObject(Object object)
     {
-        checkState(this.object == null, "You've already set the object here!");
-
-        this.object = object;
+        this.object = checkNotNull(object, "You've already set the object here!");
         return this;
     }
 

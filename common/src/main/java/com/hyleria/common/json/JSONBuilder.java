@@ -15,7 +15,6 @@ import java.util.UUID;
 public class JSONBuilder
 {
 
-
     /** where we throw all the data we insert in this builder */
     private JSONObject base;
 
