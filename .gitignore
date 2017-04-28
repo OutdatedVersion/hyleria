@@ -12,6 +12,10 @@
 */dependency-reduced-pom.xml
 
 
+# npm
+*/node_modules
+
+
 # Other
 *.pem
 lib
