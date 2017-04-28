@@ -72,12 +72,9 @@ public class Cutclean extends UHCScenario
     @EventHandler
     public void autoCook(EntityDeathEvent event)
     {
-        // try this way, if it doesn't maintain the changes made
-        // then do it the for-sure way
-
-        final Collection<ItemStack> dropClone = Lists.newArrayList(event.getDrops()); //Clone the drops, we need a clone not a reference. The object#clone() method may work, but this is a sure way
-        event.getDrops().clear(); //CLEAR IT OUT
-        dropClone.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop))); //Add the autocook
+        final Collection<ItemStack> dropClone = Lists.newArrayList(event.getDrops());
+        event.getDrops().clear();
+        dropClone.stream().map(ItemStack::getType).map(ItemUtil::cookedItemFor).filter(Objects::nonNull).forEach(drop -> event.getDrops().add(new ItemStack(drop)));
     }
 
     @EventHandler

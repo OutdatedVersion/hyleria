@@ -166,6 +166,18 @@ public class RedisHandler
     }
 
     /**
+     * @param channel the {@link RedisChannel} we're sending it to
+     * @param payload our payload
+     * @return our redis instance
+     *
+     * @see #publish(String, Payload)
+     */
+    public RedisHandler publish(RedisChannel channel, Payload payload)
+    {
+        return publish(channel.channel, payload);
+    }
+
+    /**
      * Send out a payload across our
      * Redis instance(s).
      *
