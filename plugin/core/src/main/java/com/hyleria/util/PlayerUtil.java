@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.hyleria.util.Colors.bold;
@@ -91,19 +93,9 @@ public class PlayerUtil
         if (target.equalsIgnoreCase("me"))
             return host;
 
-        final List<Player> _matches = Lists.newArrayList();
 
-        for (Player player : everyone())
-        {
-            final String _name = player.getName();
+        final List<Player> _matches = everyoneStream().filter(player -> player.getName().toLowerCase().contains(target.toLowerCase())).collect(Collectors.toList());
 
-            // :)
-            if (_name.equals("OutdatedVersion") && target.equalsIgnoreCase("ben"))
-                return player;
-
-            if (_name.toLowerCase().contains(target.toLowerCase()))
-                _matches.add(player);
-        }
 
         if (_matches.size() != 1)
         {

@@ -160,9 +160,10 @@ public class PlayerScoreboard
     /**
      * Adds a blank line to the scoreboard
      */
-    public void blank()
+    public PlayerScoreboard blank()
     {
         elements.add(" ");
+        return this;
     }
 
     /**
@@ -182,9 +183,9 @@ public class PlayerScoreboard
      * @param prefix the "key"
      * @param content the "value"
      */
-    public void write(String prefix, Object content)
+    public PlayerScoreboard write(String prefix, Object content)
     {
-        write(GREEN + prefix + ": " + WHITE + String.valueOf(content));
+        return write(GREEN + prefix + ": " + WHITE + String.valueOf(content));
     }
 
     /**
@@ -192,26 +193,27 @@ public class PlayerScoreboard
      *
      * @param content the text
      */
-    public void write(Object content)
+    public PlayerScoreboard write(Object content)
     {
         // 1.7 only allows 16 total characters on the scoreboard - including color codes!
         final String _asString = String.valueOf(content);
         elements.add(_asString.substring(0, _asString.length() < 16 ? _asString.length() : 16));
+
+        return this;
     }
 
     /**
      * A shortcut to writing our address
      */
-    public void writeURL()
+    public PlayerScoreboard writeURL()
     {
-        blank();
-        elements.add(AQUA + "hyleria.com");
+        return blank().write(AQUA + "hyleria.com");
     }
 
     /**
      * Cycle the animation
      */
-    public void animationTick()
+    void animationTick()
     {
         if (!TimeUtil.elapsed(lastAnimationCycle, 3200))
             return;

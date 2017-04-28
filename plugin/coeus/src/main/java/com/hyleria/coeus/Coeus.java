@@ -61,7 +61,7 @@ public class Coeus extends Module
 
         new DamageEventFactory(game).init(plugin);
         new ScoreboardHandler().init(plugin).title(game.scoreboardTitle)
-                               .initNametags(plugin, accountManager);
+                               .enableNametags(plugin, accountManager);
     }
 
     /**

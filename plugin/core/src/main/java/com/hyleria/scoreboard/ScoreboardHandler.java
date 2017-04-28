@@ -88,7 +88,7 @@ public class ScoreboardHandler implements Listener, Runnable
      * @param accountManager it needs this
      * @return the new module
      */
-    public Nametags initNametags(Hyleria plugin, AccountManager accountManager)
+    public Nametags enableNametags(Hyleria plugin, AccountManager accountManager)
     {
         return new Nametags(plugin, accountManager, this);
     }
@@ -104,6 +104,7 @@ public class ScoreboardHandler implements Listener, Runnable
             // purge & draw are called every time (at least for now)
 
             board.purge();
+            board.blank();
             processor.accept(board);
             board.writeURL();
             board.draw();

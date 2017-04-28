@@ -14,12 +14,15 @@
         <module>core</module>
         <module>coeus</module>
         <module>bungee</module>
+        <module>lobby</module>
     </modules>
 
 
     <properties>
         <plugin.name>Default-Plugin-Name</plugin.name>
         <plugin.main>com.hyleria.null</plugin.main>
+
+        <plugin.core>Hyleria</plugin.core>
 
         <version.paper>1.7-R1</version.paper>
         <version.waterfall>1.11-R1</version.waterfall>

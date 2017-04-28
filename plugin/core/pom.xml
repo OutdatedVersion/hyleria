@@ -17,7 +17,7 @@
 
     <properties>
         <plugin.main>com.hyleria.Hyleria</plugin.main>
-        <plugin.name>Hyleria</plugin.name>
+        <plugin.name>${plugin.core}</plugin.name>
     </properties>
     
     
