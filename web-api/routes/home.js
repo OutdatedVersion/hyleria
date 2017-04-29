@@ -2,11 +2,11 @@
 
 export default (server) =>
 {
-    server.get('/', (req, res, next) =>
+    server.get('/', (req, res) =>
     {
-        res.json({ message: `there isn't much here; perhaps seek help via our docs`,
-                   documentation_url: 'https://github.com/OutdatedVersion/hyleria' })
-
-        return next()
+        res.json({
+            message: `there isn't much here; perhaps seek help via our docs`,
+            documentation_url: 'https://github.com/OutdatedVersion/hyleria'
+        })
     })
 }

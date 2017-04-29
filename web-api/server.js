@@ -6,7 +6,7 @@ import routes from './routes'
 const server = restify.createServer({ name: 'hyleria-api' })
 routes(server)
 
-// we don't need throttling yet
+// we don't need rate limiting quite yet
 // server.use(restify.throttle())
 
 server.listen(3000)

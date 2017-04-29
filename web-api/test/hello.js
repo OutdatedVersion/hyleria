@@ -12,8 +12,8 @@ describe('Hello', () =>
             .expectValue('hello test')
             .end((err) =>
             {
-                if (err) throw err;
-                done();
+                if (err) throw err
+                done()
             })
     })
 })
