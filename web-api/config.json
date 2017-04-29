@@ -1,0 +1,7 @@
+{
+    "rate_limiting": {
+      "burst": 30,
+      "rate": 10,
+      "username": true
+    }
+}

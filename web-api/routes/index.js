@@ -1,9 +1,11 @@
-const router = require('express').Router()
+/** Ben (OutdatedVersion) | Apr/28/2017 (8:31 PM) */
 
-router.get('/', (req, res) =>
+// combine routes
+import hello from './hello'
+import home from './home'
+
+export default (server) =>
 {
-    res.json({ 'message': 'hello there :)' })
-})
-
-
-module.exports = router
+    hello(server)
+    home(server)
+}
