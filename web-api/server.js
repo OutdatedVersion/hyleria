@@ -10,7 +10,7 @@ routes(server)
 // we don't need rate limiting quite yet
 // server.use(restify.throttle())
 
-server.listen(3000)
+server.listen(process.env.port || 3000)
 
 // export for testing
 export default server
