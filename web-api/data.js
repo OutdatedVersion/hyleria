@@ -11,26 +11,33 @@ const rc = new Redis()
 
 let grabPlayer = (key) =>
 {
-    // redis -> mongo
-    if (typeof key !== 'string')
-        throw new TypeError('the key must be provided as a string')
+    return new Promise((fulfill, reject) =>
+    {
+        // redis -> mongo
+        if (typeof key !== 'string')
+            throw new TypeError('the key must be provided as a string')
 
-    // we may use either a user's UUID or name to look
-    // them up so we need to validate that we are using
-    // one or the other
-    let providedUUID = util.isUUID(key)
+        // we may use either a user's UUID or name to look
+        // them up so we need to validate that we are using
+        // one or the other
+        let providedUUID = util.isUUID(key)
 
-    if (!providedUUID && !util.isValidUsername(key))
-        return { err: 'invalid username provided' }
+        if (!providedUUID && !util.isValidUsername(key))
+            reject('invalid username provided')
 
+        // temp
+        let uuid = key || '03c337cd7be04694b9b0e2fd03f57258'
 
-    // api:p:03c337cd7be04694b9b0e2fd03f57258
-}
+        rc.get('api:p:' + uuid).then((result) =>
+        {
+            if (result)
+            {
+                fulfill({ data: JSON.parse(result) })
+            }
 
-
-let fetchFromMongo = (key, isUUID, collection, callback) =>
-{
-
+            reject('not found')
+        })
+    })
 }
 
 

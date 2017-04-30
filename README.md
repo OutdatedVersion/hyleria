@@ -19,6 +19,7 @@ In the case that you're using IntelliJ:
  - Be sure to import projects recursively
  - have at it
 
+If you're not then I wish you luck
 
 
 #### License: Mozilla Public License 2.0

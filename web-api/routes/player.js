@@ -4,8 +4,15 @@ import data from '../data'
 
 export default (server) =>
 {
-    server.get('/player/:name', (req, res) =>
+    server.get('/player/:id', (req, res) =>
     {
-        res.json({})
+        data.grabPlayer(req.params.id).then(result =>
+        {
+            res.json(result.data || { err: `unable to fetch data for ${req.params.id}` })
+        })
+        .catch(error =>
+        {
+            res.json({ err: error })
+        })
     })
 }
