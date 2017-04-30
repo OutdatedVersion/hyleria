@@ -18,6 +18,7 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
+    "debug": "^2.6.6",
     "ioredis": "latest",
     "mongodb": "^2.2.26",
     "restify": "^4.3.0"

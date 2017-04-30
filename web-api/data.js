@@ -4,7 +4,10 @@ import Redis from 'ioredis'
 import { MongoClient } from 'mongodb'
 import util from './util'
 
+
+util.debug('connecting to redis')
 const rc = new Redis()
+
 
 let grabPlayer = (key) =>
 {

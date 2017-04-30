@@ -1,7 +1,13 @@
 /** Ben (OutdatedVersion) | Apr/29/2017 (11:20 PM) */
 
 import assert from 'assert'
+import Debug from 'debug'
 
+
+/**
+ * Pretty console printing
+ */
+const debug = Debug('api:server')
 
 /**
  * Removes the dashes in a UUID
@@ -61,6 +67,7 @@ let isValidUsername = (val) =>
 
 
 export default {
+    debug,
     undash,
     dash,
     isUUID,
