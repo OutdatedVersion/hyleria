@@ -2,8 +2,10 @@
 
 // combine routes
 import home from './home'
+import player from './player'
 
 export default (server) =>
 {
     home(server)
+    player(server)
 }

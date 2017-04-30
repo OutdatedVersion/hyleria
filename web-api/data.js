@@ -2,10 +2,6 @@
 
 import Redis from 'ioredis'
 
-
-const rc = new Redis()
-
-
 const grabPlayer = (key) =>
 {
     // redis -> mongo
@@ -22,7 +18,7 @@ const grabPlayer = (key) =>
 
 
     // api:p:outdatedversion
-    // api:p:03c337cd-7be0-4694-b9b0-e2fd03f57258
+    // api:p:03c337cd7be04694b9b0e2fd03f57258
 }
 
 
