@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "debug": "^2.6.6",
-    "ioredis": "latest",
+    "ioredis": "^2.5.0",
     "mongodb": "^2.2.26",
     "restify": "^4.3.0"
   }
