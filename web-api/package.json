@@ -2,6 +2,7 @@
   "name": "hyleria-api",
   "version": "1.0.0",
   "description": "Fetch user data via a web-exposed RESTful API",
+  "repository": "https://github.com/OutdatedVersion/hyleria",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js --exec babel-node --presets es2015",
@@ -17,7 +18,8 @@
     "mocha": "^3.2.0"
   },
   "dependencies": {
-    "restify": "^4.3.0",
-    "ioredis": "latest"
+    "ioredis": "latest",
+    "mongodb": "^2.2.26",
+    "restify": "^4.3.0"
   }
 }
