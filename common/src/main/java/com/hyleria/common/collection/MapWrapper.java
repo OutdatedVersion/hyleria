@@ -23,6 +23,9 @@ public class MapWrapper
     /** that map we're fetching data from */
     private Map wrappedMap;
 
+    /**
+     * @param wraps the map we'll be using
+     */
     private MapWrapper(Map wraps)
     {
         wrappedMap = wraps;
@@ -36,27 +39,9 @@ public class MapWrapper
      * @param map the map being wrapped
      * @return a new wrapper
      */
-    public static MapWrapper fromMap(Map map)
+    public static MapWrapper of(Map map)
     {
         return new MapWrapper(map);
-    }
-
-    /**
-     * Returns an instance of a
-     * wrapper that is wrapping
-     * the supplied {@link JSONObject}.
-     * After the wrapping all of
-     * the below shortcut methods may
-     * be used for accessing data
-     * within the wrapped object.
-     *
-     * @param json The {@link JSONObject} to wrap
-     *
-     * @return A new {@link MapWrapper} tied to the supplied object
-     */
-    public static MapWrapper fromJSON(JSONObject json)
-    {
-        return new MapWrapper(json);
     }
 
     /**
@@ -98,6 +83,7 @@ public class MapWrapper
      *
      * @param key   The key that was stored at creation
      * @param clazz The class to deserialize the JSON as
+     * @param <T> the type of what we're looking for
      *
      * @return A new instance of the found JSON
      */
@@ -194,6 +180,7 @@ public class MapWrapper
      *
      * @param key   The key that was stored at creation
      * @param clazz The type to cast to
+     * @param <T> type of what we're requesting
      *
      * @return The found object. {@code null} if it does not exist
      */

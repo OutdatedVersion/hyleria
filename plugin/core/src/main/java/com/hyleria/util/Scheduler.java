@@ -95,6 +95,7 @@ public class Scheduler
      * main MC thread
      *
      * @param runnable The code to run
+     * @return The Bukkit ID of the task
      */
     public static int async(Runnable runnable)
     {
@@ -107,6 +108,7 @@ public class Scheduler
      *
      * @param runnable The code to run
      * @param delay    The delay in ticks (20 ticks = 1 second)
+     * @return the Bukkit ID for the task
      */
     public static int delayed(Runnable runnable, long delay)
     {
@@ -118,6 +120,7 @@ public class Scheduler
      * the primary Minecraft thread
      *
      * @param runnable The code to run
+     * @return the Bukkit ID of the task
      */
     public static int sync(Runnable runnable)
     {

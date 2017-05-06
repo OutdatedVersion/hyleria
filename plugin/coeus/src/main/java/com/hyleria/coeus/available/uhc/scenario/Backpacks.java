@@ -16,7 +16,7 @@ import static java.lang.String.format;
 import static org.bukkit.ChatColor.RED;
 
 /**
- * Team Based >> Yourself and a
+ * Team Based: Yourself and a
  * partner have a virtual 'backpack'
  * to store your items in. In the case
  * that both of you die this 'chest'

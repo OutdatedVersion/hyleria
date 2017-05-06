@@ -15,6 +15,7 @@ public abstract class Module implements Listener
     private Hyleria plugin;
 
     /**
+     * @param plugin our plugin instance
      */
     public void configure(Hyleria plugin)
     {

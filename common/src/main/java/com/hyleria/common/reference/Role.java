@@ -3,9 +3,9 @@ package com.hyleria.common.reference;
 import org.apache.commons.lang3.text.WordUtils;
 
 /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/10/2016 (12:19 PM)
-  */
+ * @author Ben (OutdatedVersion)
+ * @since Dec/10/2016 (12:19 PM)
+ */
 public enum Role
 {
 

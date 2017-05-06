@@ -22,8 +22,7 @@ import java.util.UUID;
 
 
 /**
- * In charge of loading & removing
- * accounts.
+ * In charge of (un)loading accounts.
  *
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (6:54 PM)

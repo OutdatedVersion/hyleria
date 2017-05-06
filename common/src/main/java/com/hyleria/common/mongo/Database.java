@@ -202,6 +202,8 @@ public class Database
      * a username.
      *
      * @param username the username
+     * @return The account we're requesting
+     *         wrapped in an {@link Optional}
      */
     public Future<Optional<Account>> fetchAccount(String username)
     {
@@ -214,6 +216,8 @@ public class Database
      *
      * @param uuid the UUID
      * @param callback our account
+     * @return The account we're working with
+     *         wrapped in an {@link Optional}
      */
     public Future<Optional<Account>> fetchAccount(UUID uuid, Consumer<Optional<Account>> callback)
     {
@@ -227,6 +231,8 @@ public class Database
      * logging into a server.
      *
      * @param uuid the UUID of the player
+     * @return The account we've requested
+     *         wrapped in an {@link Optional}
      */
     public Optional<Account> fetchAccountSync(UUID uuid)
     {
@@ -254,6 +260,7 @@ public class Database
      *         real verification goes into the return value for
      *         this method. purely up to proper implementation.
      */
+    @SuppressWarnings ( "unchecked" )
     private <R> R fetchAccount(UUID uuid, String username, boolean useCache, boolean async)
     {
         boolean _useUsername = uuid == null && username != null;

@@ -89,6 +89,7 @@ public class ReflectionUtil
      * </p>
      *
      * @param object the object
+     * @return The provided object as a JSON string
      */
     public static String printOut(Object object)
     {

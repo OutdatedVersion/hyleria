@@ -23,6 +23,8 @@ public interface DocumentCompatible
      * return any new value.
      *
      * @param document the document we're reading from
+     * @param <T> type of compatible item
+     * @return whatever it is that we're working with
      */
     <T> T populateFromDocument(Document document);
 

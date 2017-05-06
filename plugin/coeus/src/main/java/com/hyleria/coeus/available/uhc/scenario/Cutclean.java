@@ -19,7 +19,7 @@ import java.util.Objects;
  * item has already had that done to it. For
  * example, when ire ore is mined it will
  * drop an iron ingot. Additionally, flint
- * has a definite chance of dropping & apples
+ * has a definite chance of dropping + apples
  * have a 1.25% chance of dropping from severed
  * trees
  *

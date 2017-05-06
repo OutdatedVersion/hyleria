@@ -18,9 +18,9 @@ import static com.mongodb.client.model.Updates.set;
 
 
 /**
-  * @author Ben (OutdatedVersion)
-  * @since Dec/08/2016 (8:15 PM)
-  */
+ * @author Ben (OutdatedVersion)
+ * @since Dec/08/2016 (8:15 PM)
+ */
 @SuppressWarnings ( "unchecked" )
 public class Account implements DocumentCompatible
 {
@@ -45,19 +45,26 @@ public class Account implements DocumentCompatible
     @SerializedName ( "previous_addresses" )
     private List<PreviousAddress> previousAddresses = Lists.newArrayList();
 
-    /** get -> {@link #uuid} */
+    /**
+     * @return {@link #uuid}
+     */
     public UUID uuid()
     {
         return uuid;
     }
 
-    /** get -> {@link #name} */
+
+    /**
+     * @return {@link #name}
+     */
     public String username()
     {
         return name;
     }
 
-    /** get -> {@link #role} */
+    /**
+     * @return {@link #role}
+     */
     public Role role()
     {
         return role;
@@ -68,6 +75,7 @@ public class Account implements DocumentCompatible
      *
      * @param key where it was stored
      * @param type the type of said thing
+     * @param <T> the type of value we're looking for
      * @return the thing
      */
     public <T> T val(String key, Class<T> type)
@@ -88,6 +96,13 @@ public class Account implements DocumentCompatible
         return this;
     }
 
+    /**
+     * Checks whether or not the provided
+     * item is contained in this account
+     *
+     * @param key where the data is stored
+     * @return yes or no
+     */
     public boolean isPresent(String key)
     {
         return raw.containsKey(key);

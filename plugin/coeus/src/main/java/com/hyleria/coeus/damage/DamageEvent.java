@@ -79,14 +79,22 @@ public abstract class DamageEvent extends HyleriaEvent implements Cancellable
         return isCancelled;
     }
 
-    /** Bukkit */
+    /**
+     * Bukkit
+     *
+     * @return {@link HandlerList}
+     */
     @Override
     public HandlerList getHandlers()
     {
         return HANDLER_LIST;
     }
 
-    /** Bukkit */
+    /**
+     * Bukkit
+     *
+     * @return {@link HandlerList}
+     */
     public static HandlerList getHandlerList()
     {
         return HANDLER_LIST;

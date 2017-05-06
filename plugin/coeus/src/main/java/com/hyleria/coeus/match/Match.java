@@ -11,11 +11,7 @@ import java.util.Set;
  * theatrical "matches". Every time you
  * play a game, you're partaking
  * in a different match. The typical cycle
- * for a game will be as follows:
- *
- * <ul>
- *     <ul></ul>
- * </ul>
+ * for a game will be as follows.. not done
  *
  * @author Ben (OutdatedVersion)
  * @since Mar/11/2017 (5:11 PM)

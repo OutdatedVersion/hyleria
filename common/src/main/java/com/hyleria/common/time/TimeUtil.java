@@ -24,9 +24,11 @@ public class TimeUtil
     }
 
     /**
+     * Turns the provided UNIX timestamp
+     * into semi-decent human readable text
      *
-     * @param time
-     * @return
+     * @param time the time
+     * @return readable text
      */
     public static String niceTimeFormat(long time)
     {

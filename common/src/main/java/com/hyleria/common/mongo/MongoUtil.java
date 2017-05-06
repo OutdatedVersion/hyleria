@@ -29,9 +29,10 @@ public class MongoUtil
     /**
      * Turn the provided value into a document
      * based on transgressions between the default
-     * value & working value.
+     * value and working value.
      *
      * @param value the value that has content
+     * @param defaultValue where we fetch default data from
      * @param document the mongo document we're writing to
      * @param <T> the type of the value
      * @return a written document
@@ -45,6 +46,7 @@ public class MongoUtil
      * Takes in data from a Mongo document.
      *
      * @param returnType the type that we're working with
+     * @param defaultValue where we fetch our default fallback data from
      * @param document mongo doc
      * @param <T> type
      * @param <R> return type

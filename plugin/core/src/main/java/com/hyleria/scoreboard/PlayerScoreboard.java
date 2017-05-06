@@ -159,6 +159,8 @@ public class PlayerScoreboard
 
     /**
      * Adds a blank line to the scoreboard
+     *
+     * @return The scoreboard being written to
      */
     public PlayerScoreboard blank()
     {
@@ -170,10 +172,11 @@ public class PlayerScoreboard
      * Write the top part of some two function line
      *
      * @param title the text
+     * @return this scoreboard
      */
-    public void writeHead(String title)
+    public PlayerScoreboard writeHead(String title)
     {
-        write(GRAY + "» " + GREEN + title);
+        return write(GRAY + "» " + GREEN + title);
     }
 
     /**
@@ -182,6 +185,7 @@ public class PlayerScoreboard
      *
      * @param prefix the "key"
      * @param content the "value"
+     * @return this scoreboard
      */
     public PlayerScoreboard write(String prefix, Object content)
     {
@@ -192,6 +196,7 @@ public class PlayerScoreboard
      * Write the provided text to the scoreboard
      *
      * @param content the text
+     * @return this scoreboard
      */
     public PlayerScoreboard write(Object content)
     {
@@ -204,6 +209,8 @@ public class PlayerScoreboard
 
     /**
      * A shortcut to writing our address
+     *
+     * @return The scoreboard being written to
      */
     public PlayerScoreboard writeURL()
     {

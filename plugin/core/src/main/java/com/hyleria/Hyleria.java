@@ -32,8 +32,8 @@ import java.util.stream.Stream;
 
 
 /**
- * Handles the setup & initialization
- * of the Bukkit side Hyleria.
+ * Handles the setup and initialization
+ * of the Bukkit sided Hyleria.
  *
  * @author Ben (OutdatedVersion)
  * @since Dec/11/2016 (5:48 PM)
@@ -129,7 +129,7 @@ public class Hyleria extends JavaPlugin
     }
 
     /**
-     * @return grabs the one & only instance
+     * @return grabs the one and only instance
      *         of our plugin for this server
      */
     public static Hyleria get()
@@ -149,6 +149,8 @@ public class Hyleria extends JavaPlugin
      * Helpful little shortcut
      *
      * @param clazz class of what we're looking for
+     * @param <T> type of what we're requesting
+     *
      * @return an instance of the provided
      *         class satisfied by {@link Guice}
      */
@@ -227,6 +229,7 @@ public class Hyleria extends JavaPlugin
      * @param clazz the class we're working with
      * @param <T> a type parameter for the type
      *            of the provided class
+     * @return an instance of the created class
      */
     public <T> T inject(Class<T> clazz)
     {

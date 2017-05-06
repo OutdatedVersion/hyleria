@@ -9,6 +9,11 @@ util.debug('connecting to redis')
 const rc = new Redis()
 
 
+/**
+ *
+ * @param key
+ * @returns {Promise}
+ */
 let grabPlayer = (key) =>
 {
     return new Promise((fulfill, reject) =>

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Holds information regarding the
- * connection details (auth & initial)
+ * connection details (auth + initial)
  * for the MongoDB instance we use.
  *
  * @author Ben (OutdatedVersion)

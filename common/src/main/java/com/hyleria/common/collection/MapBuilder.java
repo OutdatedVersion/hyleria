@@ -16,6 +16,8 @@ public class MapBuilder<K, V>
     private Map<K, V> map = Maps.newHashMap();
 
     /**
+     * @param key type of first
+     * @param val type of second
      * @param <K> type of the key
      * @param <V> type of the value
      * @return the fresh builder

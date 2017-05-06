@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 
 /**
- * Read & write the proper data from
+ * Read and write the proper data from
  * configuration files.
  *
  * @author Ben (OutdatedVersion)

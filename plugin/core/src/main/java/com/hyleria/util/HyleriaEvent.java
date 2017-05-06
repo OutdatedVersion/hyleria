@@ -12,6 +12,8 @@ public abstract class HyleriaEvent extends Event
 
     /**
      * Runs this event through Bukkit's event system
+     *
+     * @return this event
      */
     public HyleriaEvent call()
     {
@@ -21,6 +23,7 @@ public abstract class HyleriaEvent extends Event
 
     /**
      * @param clazz the type we're looking for
+     * @param <T> type of this event
      * @return this event dirty casted to the
      *         provided class. (up to you to
      *         verify that this will work)

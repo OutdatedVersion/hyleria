@@ -29,6 +29,7 @@ public interface Payload
     RedisChannel channel();
 
     /**
+     * @param focus the {@code focus} of this payload
      * @return the object as a {@link String}
      */
     default String asString(String focus)

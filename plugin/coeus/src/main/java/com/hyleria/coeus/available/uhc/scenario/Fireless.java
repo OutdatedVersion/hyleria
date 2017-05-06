@@ -6,15 +6,13 @@ import org.bukkit.event.EventHandler;
 
 /**
  * You may not take damage from anything
- * flame related.
- *
+ * fire related.
  *
  * <strong>Including:</strong>
- * <ul>
- *     <ul>Lava</ul>
- *     <ul>Flames (includes flint and steel & damage done per tick by player ignition)</ul>
- *     <ul>Fire Aspect</ul>
- * </ul>
+ *
+ * - Lava
+ * - Flames (includes flint and steel; also damage done per tick by player ignition)
+ * - Fire Aspect
  *
  * @author Ben (OutdatedVersion)
  * @since Mar/11/2017 (8:40 PM)

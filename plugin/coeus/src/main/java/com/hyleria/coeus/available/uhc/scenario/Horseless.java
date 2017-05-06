@@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityTameEvent;
 import org.spigotmc.event.entity.EntityMountEvent;
 
 /**
- * Disallows the taming & riding of horses
+ * Disallows the taming and riding of horses.
  *
  * @author Ben (OutdatedVersion)
  * @since Mar/11/2017 (8:36 PM)

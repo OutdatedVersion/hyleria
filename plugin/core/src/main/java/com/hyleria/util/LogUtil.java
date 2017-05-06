@@ -19,6 +19,7 @@ public class LogUtil
     }
 
     /**
+     * @param header [{@code header}] Body of the line
      * @param message [General] {@code message}
      */
     public static void info(String header, String message)
@@ -35,6 +36,7 @@ public class LogUtil
     }
 
     /**
+     * @param header [{@code header}] Body of the line
      * @param message [Warning] {@code message}
      */
     public static void warn(String header, String message)
@@ -51,6 +53,7 @@ public class LogUtil
     }
 
     /**
+     * @param header [{@code header}] Body of the line
      * @param message [Severe] {@code message}
      */
     public static void severe(String header, String message)
@@ -67,6 +70,7 @@ public class LogUtil
     }
 
     /**
+     * @param header [{@code header}] Body of the line
      * @param message [System] {@code message}
      */
     public static void system(String header, String message)
@@ -75,7 +79,9 @@ public class LogUtil
     }
 
     /**
+     * @param header [{@code header}] Body of the line
      * @param message [Unknown] {@code message}
+     * @param headerColor Color of the header
      */
     public static void log(String header, String message, ChatColor headerColor)
     {

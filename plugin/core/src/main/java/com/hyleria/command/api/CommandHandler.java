@@ -93,7 +93,8 @@ public class CommandHandler implements Listener
      * @param satisfierClass class of some satisifier
      * @return this handler
      */
-    public <T> CommandHandler addProvider(Class<? extends ArgumentSatisfier> satisfierClass)
+    @SuppressWarnings ( "unchecked" )
+    public CommandHandler addProvider(Class<? extends ArgumentSatisfier> satisfierClass)
     {
         addProvider(hyleria.get(satisfierClass));
         return this;

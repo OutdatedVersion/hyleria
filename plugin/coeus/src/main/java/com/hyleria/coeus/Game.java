@@ -26,11 +26,13 @@ public abstract class Game implements Listener
     /** shared {@link Gson} instance for games */
     private static final Gson GSON = new Gson();
 
+    /**  */
     public Consumer<PlayerJoinEvent> preGameJoinHandler;
 
     /**  */
     public GameFlagHandler<PlayerJoinEvent> joinHandler = GameFlagHandler.disabled(PlayerJoinEvent.class);
 
+    /** */
     public GameFlagHandler<PlayerLoginEvent> loginHandler = GameFlagHandler.disabled(PlayerLoginEvent.class);
 
     /** if we should let people know someone died */
@@ -59,6 +61,8 @@ public abstract class Game implements Listener
      *
      * Should contain semi time-consuming
      * logic
+     *
+     * @param engine our game engine
      */
     public abstract void init(Coeus engine);
 
@@ -70,7 +74,7 @@ public abstract class Game implements Listener
     public abstract void begin();
 
     /**
-     * Called when a match is over & the
+     * Called when a match is over and the
      * server will be shutting down within
      * a short time period.
      */
@@ -92,6 +96,8 @@ public abstract class Game implements Listener
      *
      * @param name the name of the configuration
      * @param clazz the class of the config
+     * @param <T> type of the configuration being loaded
+     *
      * @return the configuration
      */
     protected <T> T loadConfig(String name, Class<T> clazz)
@@ -104,6 +110,8 @@ public abstract class Game implements Listener
      * this allows us to do that.
      *
      * @param clazz the type we want to be using
+     * @param <T> type parameter
+     *
      * @return an instance of that class
      */
     public <T> T as(Class<T> clazz)

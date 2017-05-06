@@ -31,8 +31,8 @@ public class Timer extends Module implements Runnable
     /**
      * Scans the provided
      *
-     * @param clazz
-     * @return
+     * @param clazz a
+     * @return a
      */
     public Timer beginTracking(Class<?> clazz)
     {

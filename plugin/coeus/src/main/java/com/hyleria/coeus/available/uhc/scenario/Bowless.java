@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 
 /**
- * Bows are not craftable & skeletons
+ * Bows are not craftable and skeletons
  * are kept from dropping them
  *
  * @author Ben (OutdatedVersion)

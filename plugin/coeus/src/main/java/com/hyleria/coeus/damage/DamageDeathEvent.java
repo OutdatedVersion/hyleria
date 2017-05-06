@@ -34,14 +34,22 @@ public class DamageDeathEvent extends PlayerEvent
         return log;
     }
 
-    /** Bukkit */
+    /**
+     * Bukkit
+     *
+     * @return {@link HandlerList}
+     */
     @Override
     public HandlerList getHandlers()
     {
         return HANDLER_LIST;
     }
 
-    /** Bukkit */
+    /**
+     * Bukkit
+     *
+     * @return {@link HandlerList}
+     */
     public static HandlerList getHandlerList()
     {
         return HANDLER_LIST;
