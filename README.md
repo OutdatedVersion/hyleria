@@ -22,6 +22,11 @@ In the case that you're using IntelliJ:
 If you're not then I wish you luck
 
 
+#### Documentation
+Java docs are right [here](https://outdatedversion.github.io/hyleria).
+
+
+
 #### License: Mozilla Public License 2.0
 
 See `LICENSE` for further details
