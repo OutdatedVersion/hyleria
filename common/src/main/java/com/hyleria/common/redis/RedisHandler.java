@@ -58,7 +58,7 @@ public class RedisHandler
     /** a pool of redis connections */
     private JedisPool pool;
 
-    /** one jedis instance dedicated to the thread-blocking op of */
+    /** one jedis instance dedicated to the thread-blocking op of "subbing" to channels */
     private volatile Jedis subscriber;
 
     /** collection of hooks to our redis system */
@@ -103,7 +103,7 @@ public class RedisHandler
      */
     public RedisHandler subscribe(final RedisChannel... channels)
     {
-        checkNotNull(pool, "use RedisHandler#connect before starting up pub/sub");
+        readyCheck("incoming data handler setup");
 
         // we need the channels we're subbing to as Strings so
         final String[] _channelsAsString = new String[channels.length];
@@ -187,6 +187,8 @@ public class RedisHandler
      */
     public RedisHandler publish(String channel, Payload payload)
     {
+        readyCheck("outgoing payload request");
+
         executor.submit(() ->
         {
             debug("Publishing payload on " + channel + "\npayload w/o focus: [" + payload.asJSON().toJSONString() + "]");
@@ -254,6 +256,20 @@ public class RedisHandler
         }
 
         return this;
+    }
+
+    /**
+     * Verifies that this handler has been
+     * started up before performing the
+     * specified task.
+     *
+     * @param operation whatever we're doing;
+     *                  allows for slightly more
+     *                  useful exception message.
+     */
+    private void readyCheck(String operation)
+    {
+        checkNotNull(pool, "Be sure to call RedisHandler#init before performing: [" + operation + "]");
     }
 
     /**
