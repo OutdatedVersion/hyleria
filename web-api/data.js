@@ -1,12 +1,12 @@
 /** Ben (OutdatedVersion) | Apr/29/2017 (10:23 PM) */
 
-import Redis from 'ioredis'
+import RedisClient from 'ioredis'
 import { MongoClient } from 'mongodb'
 import util from './util'
 
 
 util.debug('connecting to redis')
-const rc = new Redis()
+const redis = new RedisClient()
 
 
 /**
@@ -33,7 +33,7 @@ let grabPlayer = (key) =>
         // temp
         let uuid = key || '03c337cd7be04694b9b0e2fd03f57258'
 
-        rc.get('api:p:' + uuid).then((result) =>
+        redis.get('api:p:' + uuid).then((result) =>
         {
             if (result)
             {

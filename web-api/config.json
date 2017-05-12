@@ -3,5 +3,8 @@
       "burst": 30,
       "rate": 10,
       "username": true
+    },
+    "info": {
+      "documentation_url": "https://github.com/OutdatedVerison/hyleria"
     }
 }

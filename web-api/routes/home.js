@@ -6,7 +6,7 @@ export default (server) =>
     {
         res.json({
             message: `there isn't much here; perhaps seek help via our docs`,
-            documentation_url: 'https://github.com/OutdatedVersion/hyleria'
+            documentation_url: server.data.info.documentation_url
         })
     })
 }

@@ -3,10 +3,17 @@
 import restify from 'restify'
 import routes from './routes'
 import util from './util'
+import * as config from './config'
 
 
 util.debug('initializing server & registering routes')
+
 const server = restify.createServer({ name: 'hyleria-api' })
+
+// allow access to our data all around
+server.data = config
+
+// setup web routes
 routes(server)
 
 // we don't need rate limiting quite yet
