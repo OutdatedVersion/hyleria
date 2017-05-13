@@ -1,5 +1,11 @@
 /** Ben (OutdatedVersion) | Apr/28/2017 (8:31 PM) */
 
+/**
+ * Responds to the root (/) with basic
+ * information regarding the API.
+ *
+ * @param server - Restify instance
+ */
 export default (server) =>
 {
     server.get('/', (req, res) =>

@@ -3,11 +3,14 @@
 import { InvalidArgumentError } from 'restify/lib/errors'
 import util from '../util'
 
-import restify from 'restify'
-
 export default (req, res, next) =>
 {
     console.log(req.params)
+
+    // pattern validation
+    // > non null/empty
+    // > username: [A-Za-z0-9_{1,16}]
+    // > uuid: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}
 
     if (req.params.id === '')
     {
@@ -15,6 +18,6 @@ export default (req, res, next) =>
         return
     }
 
-
-    next() // request will hang w/o
+    // everything checks out, continue request cycle
+    next()
 }
