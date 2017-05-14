@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
+import static net.md_5.bungee.api.ChatColor.GRAY;
+import static net.md_5.bungee.api.ChatColor.YELLOW;
 
 /**
  * @author Ben (OutdatedVersion)
@@ -43,10 +45,13 @@ public class CommandHandler implements Listener
 
     /** the message sent when someone runs a command that doesn't exist */
     private static final BaseComponent[] HELP_MESSAGE = new ComponentBuilder("Unknown command... we're here to ")
-            .color(net.md_5.bungee.api.ChatColor.GRAY).bold(true).append("/help").color(net.md_5.bungee.api.ChatColor.YELLOW)
-            .append(" you.").color(net.md_5.bungee.api.ChatColor.GRAY).create();
+                                                            .color(GRAY).bold(true).append("/help").color(YELLOW)
+                                                            .append(" you.").color(GRAY).create();
 
-    /** all the providers we need */
+    /**
+     * A set of {@link ArgumentSatisfier}s that a large
+     * majority of our commands require. \
+     */
     public static final Collection<Class<? extends ArgumentSatisfier>> DEFAULT_PROVIDERS = Lists.newArrayList(
             RoleSatisfier.class, PlayerSatisfier.class, StringArraySatisfier.class
     );
@@ -406,7 +411,7 @@ public class CommandHandler implements Listener
         }
     }
 
-    /** data for a sub-commands of a {@link BaseCommandInfo} */
+    /** data for sub-commands of a {@link BaseCommandInfo} */
     static class SubCommandInfo extends CommandInfo { }
 
 }

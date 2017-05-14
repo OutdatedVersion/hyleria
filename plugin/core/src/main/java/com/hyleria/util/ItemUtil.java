@@ -9,6 +9,13 @@ import org.bukkit.Material;
 public class ItemUtil
 {
 
+    /**
+     * Finds the cooked equivalent of
+     * an item.
+     *
+     * @param material the item we're finding a match for
+     * @return Either the cooked item or {@code null}
+     */
     public static Material cookedItemFor(Material material)
     {
         switch (material)

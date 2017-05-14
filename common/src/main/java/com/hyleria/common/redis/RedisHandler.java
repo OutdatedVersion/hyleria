@@ -58,7 +58,7 @@ public class RedisHandler
     /** a pool of redis connections */
     private JedisPool pool;
 
-    /** one jedis instance dedicated to the thread-blocking op of "subbing" to channels */
+    /** one {@link Jedis} instance dedicated to the thread-blocking op of "subbing" to channels */
     private volatile Jedis subscriber;
 
     /** collection of hooks to our redis system */

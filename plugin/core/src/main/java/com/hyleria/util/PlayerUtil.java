@@ -1,13 +1,11 @@
 package com.hyleria.util;
 
-import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,7 +40,7 @@ public class PlayerUtil
      */
     public static Stream<? extends Player> everyoneStream()
     {
-        return Arrays.asList(Bukkit.getServer().getOnlinePlayers()).stream();
+        return everyone().stream();
     }
 
     /**
@@ -61,10 +59,10 @@ public class PlayerUtil
      * Looks for a player matching the
      * name provided on the current server
      *
-     * @param host person looking for said player
+     * @param host   person looking for said player
      * @param target the player
-     * @param inform whether or not to send updates regarding
-     *               the status of the search
+     * @param inform whether or not to send updates regarding the status of the search
+     *
      * @return the player or null
      */
     public static Player search(Player host, String target, boolean inform)
@@ -99,22 +97,24 @@ public class PlayerUtil
 
         if (_matches.size() != 1)
         {
-            if (inform && _matches.size() != 0)
-                host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + " (" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
-
-            if (_matches.size() > 0)
+            if (inform)
             {
-                final StringBuilder _builder = new StringBuilder();
+                if (_matches.size() != 0)
+                    host.sendMessage(bold(GRAY) + "Matches for " + bold(YELLOW) + target + bold(GRAY) + " (" + bold(GREEN) + _matches.size() + bold(GRAY) + ")");
 
-                for (Player working : _matches)
-                    _builder.append(bold(YELLOW)).append(working.getName()).append(bold(GRAY)).append(", ");
+                if (_matches.size() > 0)
+                {
+                    final StringBuilder _builder = new StringBuilder();
 
-                // remove last ", "
-                if (_builder.length() > 1)
-                    _builder.delete(_builder.length() - 2, _builder.length());
+                    for (Player working : _matches)
+                        _builder.append(bold(YELLOW)).append(working.getName()).append(bold(GRAY)).append(", ");
 
-                if (inform)
+                    // remove last ", "
+                    if (_builder.length() > 1)
+                        _builder.delete(_builder.length() - 2, _builder.length());
+
                     host.sendMessage(bold(GRAY) + "Matched names: " + _builder.toString());
+                }
             }
 
             return null;
@@ -128,7 +128,7 @@ public class PlayerUtil
      * to the specified player
      *
      * @param player the player
-     * @param sound the sound
+     * @param sound  the sound
      */
     public static void play(Player player, Sound sound)
     {

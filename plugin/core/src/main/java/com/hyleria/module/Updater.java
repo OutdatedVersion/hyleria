@@ -11,6 +11,7 @@ import com.hyleria.common.backend.ServerConfig;
 import com.hyleria.common.backend.payload.SwitchPlayerServerPayload;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.redis.RedisHandler;
+import com.hyleria.common.reference.Constants;
 import com.hyleria.common.reference.Role;
 import com.hyleria.common.time.Time;
 import com.hyleria.util.Issues;
@@ -44,7 +45,7 @@ public class Updater
     private static final File RESTART_SCRIPT = new File("./start.sh");
 
     /** the file for the JAR that we'll be uploading */
-    private static final Function<Player, File> UPDATE_FOR_DEV = player -> new File(format("/home/mc/update/dev/%s/Hyleria.jar", player.getName().toLowerCase()));
+    private static final Function<Player, File> UPDATE_FOR_DEV = player -> new File(format(Constants.BASE_PATH + "update/dev/%s/Hyleria.jar", player.getName().toLowerCase()));
 
     /** name of this server */
     private final String serverName;
