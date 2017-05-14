@@ -2,9 +2,9 @@
 
 import { InvalidArgumentError, PreconditionFailedError } from 'restify'
 
-const combinedPattern = new RegExp( [ /A-Za-z0-9_{1,16}/,
-                                      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/,
-                                      /[0-9a-f]{32}/ ].join('|'), 'i')
+const allPatterns = [ /[A-Za-z0-9_]{1,16}$/,
+                      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+                      /[0-9a-f]{32}$/ ]
 
 
 /**
@@ -26,9 +26,25 @@ export default (req, res, next) =>
         return
     }
 
-    if (!id.match(combinedPattern))
+
+    let err = {}
+
+    for (let pattern of allPatterns)
     {
-        res.send(new PreconditionFailedError(`'${id}' did not match any valid pattern! [undashed UUID, dashed UUID, username]`))
+        if (id.match(pattern))
+        {
+            break
+        }
+        else
+        {
+            err.yes = pattern
+        }
+    }
+
+
+    if (err.yes)
+    {
+        res.send(new PreconditionFailedError(`'${id}' did not match a required pattern! [${err.yes}]`))
         return
     }
 
