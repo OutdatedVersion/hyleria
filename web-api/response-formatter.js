@@ -13,11 +13,9 @@ import * as config from './config.json'
  */
 let ok = (res, startedAt, data) =>
 {
-    res.json({
-        status: config.status.ok,
-        elapsed_time: startedAt - Date.now(),
-        data
-    })
+    // for now we're going to cut out
+    // that extra stuff. too cluttered
+    res.json(data)
 }
 
 /**

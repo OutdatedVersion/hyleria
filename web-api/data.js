@@ -2,6 +2,7 @@
 
 import RedisClient from 'ioredis'
 import { MongoClient } from 'mongodb'
+import { NotFoundError, InvalidContentError } from 'restify'
 import util from './util'
 
 
@@ -16,32 +17,33 @@ const redis = new RedisClient()
  */
 let grabPlayer = (key) =>
 {
+    // TODO(Ben): should probably run this async in some sort
+
     return new Promise((fulfill, reject) =>
     {
         // redis -> mongo
         if (typeof key !== 'string')
             throw new TypeError('the key must be provided as a string')
 
-        // we may use either a user's UUID or name to look
-        // them up so we need to validate that we are using
-        // one or the other
+        // we may use either a user's UUID or name to look them up
         let providedUUID = util.isUUID(key)
-
-        if (!providedUUID && !util.isValidUsername(key))
-            reject('invalid username provided')
 
         // temp
         let uuid = key || '03c337cd7be04694b9b0e2fd03f57258'
 
-        redis.get('api:p:' + uuid).then((result) =>
+        redis.get('api:player:' + uuid).then(result =>
         {
             if (result)
             {
-                fulfill({ data: JSON.parse(result) })
+                fulfill(JSON.parse(result))
             }
+            else
+            {
+                // mongo
 
-            reject('not found')
-        })
+                reject(new NotFoundError(`No player found matching '${key}'`))
+            }
+        }).catch(err => reject(err))
     })
 }
 

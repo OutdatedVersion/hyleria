@@ -27,16 +27,13 @@ export default (server) =>
         .use(validation)
         .get('/player/:id', (req, res) =>
     {
-        // TODO(Ben): use our response formatting utility for uniform responses everywhere.
-
         data.grabPlayer(req.params.id).then(result =>
         {
-            //format.ok(res, )
-            res.json(result.data)
+            format.ok(res, req.time(), result)
         })
         .catch(error =>
         {
-            res.json({ err: error })
+            res.send(error)
         })
     })
 }
