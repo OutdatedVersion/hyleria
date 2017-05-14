@@ -32,13 +32,9 @@ export default (req, res, next) =>
     for (let pattern of allPatterns)
     {
         if (id.match(pattern))
-        {
             break
-        }
         else
-        {
             err.yes = pattern
-        }
     }
 
 
