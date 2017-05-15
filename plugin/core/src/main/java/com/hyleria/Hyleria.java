@@ -12,6 +12,7 @@ import com.hyleria.common.redis.RedisChannel;
 import com.hyleria.common.redis.RedisHandler;
 import com.hyleria.common.reference.Constants;
 import com.hyleria.util.Module;
+import com.hyleria.util.Scheduler;
 import com.hyleria.util.ShutdownHook;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
@@ -71,6 +72,8 @@ public class Hyleria extends JavaPlugin
                 ex.printStackTrace();
                 System.err.println("\nIssue reading primary server configuration file");
             }
+
+            binder.requestStaticInjection(Scheduler.class);
         });
 
         // connect to Redis instance
@@ -117,7 +120,7 @@ public class Hyleria extends JavaPlugin
         {
             try
             {
-                method.invoke(injector.getInstance(method.getDeclaringClass()));
+                method.invoke(get(method.getDeclaringClass()));
             }
             catch (Exception ex)
             {
@@ -126,15 +129,6 @@ public class Hyleria extends JavaPlugin
                 System.err.println("Origin: [" + method.getDeclaringClass().getName() + "]");
             }
         });
-    }
-
-    /**
-     * @return grabs the one and only instance
-     *         of our plugin for this server
-     */
-    public static Hyleria get()
-    {
-        return JavaPlugin.getPlugin(Hyleria.class);
     }
 
     /**
@@ -220,7 +214,7 @@ public class Hyleria extends JavaPlugin
     {
         Stream.of(classSet)
                 .filter(clazz -> Stream.of(clazz.getMethods()).anyMatch(method -> method.isAnnotationPresent(EventHandler.class)))
-                .forEach(clazz -> Bukkit.getServer().getPluginManager().registerEvents(injector.getInstance(clazz), this));
+                .forEach(clazz -> Bukkit.getServer().getPluginManager().registerEvents(get(clazz), this));
 
         return this;
     }
@@ -241,7 +235,7 @@ public class Hyleria extends JavaPlugin
 
         // auto register listeners
         if (_instance instanceof Listener)
-            Bukkit.getPluginManager().registerEvents(((Listener) _instance), this);
+            Bukkit.getPluginManager().registerEvents((Listener) _instance, this);
 
         return _instance;
     }

@@ -40,9 +40,7 @@ public class ConfigurationProvider
     {
         try
         {
-            dataFileName = injectAndFormat.apply(dataFileName);
-
-            final File _file = new File(Constants.DATA_FOLDER + dataFileName);
+            final File _file = new File(Constants.DATA_FOLDER + injectAndFormat.apply(dataFileName));
 
             if (!_file.exists() || _file.isDirectory())
                 throw new IllegalArgumentException("Invalid data file found at " + _file.getAbsolutePath());

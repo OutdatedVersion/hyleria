@@ -35,13 +35,13 @@ public class Math
      * fall under the "starting point"
      * provided
      *
-     * @param startingPoint the minimum value
-     * @param bound the maximum value
+     * @param lowerBound the minimum value
+     * @param upperBound the maximum value
      * @return the number
      */
-    public static int random(double startingPoint, double bound)
+    public static int random(double lowerBound, double upperBound)
     {
-        return ThreadLocalRandom.current().nextInt((int) startingPoint, (int) bound);
+        return ThreadLocalRandom.current().nextInt((int) lowerBound, (int) upperBound);
     }
 
     /**

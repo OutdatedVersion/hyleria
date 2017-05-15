@@ -1,5 +1,6 @@
 package com.hyleria.util;
 
+import com.google.inject.Inject;
 import com.hyleria.Hyleria;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -13,6 +14,9 @@ import org.bukkit.scheduler.BukkitScheduler;
  */
 public class Scheduler
 {
+
+    /** Our plugin instance */
+    @Inject private static Hyleria plugin;
 
     /**
      * @return the one and only scheduler instance for this server
@@ -99,7 +103,7 @@ public class Scheduler
      */
     public static int async(Runnable runnable)
     {
-        return get().runTaskAsynchronously(Hyleria.get(), runnable).getTaskId();
+        return get().runTaskAsynchronously(plugin, runnable).getTaskId();
     }
 
     /**
@@ -112,7 +116,7 @@ public class Scheduler
      */
     public static int delayed(Runnable runnable, long delay)
     {
-        return get().scheduleSyncDelayedTask(Hyleria.get(), runnable, delay);
+        return get().scheduleSyncDelayedTask(plugin, runnable, delay);
     }
 
     /**
@@ -124,7 +128,7 @@ public class Scheduler
      */
     public static int sync(Runnable runnable)
     {
-        return get().runTask(Hyleria.get(), runnable).getTaskId();
+        return get().runTask(plugin, runnable).getTaskId();
     }
 
     /**
@@ -151,7 +155,7 @@ public class Scheduler
      */
     public static int timer(Runnable runnable, long delayBeforeRepeat, long interval)
     {
-        return get().runTaskTimer(Hyleria.get(), runnable, delayBeforeRepeat, interval * 20).getTaskId();
+        return get().runTaskTimer(plugin, runnable, delayBeforeRepeat, interval * 20).getTaskId();
     }
 
     /**
@@ -162,7 +166,7 @@ public class Scheduler
      */
     public static int timerExact(Runnable runnable, long delayBeforeNextLoop, long interval)
     {
-        return get().runTaskTimer(Hyleria.get(), runnable, delayBeforeNextLoop, interval).getTaskId();
+        return get().runTaskTimer(plugin, runnable, delayBeforeNextLoop, interval).getTaskId();
     }
 
     /**
