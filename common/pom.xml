@@ -23,7 +23,7 @@
             <version>3.2.2</version>
         </dependency>
 
-        <!-- Literally every account driver wants this -->
+        <!-- Literally every database driver wants this -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
