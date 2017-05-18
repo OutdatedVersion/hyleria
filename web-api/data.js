@@ -1,13 +1,16 @@
 /** Ben (OutdatedVersion) | Apr/29/2017 (10:23 PM) */
 
 import RedisClient from 'ioredis'
-import { MongoClient } from 'mongodb'
 import { NotFoundError, InvalidContentError } from 'restify'
+import Mongo from './mongodb'
 import util from './util'
 
 
 util.debug('connecting to redis')
 const redis = new RedisClient()
+
+util.debug('connecting to mongo')
+const mongo = Mongo(util.config.mongo)
 
 
 /**
@@ -39,7 +42,7 @@ let grabPlayer = (key) =>
             }
             else
             {
-                // mongo
+
 
                 reject(new NotFoundError(`No player found matching '${key}'`))
             }

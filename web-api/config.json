@@ -10,5 +10,8 @@
     "status": {
       "ok": "ok",
       "failure": "fail"
+    },
+    "mongo": {
+      "database": "hyleria"
     }
 }

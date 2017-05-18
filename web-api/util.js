@@ -2,6 +2,7 @@
 
 import assert from 'assert'
 import Debug from 'debug'
+import * as config from './config.json'
 
 
 /**
@@ -71,5 +72,6 @@ export default {
     undash,
     dash,
     isUUID,
-    isValidUsername
+    isValidUsername,
+    config
 }
