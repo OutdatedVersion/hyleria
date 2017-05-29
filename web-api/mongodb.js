@@ -19,10 +19,5 @@ export default (options) =>
         database: 'default_database'
     })
 
-    return new Promise((resolve, reject) =>
-    {
-        const uri = `mongodb://${options.host}:${options.port}/${options.database}`
-
-        MongoClient.connect(uri).then(resolve).catch(reject)
-    })
+    return MongoClient.connect(`mongodb://${options.host}:${options.port}/${options.database}`)
 }

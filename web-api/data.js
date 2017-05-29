@@ -20,8 +20,6 @@ const mongo = Mongo(util.config.mongo)
  */
 let grabPlayer = (key) =>
 {
-    // TODO(Ben): should probably run this async in some sort
-
     return new Promise((fulfill, reject) =>
     {
         // redis -> mongo
