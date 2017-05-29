@@ -4,11 +4,13 @@ import assert from 'assert'
 import Debug from 'debug'
 import * as config from './config.json'
 
+// make publicly available
+export default config
 
 /**
  * Pretty console printing
  */
-const debug = Debug('api:server')
+export default debug = Debug('api:server')
 
 /**
  * Removes the dashes in a UUID
@@ -16,7 +18,7 @@ const debug = Debug('api:server')
  * @param uuid the unique id for a player
  * @returns {string} the uuid but stripped of dashes
  */
-let undash = (uuid) =>
+export default undash = (uuid) =>
 {
     assert(typeof uuid === 'string', 'uuid must be provided as a string')
 
@@ -30,7 +32,7 @@ let undash = (uuid) =>
  * @param val the plain UUID
  * @returns {string} the freshly dashed unique id
  */
-let dash = (val) =>
+export default dash = (val) =>
 {
     assert(typeof val === 'string', 'we need to work with a string')
 
@@ -45,7 +47,7 @@ let dash = (val) =>
  * @param val the string
  * @returns {boolean} yes or no
  */
-let isUUID = (val) =>
+export default isUUID = (val) =>
 {
     assert(typeof val === 'string', 'we can only verify a string')
 
@@ -59,19 +61,9 @@ let isUUID = (val) =>
  * @param val the string
  * @returns {boolean} yes or no
  */
-let isValidUsername = (val) =>
+export default isValidUsername = (val) =>
 {
     assert(typeof val === 'string', 'we can only verify a string')
 
     return val.match(/[a-zA-Z0-9_]{1,16}$/)
-}
-
-
-export default {
-    debug,
-    undash,
-    dash,
-    isUUID,
-    isValidUsername,
-    config
 }
