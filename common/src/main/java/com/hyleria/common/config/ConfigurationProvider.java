@@ -1,4 +1,4 @@
-package com.hyleria.common.inject;
+package com.hyleria.common.config;
 
 import com.google.gson.Gson;
 import com.google.inject.Singleton;

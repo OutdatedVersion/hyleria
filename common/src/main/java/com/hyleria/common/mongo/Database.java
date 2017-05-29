@@ -6,7 +6,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.hyleria.common.account.Account;
-import com.hyleria.common.inject.ConfigurationProvider;
+import com.hyleria.common.config.ConfigurationProvider;
 import com.hyleria.common.inject.StartParallel;
 import com.hyleria.common.mongo.codec.ExtraCodecs;
 import com.mongodb.MongoClient;
